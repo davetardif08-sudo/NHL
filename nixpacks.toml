@@ -1,0 +1,5 @@
+[build]
+nixpkgs = ["chromium", "libnss_nis"]
+
+[phases.setup]
+nixpkgs = ["chromium", "libstdc++", "libxcb", "libxkbcommon", "mesa"]
