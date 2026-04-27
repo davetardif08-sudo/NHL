@@ -4035,4 +4035,5 @@ if __name__ == "__main__":
             print(f"  [startup] Backup stats ignoré : {e}")
 
     threading.Thread(target=_startup_sequence, daemon=True).start()
-    app.run(debug=False, port=5000, use_reloader=False)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, port=port, host='0.0.0.0', use_reloader=False)
