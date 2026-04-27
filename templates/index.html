@@ -759,6 +759,7 @@
       <button class="tab-btn hockey"        data-tab="mises-reelles" onclick="switchTab('mises-reelles')">MISES RÉELLES</button>
       <button class="tab-btn" data-tab="comparaison" onclick="switchTab('comparaison')">COMPARAISON</button>
       <button class="tab-btn" data-tab="anomalies" onclick="switchTab('anomalies')" style="background:linear-gradient(135deg,#f59e0b22,#d97706); border-color:#f59e0b55; color:#fbbf24;">ANOMALIES</button>
+      <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')" style="background:linear-gradient(135deg,#8b5cf622,#7c3aed22); border-color:#8b5cf655; color:#a78bfa;">ANALYTICS</button>
       <button class="tab-btn" id="tab-btn-dev-backlog-hdr" data-tab="dev-backlog" onclick="switchTab('dev-backlog')" style="display:none">DEV</button>
     </div>
   </header>
@@ -1295,6 +1296,84 @@
         </table>
       </div>
     </div><!-- fin tab-anomalies -->
+
+    <!-- ═══════════ ONGLET ANALYTICS ═══════════ -->
+    <div id="tab-analytics" class="tab-content">
+      <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+        <button onclick="loadAnalytics()" style="padding:10px 16px; background:var(--blue); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600;">
+          📊 Charger données
+        </button>
+        <button onclick="downloadAnalyticsCSV()" style="padding:10px 16px; background:var(--green); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600;">
+          📥 Télécharger CSV
+        </button>
+        <button onclick="copyAnalyticsJSON()" style="padding:10px 16px; background:var(--yellow); color:#000; border:none; border-radius:6px; cursor:pointer; font-weight:600;">
+          📋 Copier JSON
+        </button>
+      </div>
+
+      <!-- Loading state -->
+      <div id="analytics-loading" style="text-align:center; padding:40px; display:none;">
+        <div style="font-size:24px; margin-bottom:10px;">⏳</div>
+        <div>Chargement des données d'analyse...</div>
+      </div>
+
+      <!-- Results -->
+      <div id="analytics-results" style="display:none;">
+        <!-- Summary metrics -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:24px;">
+          <div style="background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px;">
+            <div style="font-size:11px; color:var(--muted); text-transform:uppercase;">Total picks</div>
+            <div id="analytics-total-picks" style="font-size:24px; font-weight:700; color:var(--blue); margin-top:4px;">—</div>
+          </div>
+          <div style="background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px;">
+            <div style="font-size:11px; color:var(--muted); text-transform:uppercase;">Snapshots</div>
+            <div id="analytics-total-snapshots" style="font-size:24px; font-weight:700; color:#a78bfa; margin-top:4px;">—</div>
+          </div>
+          <div style="background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px;">
+            <div style="font-size:11px; color:var(--muted); text-transform:uppercase;">Win rate</div>
+            <div id="analytics-win-rate" style="font-size:24px; font-weight:700; color:var(--green); margin-top:4px;">—</div>
+          </div>
+          <div style="background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px;">
+            <div style="font-size:11px; color:var(--muted); text-transform:uppercase;">Calibration</div>
+            <div id="analytics-calibration" style="font-size:24px; font-weight:700; color:var(--orange); margin-top:4px;">—</div>
+          </div>
+        </div>
+
+        <!-- Calibration details -->
+        <div style="background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:24px;">
+          <div style="font-weight:700; margin-bottom:12px; font-size:14px;">📈 Calibration par plage de probabilité</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:12px;">
+            Analyse de la précision prédictive par intervalles de probabilité
+          </div>
+          <table id="analytics-calibration-table" style="width:100%; border-collapse:collapse; font-size:12px;">
+            <thead>
+              <tr style="background:var(--bg3); border-bottom:1px solid var(--border);">
+                <th style="padding:8px; text-align:left;">Plage prob.</th>
+                <th style="padding:8px;">Picks</th>
+                <th style="padding:8px;">Wins</th>
+                <th style="padding:8px;">Win %</th>
+                <th style="padding:8px;">Attendu</th>
+                <th style="padding:8px;">Écart</th>
+              </tr>
+            </thead>
+            <tbody id="analytics-calibration-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Export info -->
+        <div style="background:rgba(102,187,106,.1); border:1px solid rgba(102,187,106,.3); border-radius:8px; padding:16px;">
+          <div style="font-weight:700; color:var(--green); margin-bottom:8px;">✅ Données prêtes pour l'analyse</div>
+          <p style="font-size:13px; color:var(--text); margin:0 0 8px 0;">
+            Vous pouvez maintenant télécharger les données CSV ou copier le JSON pour les analyser avec Claude.
+          </p>
+          <p style="font-size:12px; color:var(--muted); margin:0;">
+            <strong>Comment analyser:</strong> Téléchargez le CSV, puis partagez-le avec Claude pour des recommandations d'amélioration.
+          </p>
+        </div>
+      </div>
+    </div><!-- fin tab-analytics -->
 
     <!-- ═══════════ ONGLET DEV BACKLOG (localhost only) ═══════════ -->
     <div id="tab-dev-backlog" class="tab-content">
@@ -2307,6 +2386,10 @@
     if (tab === 'anomalies' && !_anomaliesLoaded) {
       _anomaliesLoaded = true;
       loadAnomalies();
+    }
+    if (tab === 'analytics') {
+      // Auto-load analytics data when tab is opened
+      loadAnalytics();
     }
   }
 
@@ -7342,6 +7425,96 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Enter') {
         submitChangePassword();
       }
+    });
+  }
+
+  // ── ANALYTICS TAB FUNCTIONS ────────────────────────────────────
+  let _analyticsData = null;
+
+  async function loadAnalytics() {
+    const loading = document.getElementById('analytics-loading');
+    const results = document.getElementById('analytics-results');
+    loading.style.display = 'block';
+    results.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/export-analytics');
+      const data = await res.json();
+      _analyticsData = data;
+
+      // Display metrics
+      document.getElementById('analytics-total-picks').textContent = data.total_picks;
+      document.getElementById('analytics-total-snapshots').textContent = data.total_snapshots;
+
+      // Compute calibration metrics
+      const cal = data.calibration;
+      if (cal && cal.picks_by_bin) {
+        let totalWins = 0, totalPicks = 0;
+        Object.values(cal.picks_by_bin).forEach(bin => {
+          totalWins += bin.wins || 0;
+          totalPicks += bin.count || 0;
+        });
+        const wr = totalPicks > 0 ? ((totalWins / totalPicks) * 100).toFixed(1) : '—';
+        document.getElementById('analytics-win-rate').textContent = wr + '%';
+
+        // Calibration score
+        const calScore = cal.calibration_score ? cal.calibration_score.toFixed(2) : '—';
+        document.getElementById('analytics-calibration').textContent = calScore;
+
+        // Render calibration table
+        const tbody = document.getElementById('analytics-calibration-body');
+        tbody.innerHTML = '';
+        Object.entries(cal.picks_by_bin || {}).forEach(([bin, stats]) => {
+          const expected = parseFloat(bin) || 0;
+          const actual = stats.count > 0 ? ((stats.wins / stats.count) * 100).toFixed(1) : 0;
+          const diff = (actual - expected).toFixed(1);
+          tbody.innerHTML += `
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:8px;">${bin}</td>
+              <td style="padding:8px; text-align:center;">${stats.count || 0}</td>
+              <td style="padding:8px; text-align:center;">${stats.wins || 0}</td>
+              <td style="padding:8px; text-align:center; font-weight:600;">${actual}%</td>
+              <td style="padding:8px; text-align:center;">${expected}%</td>
+              <td style="padding:8px; text-align:center; color:${Math.abs(diff) > 5 ? '#ef5350' : '#4caf50'};">
+                ${diff > 0 ? '+' : ''}${diff}%
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      loading.style.display = 'none';
+      results.style.display = 'block';
+    } catch (e) {
+      loading.innerHTML = `<div style="color:#ef5350;">Erreur: ${e.message}</div>`;
+    }
+  }
+
+  function downloadAnalyticsCSV() {
+    if (!_analyticsData || !_analyticsData.csv_export) {
+      alert('Charger les données d\'abord');
+      return;
+    }
+    const csv = _analyticsData.csv_export;
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `analytics-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function copyAnalyticsJSON() {
+    if (!_analyticsData) {
+      alert('Charger les données d\'abord');
+      return;
+    }
+    const json = JSON.stringify(_analyticsData, null, 2);
+    navigator.clipboard.writeText(json).then(() => {
+      alert('JSON copié au presse-papiers (prêt à partager avec Claude)');
+    }).catch(() => {
+      alert('Impossible de copier. Essayez le téléchargement CSV à la place.');
     });
   }
 });

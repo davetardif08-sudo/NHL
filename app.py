@@ -3913,6 +3913,160 @@ def _refresh_injuries_bg():
         pass
 
 
+# ─── EXPORT ANALYTICS ENDPOINT ────────────────────────────────────────────────────
+@app.route("/api/export-analytics")
+def api_export_analytics():
+    """Export all analytics data for analysis: snapshots, outcomes, calibration."""
+    import csv
+    from io import StringIO
+
+    try:
+        # Load snapshots directory
+        snap_dir = os.path.join(os.path.dirname(__file__), "snapshots")
+        snapshots = {}
+        outcomes_by_date = {}
+
+        if os.path.isdir(snap_dir):
+            for fname in sorted(os.listdir(snap_dir)):
+                if not fname.endswith(".json"):
+                    continue
+                date = fname[:-5]  # Remove .json
+                try:
+                    with open(os.path.join(snap_dir, fname), encoding="utf-8") as f:
+                        snap_data = json.load(f)
+                    snapshots[date] = snap_data
+
+                    # Extract outcomes for each date
+                    nhl_map = _nhl_outcomes_for_date(date)
+                    outcomes_by_date[date] = nhl_map
+                except Exception as e:
+                    print(f"  [export] Snapshot {date} error: {e}")
+
+        # Get calibration metrics
+        from predictions import compute_calibration
+        calibration = compute_calibration(sport="hockey")
+
+        # Build CSV export (flat structure for easy analysis)
+        csv_buffer = StringIO()
+        csv_writer = csv.writer(csv_buffer)
+
+        # Headers for picks
+        csv_writer.writerow([
+            "date", "match", "selection", "bet_type", "predicted_prob", "odds",
+            "kelly_fraction", "fair_prob", "edge_pct", "outcome", "actual_result"
+        ])
+
+        # Write all picks with outcomes
+        for date in sorted(snapshots.keys()):
+            snap = snapshots[date]
+            outcomes = outcomes_by_date.get(date, {})
+
+            for pick in snap.get("picks", []):
+                match = pick.get("match", "")
+                # Try to find outcome for this pick
+                outcome = "pending"
+                actual = None
+                for key, result in outcomes.items():
+                    if match.lower() in key.lower() or key.lower() in match.lower():
+                        outcome = result.get("outcome", "pending")
+                        actual = result.get("score", "")
+                        break
+
+                csv_writer.writerow([
+                    date,
+                    match,
+                    pick.get("selection", ""),
+                    pick.get("bet_type", ""),
+                    f"{pick.get('fair_prob', 0):.1f}%",
+                    f"{pick.get('odds', 0):.2f}",
+                    pick.get("mise", ""),
+                    f"{pick.get('fair_prob', 0):.1f}%",
+                    pick.get("edge", ""),
+                    outcome,
+                    actual or ""
+                ])
+
+        # Return JSON with all data
+        return jsonify({
+            "snapshots": snapshots,
+            "outcomes_by_date": outcomes_by_date,
+            "calibration": calibration,
+            "csv_export": csv_buffer.getvalue(),
+            "export_date": datetime.now().isoformat(),
+            "total_snapshots": len(snapshots),
+            "total_picks": sum(len(s.get("picks", [])) for s in snapshots.values())
+        })
+
+    except Exception as e:
+        print(f"  [export] Error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/export-csv")
+def api_export_csv():
+    """Export analytics data as CSV file (downloadable)."""
+    try:
+        snap_dir = os.path.join(os.path.dirname(__file__), "snapshots")
+        snapshots = {}
+        outcomes_by_date = {}
+
+        if os.path.isdir(snap_dir):
+            for fname in sorted(os.listdir(snap_dir)):
+                if not fname.endswith(".json"):
+                    continue
+                date = fname[:-5]
+                try:
+                    with open(os.path.join(snap_dir, fname), encoding="utf-8") as f:
+                        snapshots[date] = json.load(f)
+                    outcomes_by_date[date] = _nhl_outcomes_for_date(date)
+                except Exception:
+                    pass
+
+        # Build CSV
+        csv_buffer = StringIO()
+        csv_writer = csv.writer(csv_buffer)
+        csv_writer.writerow([
+            "date", "match", "selection", "bet_type", "predicted_prob", "odds",
+            "kelly_fraction", "outcome"
+        ])
+
+        for date in sorted(snapshots.keys()):
+            snap = snapshots[date]
+            outcomes = outcomes_by_date.get(date, {})
+
+            for pick in snap.get("picks", []):
+                match = pick.get("match", "")
+                outcome = "pending"
+                for key, result in outcomes.items():
+                    if match.lower() in key.lower() or key.lower() in match.lower():
+                        outcome = result.get("outcome", "pending")
+                        break
+
+                csv_writer.writerow([
+                    date,
+                    match,
+                    pick.get("selection", ""),
+                    pick.get("bet_type", ""),
+                    f"{pick.get('fair_prob', 0):.1f}%",
+                    f"{pick.get('odds', 0):.2f}",
+                    pick.get("mise", ""),
+                    outcome
+                ])
+
+        # Return as downloadable CSV
+        csv_content = csv_buffer.getvalue()
+        response = app.response_class(
+            response=csv_content,
+            status=200,
+            mimetype="text/csv",
+            headers={"Content-Disposition": "attachment; filename=analytics_export.csv"}
+        )
+        return response
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == "__main__":
     # Rafraîchir les stats avancées au démarrage (NHL REST API + Evolving Hockey)
     threading.Thread(target=_refresh_advanced_stats_bg, daemon=True).start()
