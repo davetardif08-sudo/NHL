@@ -1,0 +1,55 @@
+{
+  "saved_at": "2026-04-14T14:03:49.988181",
+  "date": "2026-04-14",
+  "time": "14:03",
+  "picks": [
+    {
+      "key": "",
+      "match": "Pittsburgh (Penguins) @ Saint-Louis (Blues)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Pittsburgh (Penguins)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.64,
+      "fair_prob": 50.8,
+      "mise_reelle": 1.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Caroline (Hurricanes) @ New York (Islanders)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Caroline (Hurricanes)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.2,
+      "fair_prob": 55.7,
+      "mise_reelle": 1.5,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Colorado (Avalanche) @ Calgary (Flames)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Calgary (Flames)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.3,
+      "fair_prob": 51.3,
+      "mise_reelle": 1,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Los Angeles (Kings) @ Vancouver (Canucks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Los Angeles (Kings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.64,
+      "fair_prob": 63.9,
+      "mise_reelle": 0.5,
+      "recommendation": "Excellent ***"
+    }
+  ]
+}

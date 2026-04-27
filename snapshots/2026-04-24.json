@@ -1,0 +1,210 @@
+{
+  "saved_at": "2026-04-24T15:23:26.207716",
+  "date": "2026-04-24",
+  "time": "15:23",
+  "sgp_proposals": [
+    {
+      "match": "Edmonton (Oilers) @ Anaheim (Ducks)",
+      "short_match": "Oilers @ Ducks",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Oilers + Plus de 6.5",
+      "combined_odds": 2.91,
+      "avg_score": 103.2,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Edmonton (Oilers)",
+          "odds": 1.74,
+          "fair_prob": 51.8,
+          "value_score": 101
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Plus de 6.5",
+          "odds": 1.67,
+          "fair_prob": 57.9,
+          "value_score": 105.4
+        }
+      ]
+    },
+    {
+      "match": "Tampa Bay (Lightning) @ Montreal (Canadiens)",
+      "short_match": "Lightning @ Canadiens",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Lightning + Plus de 2.5",
+      "combined_odds": 3.07,
+      "avg_score": 92.1,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Tampa Bay (Lightning)",
+          "odds": 1.84,
+          "fair_prob": 50.8,
+          "value_score": 101
+        },
+        {
+          "bet_type": "Montréal (Canadiens) Total de buts plus/moins 2.5",
+          "selection": "Plus de 2.5",
+          "odds": 1.67,
+          "fair_prob": 56.3,
+          "value_score": 83.2
+        }
+      ]
+    },
+    {
+      "match": "Vegas (Golden Knights) @ Utah (Mammoth)",
+      "short_match": "Golden Knights @ Mammoth",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Mammoth + Plus de 2.5",
+      "combined_odds": 3.18,
+      "avg_score": 91.0,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Utah (Mammoth)",
+          "odds": 1.95,
+          "fair_prob": 50.9,
+          "value_score": 101
+        },
+        {
+          "bet_type": "Utah (Mammoth) Total de buts plus/moins 2.5",
+          "selection": "Plus de 2.5",
+          "odds": 1.63,
+          "fair_prob": 57.4,
+          "value_score": 81
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Vegas (Golden Knights) @ Utah (Mammoth)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Utah (Mammoth)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.95,
+      "fair_prob": 50.9,
+      "value_score": 101,
+      "mise": 3.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Tampa Bay (Lightning) @ Montreal (Canadiens)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Tampa Bay (Lightning)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.84,
+      "fair_prob": 50.8,
+      "value_score": 101,
+      "mise": 3.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Edmonton (Oilers) @ Anaheim (Ducks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Edmonton (Oilers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.74,
+      "fair_prob": 51.8,
+      "value_score": 101,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Edmonton (Oilers) @ Anaheim (Ducks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.67,
+      "fair_prob": 57.9,
+      "value_score": 105.4,
+      "mise": 3,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Tampa Bay (Lightning) @ Montreal (Canadiens)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 2.5",
+      "bet_type": "Montréal (Canadiens) Total de buts plus/moins 2.5",
+      "odds": 1.67,
+      "fair_prob": 56.3,
+      "value_score": 83.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Vegas (Golden Knights) @ Utah (Mammoth)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 2.5",
+      "bet_type": "Utah (Mammoth) Total de buts plus/moins 2.5",
+      "odds": 1.63,
+      "fair_prob": 57.4,
+      "value_score": 81,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Tampa Bay (Lightning) @ Montreal (Canadiens)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Tampa Bay (Lightning)",
+      "bet_type": "Double chance",
+      "odds": 1.5,
+      "fair_prob": 31.5,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Vegas (Golden Knights) @ Utah (Mammoth)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Utah (Mammoth) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.53,
+      "fair_prob": 31,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Edmonton (Oilers) @ Anaheim (Ducks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Anaheim (Ducks) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.67,
+      "fair_prob": 28.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}

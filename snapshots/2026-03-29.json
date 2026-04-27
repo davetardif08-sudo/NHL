@@ -1,0 +1,336 @@
+{
+  "saved_at": "2026-03-29T09:00:28.532847",
+  "date": "2026-03-29",
+  "time": "09:00",
+  "sgp_proposals": [
+    {
+      "match": "Boston (Bruins) @ Columbus (Blue Jackets)",
+      "short_match": "Bruins @ Blue Jackets",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Blue Jackets + Moins de 6.5",
+      "combined_odds": 2.99,
+      "avg_score": 104.6,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Columbus (Blue Jackets)",
+          "odds": 1.66,
+          "fair_prob": 47.5,
+          "value_score": 101
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Moins de 6.5",
+          "odds": 1.8,
+          "fair_prob": 53.8,
+          "value_score": 108.2
+        }
+      ]
+    },
+    {
+      "match": "Montreal (Canadiens) @ Caroline (Hurricanes)",
+      "short_match": "Canadiens @ Hurricanes",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Hurricanes + Moins de 6.5",
+      "combined_odds": 2.92,
+      "avg_score": 104.6,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Caroline (Hurricanes)",
+          "odds": 1.56,
+          "fair_prob": 57,
+          "value_score": 101
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Moins de 6.5",
+          "odds": 1.87,
+          "fair_prob": 51.7,
+          "value_score": 108.2
+        }
+      ]
+    },
+    {
+      "match": "Dallas (Stars) @ Philadelphie (Flyers)",
+      "short_match": "Stars @ Flyers",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Stars + Plus de 5.5",
+      "combined_odds": 2.99,
+      "avg_score": 104.6,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Dallas (Stars)",
+          "odds": 1.66,
+          "fair_prob": 52.4,
+          "value_score": 101
+        },
+        {
+          "bet_type": "Total de buts plus/moins 5.5",
+          "selection": "Plus de 5.5",
+          "odds": 1.8,
+          "fair_prob": 53.2,
+          "value_score": 108.2
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Floride (Panthers) @ New York (Rangers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New York (Rangers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.66,
+      "fair_prob": 68.8,
+      "value_score": 101,
+      "mise": 9,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Columbus (Blue Jackets)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.8,
+      "fair_prob": 53.8,
+      "value_score": 108.2,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Caroline (Hurricanes)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.87,
+      "fair_prob": 51.7,
+      "value_score": 108.2,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Dallas (Stars) @ Philadelphie (Flyers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 5.5",
+      "bet_type": "Total de buts plus/moins 5.5",
+      "odds": 1.8,
+      "fair_prob": 53.2,
+      "value_score": 108.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Nashville (Predators) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 3.5",
+      "bet_type": "Tampa Bay (Lightning) Total de buts plus/moins 3.5",
+      "odds": 1.77,
+      "fair_prob": 53.1,
+      "value_score": 75,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Chicago (Blackhawks) @ New Jersey (Devils)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.65,
+      "fair_prob": 56.6,
+      "value_score": 85.4,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Floride (Panthers) @ New York (Rangers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 5.5",
+      "bet_type": "Total de buts plus/moins 5.5",
+      "odds": 1.69,
+      "fair_prob": 55.4,
+      "value_score": 85.4,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Chicago (Blackhawks) @ New Jersey (Devils)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New Jersey (Devils)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.6,
+      "fair_prob": 57.6,
+      "value_score": 101,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Caroline (Hurricanes)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Caroline (Hurricanes)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.56,
+      "fair_prob": 57,
+      "value_score": 101,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Dallas (Stars) @ Philadelphie (Flyers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Dallas (Stars)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.66,
+      "fair_prob": 52.4,
+      "value_score": 101,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Nashville (Predators) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Tampa Bay (Lightning)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.5,
+      "fair_prob": 48.6,
+      "value_score": 101,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Columbus (Blue Jackets)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Columbus (Blue Jackets)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.66,
+      "fair_prob": 47.5,
+      "value_score": 101,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Columbus (Blue Jackets)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Boston (Bruins)",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Dallas (Stars) @ Philadelphie (Flyers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Philadelphie (Flyers) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Floride (Panthers) @ New York (Rangers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Floride (Panthers)",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Caroline (Hurricanes)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Montreal (Canadiens)",
+      "bet_type": "Double chance",
+      "odds": 1.83,
+      "fair_prob": 25.8,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Chicago (Blackhawks) @ New Jersey (Devils)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Chicago (Blackhawks)",
+      "bet_type": "Double chance",
+      "odds": 1.83,
+      "fair_prob": 25.8,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Nashville (Predators) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Nashville (Predators)",
+      "bet_type": "Double chance",
+      "odds": 2,
+      "fair_prob": 23.7,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}

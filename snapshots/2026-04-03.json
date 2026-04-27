@@ -1,0 +1,143 @@
+{
+  "saved_at": "2026-04-03T11:35:30.750870",
+  "date": "2026-04-03",
+  "time": "11:35",
+  "sgp_proposals": [
+    {
+      "match": "Philadelphie (Flyers) @ New York (Islanders)",
+      "short_match": "Flyers @ Islanders",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Islanders + Plus de 5.5",
+      "combined_odds": 4.02,
+      "avg_score": 96.0,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 3 issues (excluant prol. et TB)",
+          "selection": "New York (Islanders)",
+          "odds": 2.15,
+          "fair_prob": 51.2,
+          "value_score": 84
+        },
+        {
+          "bet_type": "Total de buts plus/moins 5.5",
+          "selection": "Plus de 5.5",
+          "odds": 1.87,
+          "fair_prob": 51.7,
+          "value_score": 107.9
+        }
+      ]
+    },
+    {
+      "match": "Saint-Louis (Blues) @ Anaheim (Ducks)",
+      "short_match": "Blues @ Ducks",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Ducks + Moins de 6.5",
+      "combined_odds": 3.83,
+      "avg_score": 96.0,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 3 issues (excluant prol. et TB)",
+          "selection": "Anaheim (Ducks)",
+          "odds": 2.15,
+          "fair_prob": 47.9,
+          "value_score": 84
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Moins de 6.5",
+          "odds": 1.78,
+          "fair_prob": 54.1,
+          "value_score": 107.9
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Philadelphie (Flyers) @ New York (Islanders)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 5.5",
+      "bet_type": "Total de buts plus/moins 5.5",
+      "odds": 1.87,
+      "fair_prob": 51.7,
+      "value_score": 107.9,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Saint-Louis (Blues) @ Anaheim (Ducks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.78,
+      "fair_prob": 54.1,
+      "value_score": 107.9,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Philadelphie (Flyers) @ New York (Islanders)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New York (Islanders)",
+      "bet_type": "Gagnant à 3 issues (excluant prol. et TB)",
+      "odds": 2.15,
+      "fair_prob": 51.2,
+      "value_score": 84,
+      "mise": 7,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Saint-Louis (Blues) @ Anaheim (Ducks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Anaheim (Ducks)",
+      "bet_type": "Gagnant à 3 issues (excluant prol. et TB)",
+      "odds": 2.15,
+      "fair_prob": 47.9,
+      "value_score": 84,
+      "mise": 2.5,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Saint-Louis (Blues) @ Anaheim (Ducks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Saint-Louis (Blues)",
+      "bet_type": "Double chance",
+      "odds": 1.67,
+      "fair_prob": 28.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Philadelphie (Flyers) @ New York (Islanders)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Philadelphie (Flyers)",
+      "bet_type": "Double chance",
+      "odds": 1.73,
+      "fair_prob": 27.4,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}

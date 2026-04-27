@@ -1,0 +1,43 @@
+{
+  "saved_at": "2026-04-12T11:01:58.259153",
+  "date": "2026-04-12",
+  "time": "11:01",
+  "picks": [
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Columbus (Blue Jackets)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Boston (Bruins)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.2,
+      "fair_prob": 50.2,
+      "mise_reelle": 2.5,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Ottawa (Senateurs) @ New Jersey (Devils)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New Jersey (Devils)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.1,
+      "fair_prob": 51.7,
+      "mise_reelle": 2.25,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Columbus (Blue Jackets)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.78,
+      "fair_prob": 54.1,
+      "mise_reelle": 0.25,
+      "recommendation": "Excellent ***"
+    }
+  ]
+}

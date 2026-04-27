@@ -1,0 +1,210 @@
+{
+  "saved_at": "2026-04-08T13:37:19.040285",
+  "date": "2026-04-08",
+  "time": "13:37",
+  "sgp_proposals": [
+    {
+      "match": "Buffalo (Sabres) @ New York (Rangers)",
+      "short_match": "Sabres @ Rangers",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Rangers + Moins de 6.5",
+      "combined_odds": 4.3,
+      "avg_score": 106.0,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "New York (Rangers)",
+          "odds": 2.3,
+          "fair_prob": 61.6,
+          "value_score": 103.2
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Moins de 6.5",
+          "odds": 1.87,
+          "fair_prob": 51.7,
+          "value_score": 108.7
+        }
+      ]
+    },
+    {
+      "match": "Edmonton (Oilers) @ San Jose (Sharks)",
+      "short_match": "Oilers @ Sharks",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Oilers + Plus de 6.5",
+      "combined_odds": 3.33,
+      "avg_score": 106.0,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Edmonton (Oilers)",
+          "odds": 1.82,
+          "fair_prob": 53.4,
+          "value_score": 103.2
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Plus de 6.5",
+          "odds": 1.83,
+          "fair_prob": 52.8,
+          "value_score": 108.7
+        }
+      ]
+    },
+    {
+      "match": "Washington (Capitals) @ Toronto (Maple Leafs)",
+      "short_match": "Capitals @ Maple Leafs",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Capitals + Plus de 2.5",
+      "combined_odds": 2.71,
+      "avg_score": 90.5,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Washington (Capitals)",
+          "odds": 1.66,
+          "fair_prob": 57.7,
+          "value_score": 103.2
+        },
+        {
+          "bet_type": "Toronto (Maple Leafs) Total de buts plus/moins 2.5",
+          "selection": "Plus de 2.5",
+          "odds": 1.63,
+          "fair_prob": 57.4,
+          "value_score": 77.7
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Buffalo (Sabres) @ New York (Rangers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New York (Rangers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.3,
+      "fair_prob": 61.6,
+      "value_score": 103.2,
+      "mise": 7.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Edmonton (Oilers) @ San Jose (Sharks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Edmonton (Oilers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.82,
+      "fair_prob": 53.4,
+      "value_score": 103.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Edmonton (Oilers) @ San Jose (Sharks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.83,
+      "fair_prob": 52.8,
+      "value_score": 108.7,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Buffalo (Sabres) @ New York (Rangers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.87,
+      "fair_prob": 51.7,
+      "value_score": 108.7,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Washington (Capitals) @ Toronto (Maple Leafs)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Washington (Capitals)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.66,
+      "fair_prob": 57.7,
+      "value_score": 103.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Washington (Capitals) @ Toronto (Maple Leafs)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 2.5",
+      "bet_type": "Toronto (Maple Leafs) Total de buts plus/moins 2.5",
+      "odds": 1.63,
+      "fair_prob": 57.4,
+      "value_score": 77.7,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Edmonton (Oilers) @ San Jose (Sharks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Edmonton (Oilers)",
+      "bet_type": "Double chance",
+      "odds": 1.5,
+      "fair_prob": 31.5,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Buffalo (Sabres) @ New York (Rangers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New York (Rangers) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.73,
+      "fair_prob": 27.4,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Washington (Capitals) @ Toronto (Maple Leafs)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Toronto (Maple Leafs) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}

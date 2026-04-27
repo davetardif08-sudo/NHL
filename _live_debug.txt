@@ -1,0 +1,4 @@
+nhl_map keys: [('OTT', 'NYR'), ('senators', 'rangers')]
+away='ottawa (senateurs)' -> OTT, home='new york (rangers)' -> NYR
+away='ottawa (senateurs)' -> OTT, home='new york (rangers)' -> NYR
+away='ottawa (senateurs)' -> OTT, home='new york (rangers)' -> NYR

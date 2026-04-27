@@ -1,0 +1,196 @@
+{
+  "saved_at": "2026-04-01T15:58:49.165301",
+  "date": "2026-04-01",
+  "time": "15:58",
+  "sgp_proposals": [
+    {
+      "match": "Anaheim (Ducks) @ San Jose (Sharks)",
+      "short_match": "Ducks @ Sharks",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Ducks + Plus de 6.5",
+      "combined_odds": 3.38,
+      "avg_score": 99.8,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Anaheim (Ducks)",
+          "odds": 1.91,
+          "fair_prob": 50.5,
+          "value_score": 99
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Plus de 6.5",
+          "odds": 1.77,
+          "fair_prob": 54.3,
+          "value_score": 100.6
+        }
+      ]
+    },
+    {
+      "match": "Saint-Louis (Blues) @ Los Angeles (Kings)",
+      "short_match": "Blues @ Kings",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Kings + Moins de 3.5",
+      "combined_odds": 2.7,
+      "avg_score": 87.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Los Angeles (Kings)",
+          "odds": 1.7,
+          "fair_prob": 56.9,
+          "value_score": 99
+        },
+        {
+          "bet_type": "Los Angeles (Kings) Total de buts plus/moins 3.5",
+          "selection": "Moins de 3.5",
+          "odds": 1.59,
+          "fair_prob": 59.1,
+          "value_score": 75.6
+        }
+      ]
+    },
+    {
+      "match": "Vancouver (Canucks) @ Colorado (Avalanche)",
+      "short_match": "Canucks @ Avalanche",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Canucks + Moins de 4.5",
+      "combined_odds": 7.68,
+      "avg_score": 82.1,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Vancouver (Canucks)",
+          "odds": 4.6,
+          "fair_prob": 21,
+          "value_score": 88.6
+        },
+        {
+          "bet_type": "Colorado (Avalanche) Total de buts plus/moins 4.5",
+          "selection": "Moins de 4.5",
+          "odds": 1.67,
+          "fair_prob": 56.3,
+          "value_score": 75.6
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Anaheim (Ducks) @ San Jose (Sharks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Anaheim (Ducks)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.91,
+      "fair_prob": 50.5,
+      "value_score": 99,
+      "mise": 3.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Vancouver (Canucks) @ Colorado (Avalanche)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Vancouver (Canucks)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 4.6,
+      "fair_prob": 21,
+      "value_score": 88.6,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Saint-Louis (Blues) @ Los Angeles (Kings)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 3.5",
+      "bet_type": "Los Angeles (Kings) Total de buts plus/moins 3.5",
+      "odds": 1.59,
+      "fair_prob": 59.1,
+      "value_score": 75.6,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Vancouver (Canucks) @ Colorado (Avalanche)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 4.5",
+      "bet_type": "Colorado (Avalanche) Total de buts plus/moins 4.5",
+      "odds": 1.67,
+      "fair_prob": 56.3,
+      "value_score": 75.6,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Saint-Louis (Blues) @ Los Angeles (Kings)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Los Angeles (Kings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.7,
+      "fair_prob": 56.9,
+      "value_score": 99,
+      "mise": 3.5,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Anaheim (Ducks) @ San Jose (Sharks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.77,
+      "fair_prob": 54.3,
+      "value_score": 100.6,
+      "mise": 3,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Anaheim (Ducks) @ San Jose (Sharks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Anaheim (Ducks)",
+      "bet_type": "Double chance",
+      "odds": 1.53,
+      "fair_prob": 31,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Saint-Louis (Blues) @ Los Angeles (Kings)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Saint-Louis (Blues)",
+      "bet_type": "Double chance",
+      "odds": 1.67,
+      "fair_prob": 28.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}

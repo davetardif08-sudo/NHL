@@ -1,0 +1,252 @@
+{
+  "saved_at": "2026-04-20T15:09:14.134028",
+  "date": "2026-04-20",
+  "time": "15:09",
+  "sgp_proposals": [
+    {
+      "match": "Minnesota (Wild) @ Dallas (Stars)",
+      "short_match": "Wild @ Stars",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Stars + Moins de 3.5",
+      "combined_odds": 2.73,
+      "avg_score": 92.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Dallas (Stars)",
+          "odds": 1.74,
+          "fair_prob": 58.8,
+          "value_score": 100.6
+        },
+        {
+          "bet_type": "Dallas (Stars) Total de buts plus/moins 3.5",
+          "selection": "Moins de 3.5",
+          "odds": 1.57,
+          "fair_prob": 59.9,
+          "value_score": 84
+        }
+      ]
+    },
+    {
+      "match": "Ottawa (Senateurs) @ Caroline (Hurricanes)",
+      "short_match": "Senateurs @ Hurricanes",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Hurricanes + Moins de 3.5",
+      "combined_odds": 2.64,
+      "avg_score": 92.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Caroline (Hurricanes)",
+          "odds": 1.66,
+          "fair_prob": 60.7,
+          "value_score": 100.6
+        },
+        {
+          "bet_type": "Caroline (Hurricanes) Total de buts plus/moins 3.5",
+          "selection": "Moins de 3.5",
+          "odds": 1.59,
+          "fair_prob": 59.1,
+          "value_score": 84
+        }
+      ]
+    },
+    {
+      "match": "Anaheim (Ducks) @ Edmonton (Oilers)",
+      "short_match": "Ducks @ Oilers",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Oilers + Plus de 2.5",
+      "combined_odds": 2.61,
+      "avg_score": 92.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Edmonton (Oilers)",
+          "odds": 1.56,
+          "fair_prob": 59.4,
+          "value_score": 100.6
+        },
+        {
+          "bet_type": "Anaheim (Ducks) Total de buts plus/moins 2.5",
+          "selection": "Plus de 2.5",
+          "odds": 1.67,
+          "fair_prob": 56.3,
+          "value_score": 84
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Minnesota (Wild) @ Dallas (Stars)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Dallas (Stars)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.74,
+      "fair_prob": 58.8,
+      "value_score": 100.6,
+      "mise": 7,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Ottawa (Senateurs) @ Caroline (Hurricanes)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Caroline (Hurricanes)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.66,
+      "fair_prob": 60.7,
+      "value_score": 100.6,
+      "mise": 2.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Philadelphie (Flyers) @ Pittsburgh (Penguins)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Pittsburgh (Penguins)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.7,
+      "fair_prob": 56.3,
+      "value_score": 100.6,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Minnesota (Wild) @ Dallas (Stars)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 3.5",
+      "bet_type": "Dallas (Stars) Total de buts plus/moins 3.5",
+      "odds": 1.57,
+      "fair_prob": 59.9,
+      "value_score": 84,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Ottawa (Senateurs) @ Caroline (Hurricanes)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 3.5",
+      "bet_type": "Caroline (Hurricanes) Total de buts plus/moins 3.5",
+      "odds": 1.59,
+      "fair_prob": 59.1,
+      "value_score": 84,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Anaheim (Ducks) @ Edmonton (Oilers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 2.5",
+      "bet_type": "Anaheim (Ducks) Total de buts plus/moins 2.5",
+      "odds": 1.67,
+      "fair_prob": 56.3,
+      "value_score": 84,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Anaheim (Ducks) @ Edmonton (Oilers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Edmonton (Oilers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.56,
+      "fair_prob": 59.4,
+      "value_score": 100.6,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Philadelphie (Flyers) @ Pittsburgh (Penguins)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 5.5",
+      "bet_type": "Total de buts plus/moins 5.5",
+      "odds": 1.63,
+      "fair_prob": 57.4,
+      "value_score": 81,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Minnesota (Wild) @ Dallas (Stars)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Minnesota (Wild)",
+      "bet_type": "Double chance",
+      "odds": 1.67,
+      "fair_prob": 28.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Ottawa (Senateurs) @ Caroline (Hurricanes)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Ottawa (Senateurs)",
+      "bet_type": "Double chance",
+      "odds": 1.73,
+      "fair_prob": 27.4,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Philadelphie (Flyers) @ Pittsburgh (Penguins)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Philadelphie (Flyers)",
+      "bet_type": "Double chance",
+      "odds": 1.73,
+      "fair_prob": 27.4,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Anaheim (Ducks) @ Edmonton (Oilers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Anaheim (Ducks)",
+      "bet_type": "Double chance",
+      "odds": 1.91,
+      "fair_prob": 24.8,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}

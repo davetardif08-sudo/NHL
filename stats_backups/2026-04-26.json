@@ -1,0 +1,1728 @@
+{
+  "date": "2026-04-26",
+  "heure": "08:04",
+  "calibration": {
+    "count": 504,
+    "wins": 290,
+    "win_rate": 57.5,
+    "avg_predicted": 56.5,
+    "bias_factor": 1.019,
+    "buckets": {
+      "20-30%": {
+        "total": 3,
+        "wins": 1,
+        "win_rate": 33.3
+      },
+      "40-50%": {
+        "total": 24,
+        "wins": 11,
+        "win_rate": 45.8
+      },
+      "50-60%": {
+        "total": 386,
+        "wins": 216,
+        "win_rate": 56.0
+      },
+      "60-70%": {
+        "total": 76,
+        "wins": 50,
+        "win_rate": 65.8
+      },
+      "70-80%": {
+        "total": 13,
+        "wins": 10,
+        "win_rate": 76.9
+      },
+      "80-90%": {
+        "total": 1,
+        "wins": 1,
+        "win_rate": 100.0
+      },
+      "90-100%": {
+        "total": 1,
+        "wins": 1,
+        "win_rate": 100.0
+      }
+    },
+    "correction_active": true,
+    "feature_accuracies": {},
+    "feature_weights": {
+      "stat_vs_math": 0.55,
+      "goalie_lambda_factor": 1.0,
+      "intra_stat": {
+        "base_score": 0.34,
+        "ppPct": 0.13,
+        "pkPct": 0.1,
+        "satPct": 0.13,
+        "sfPG": 0.07,
+        "foPct": 0.04,
+        "gfPG": 0.08,
+        "gaPG": 0.08,
+        "jetLag": 0.03,
+        "injuryNet": 0.05,
+        "hotPlayer": 0.04
+      }
+    },
+    "sim_yesterday": {
+      "bets": 3,
+      "spent": 10.0,
+      "profit": 2.28
+    },
+    "sim_total": {
+      "bets": 93,
+      "spent": 270.0,
+      "profit": 59.57
+    },
+    "odds_accuracy": [
+      {
+        "range": "<1.50",
+        "total": 20,
+        "wins": 16,
+        "win_rate": 80.0,
+        "avg_odds": 1.38,
+        "seuil": 72.2,
+        "roi": 10.8,
+        "positive": true
+      },
+      {
+        "range": "1.50-1.70",
+        "total": 214,
+        "wins": 130,
+        "win_rate": 60.7,
+        "avg_odds": 1.61,
+        "seuil": 62.1,
+        "roi": -2.2,
+        "positive": false
+      },
+      {
+        "range": "1.70-1.90",
+        "total": 179,
+        "wins": 101,
+        "win_rate": 56.4,
+        "avg_odds": 1.78,
+        "seuil": 56.2,
+        "roi": 0.4,
+        "positive": true
+      },
+      {
+        "range": "1.90-2.20",
+        "total": 52,
+        "wins": 23,
+        "win_rate": 44.2,
+        "avg_odds": 2.0,
+        "seuil": 49.9,
+        "roi": -11.4,
+        "positive": false
+      },
+      {
+        "range": "2.20+",
+        "total": 39,
+        "wins": 20,
+        "win_rate": 51.3,
+        "avg_odds": 2.58,
+        "seuil": 38.8,
+        "roi": 32.3,
+        "positive": true
+      }
+    ],
+    "daily_accuracy": [
+      {
+        "date": "2026-03-19",
+        "wins": 6,
+        "total": 13,
+        "win_rate": 46.2,
+        "roi": -10.6,
+        "profit": -2.76,
+        "kelly_profit": -0.85,
+        "kelly_spent": 10.0,
+        "kelly_roi": -8.5,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-03-20",
+        "wins": 5,
+        "total": 6,
+        "win_rate": 83.3,
+        "roi": 56.3,
+        "profit": 6.76,
+        "kelly_profit": 17.0,
+        "kelly_spent": 10.0,
+        "kelly_roi": 170.0,
+        "champ_wins": 2,
+        "champ_total": 2,
+        "champ_win_rate": 100.0
+      },
+      {
+        "date": "2026-03-21",
+        "wins": 12,
+        "total": 22,
+        "win_rate": 54.5,
+        "roi": -1.7,
+        "profit": -0.76,
+        "kelly_profit": 8.87,
+        "kelly_spent": 10.0,
+        "kelly_roi": 88.7,
+        "champ_wins": 2,
+        "champ_total": 4,
+        "champ_win_rate": 50.0
+      },
+      {
+        "date": "2026-03-22",
+        "wins": 9,
+        "total": 18,
+        "win_rate": 50.0,
+        "roi": -14.9,
+        "profit": -5.36,
+        "kelly_profit": 9.1,
+        "kelly_spent": 10.0,
+        "kelly_roi": 91.0,
+        "champ_wins": 4,
+        "champ_total": 5,
+        "champ_win_rate": 80.0
+      },
+      {
+        "date": "2026-03-23",
+        "wins": 2,
+        "total": 2,
+        "win_rate": 100.0,
+        "roi": 68.5,
+        "profit": 2.74,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 0,
+        "champ_total": 0,
+        "champ_win_rate": null
+      },
+      {
+        "date": "2026-03-24",
+        "wins": 12,
+        "total": 30,
+        "win_rate": 40.0,
+        "roi": -31.0,
+        "profit": -18.6,
+        "kelly_profit": 8.46,
+        "kelly_spent": 10.0,
+        "kelly_roi": 84.6,
+        "champ_wins": 4,
+        "champ_total": 5,
+        "champ_win_rate": 80.0
+      },
+      {
+        "date": "2026-03-25",
+        "wins": 1,
+        "total": 4,
+        "win_rate": 25.0,
+        "roi": -60.8,
+        "profit": -4.86,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 0,
+        "champ_total": 0,
+        "champ_win_rate": null
+      },
+      {
+        "date": "2026-03-26",
+        "wins": 14,
+        "total": 26,
+        "win_rate": 53.8,
+        "roi": -5.9,
+        "profit": -3.06,
+        "kelly_profit": 2.52,
+        "kelly_spent": 10.0,
+        "kelly_roi": 25.2,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-03-27",
+        "wins": 3,
+        "total": 4,
+        "win_rate": 75.0,
+        "roi": 23.0,
+        "profit": 1.84,
+        "kelly_profit": -10.0,
+        "kelly_spent": 10.0,
+        "kelly_roi": -100.0,
+        "champ_wins": 0,
+        "champ_total": 0,
+        "champ_win_rate": null
+      },
+      {
+        "date": "2026-03-28",
+        "wins": 20,
+        "total": 30,
+        "win_rate": 66.7,
+        "roi": 18.9,
+        "profit": 11.36,
+        "kelly_profit": 12.4,
+        "kelly_spent": 10.0,
+        "kelly_roi": 124.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-03-29",
+        "wins": 4,
+        "total": 12,
+        "win_rate": 33.3,
+        "roi": -44.8,
+        "profit": -10.74,
+        "kelly_profit": 6.6,
+        "kelly_spent": 10.0,
+        "kelly_roi": 66.0,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-03-30",
+        "wins": 5,
+        "total": 10,
+        "win_rate": 50.0,
+        "roi": -18.1,
+        "profit": -3.62,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-03-31",
+        "wins": 13,
+        "total": 20,
+        "win_rate": 65.0,
+        "roi": 29.6,
+        "profit": 11.86,
+        "kelly_profit": 2.2,
+        "kelly_spent": 10.0,
+        "kelly_roi": 22.0,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-04-01",
+        "wins": 4,
+        "total": 6,
+        "win_rate": 66.7,
+        "roi": 61.0,
+        "profit": 7.32,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 2,
+        "champ_total": 4,
+        "champ_win_rate": 50.0
+      },
+      {
+        "date": "2026-04-02",
+        "wins": 19,
+        "total": 28,
+        "win_rate": 67.9,
+        "roi": 15.0,
+        "profit": 8.38,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-03",
+        "wins": 0,
+        "total": 4,
+        "win_rate": 0.0,
+        "roi": -100.0,
+        "profit": -8.0,
+        "kelly_profit": -10.0,
+        "kelly_spent": 10.0,
+        "kelly_roi": -100.0,
+        "champ_wins": 0,
+        "champ_total": 2,
+        "champ_win_rate": 0.0
+      },
+      {
+        "date": "2026-04-04",
+        "wins": 20,
+        "total": 30,
+        "win_rate": 66.7,
+        "roi": 21.3,
+        "profit": 12.76,
+        "kelly_profit": 7.57,
+        "kelly_spent": 10.0,
+        "kelly_roi": 75.7,
+        "champ_wins": 4,
+        "champ_total": 5,
+        "champ_win_rate": 80.0
+      },
+      {
+        "date": "2026-04-05",
+        "wins": 10,
+        "total": 14,
+        "win_rate": 71.4,
+        "roi": 23.4,
+        "profit": 6.56,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-06",
+        "wins": 5,
+        "total": 8,
+        "win_rate": 62.5,
+        "roi": 8.8,
+        "profit": 1.4,
+        "kelly_profit": -0.2,
+        "kelly_spent": 10.0,
+        "kelly_roi": -2.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-07",
+        "wins": 14,
+        "total": 22,
+        "win_rate": 63.6,
+        "roi": 3.4,
+        "profit": 1.48,
+        "kelly_profit": 4.25,
+        "kelly_spent": 10.0,
+        "kelly_roi": 42.5,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-08",
+        "wins": 3,
+        "total": 6,
+        "win_rate": 50.0,
+        "roi": -11.5,
+        "profit": -1.38,
+        "kelly_profit": -10.0,
+        "kelly_spent": 10.0,
+        "kelly_roi": -100.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-09",
+        "wins": 21,
+        "total": 28,
+        "win_rate": 75.0,
+        "roi": 25.1,
+        "profit": 14.04,
+        "kelly_profit": -2.79,
+        "kelly_spent": 10.0,
+        "kelly_roi": -27.9,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-11",
+        "wins": 12,
+        "total": 30,
+        "win_rate": 40.0,
+        "roi": -29.6,
+        "profit": -17.76,
+        "kelly_profit": -5.8,
+        "kelly_spent": 10.0,
+        "kelly_roi": -58.0,
+        "champ_wins": 1,
+        "champ_total": 5,
+        "champ_win_rate": 20.0
+      },
+      {
+        "date": "2026-04-12",
+        "wins": 8,
+        "total": 12,
+        "win_rate": 66.7,
+        "roi": 21.8,
+        "profit": 5.22,
+        "kelly_profit": 11.5,
+        "kelly_spent": 10.0,
+        "kelly_roi": 115.0,
+        "champ_wins": 4,
+        "champ_total": 5,
+        "champ_win_rate": 80.0
+      },
+      {
+        "date": "2026-04-13",
+        "wins": 9,
+        "total": 20,
+        "win_rate": 45.0,
+        "roi": -27.1,
+        "profit": -10.82,
+        "kelly_profit": -3.41,
+        "kelly_spent": 10.0,
+        "kelly_roi": -34.1,
+        "champ_wins": 1,
+        "champ_total": 5,
+        "champ_win_rate": 20.0
+      },
+      {
+        "date": "2026-04-14",
+        "wins": 9,
+        "total": 18,
+        "win_rate": 50.0,
+        "roi": -11.3,
+        "profit": -4.06,
+        "kelly_profit": -3.4,
+        "kelly_spent": 10.0,
+        "kelly_roi": -34.0,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-04-15",
+        "wins": 7,
+        "total": 12,
+        "win_rate": 58.3,
+        "roi": -0.9,
+        "profit": -0.22,
+        "kelly_profit": 4.91,
+        "kelly_spent": 10.0,
+        "kelly_roi": 49.1,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-04-16",
+        "wins": 6,
+        "total": 12,
+        "win_rate": 50.0,
+        "roi": -19.3,
+        "profit": -4.64,
+        "kelly_profit": -2.3,
+        "kelly_spent": 10.0,
+        "kelly_roi": -23.0,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-04-18",
+        "wins": 4,
+        "total": 6,
+        "win_rate": 66.7,
+        "roi": 14.8,
+        "profit": 1.78,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 4,
+        "champ_total": 5,
+        "champ_win_rate": 80.0
+      },
+      {
+        "date": "2026-04-19",
+        "wins": 4,
+        "total": 8,
+        "win_rate": 50.0,
+        "roi": -20.0,
+        "profit": -3.2,
+        "kelly_profit": -5.14,
+        "kelly_spent": 10.0,
+        "kelly_roi": -51.4,
+        "champ_wins": 2,
+        "champ_total": 5,
+        "champ_win_rate": 40.0
+      },
+      {
+        "date": "2026-04-20",
+        "wins": 5,
+        "total": 8,
+        "win_rate": 62.5,
+        "roi": 2.8,
+        "profit": 0.44,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-21",
+        "wins": 6,
+        "total": 8,
+        "win_rate": 75.0,
+        "roi": 31.8,
+        "profit": 5.08,
+        "kelly_profit": 14.8,
+        "kelly_spent": 10.0,
+        "kelly_roi": 148.0,
+        "champ_wins": 4,
+        "champ_total": 5,
+        "champ_win_rate": 80.0
+      },
+      {
+        "date": "2026-04-22",
+        "wins": 4,
+        "total": 6,
+        "win_rate": 66.7,
+        "roi": 16.2,
+        "profit": 1.94,
+        "kelly_profit": 2.6,
+        "kelly_spent": 10.0,
+        "kelly_roi": 26.0,
+        "champ_wins": 3,
+        "champ_total": 5,
+        "champ_win_rate": 60.0
+      },
+      {
+        "date": "2026-04-23",
+        "wins": 4,
+        "total": 6,
+        "win_rate": 66.7,
+        "roi": 14.2,
+        "profit": 1.7,
+        "kelly_profit": -1.6,
+        "kelly_spent": 10.0,
+        "kelly_roi": -16.0,
+        "champ_wins": 3,
+        "champ_total": 3,
+        "champ_win_rate": 100.0
+      },
+      {
+        "date": "2026-04-24",
+        "wins": 4,
+        "total": 6,
+        "win_rate": 66.7,
+        "roi": 15.3,
+        "profit": 1.84,
+        "kelly_profit": 0.0,
+        "kelly_spent": 0.0,
+        "kelly_roi": 0.0,
+        "champ_wins": 1,
+        "champ_total": 3,
+        "champ_win_rate": 33.3
+      },
+      {
+        "date": "2026-04-25",
+        "wins": 6,
+        "total": 9,
+        "win_rate": 66.7,
+        "roi": 12.4,
+        "profit": 2.24,
+        "kelly_profit": 2.28,
+        "kelly_spent": 10.0,
+        "kelly_roi": 22.8,
+        "champ_wins": 5,
+        "champ_total": 8,
+        "champ_win_rate": 62.5
+      }
+    ],
+    "score_accuracy": [
+      {
+        "range": "100+",
+        "total": 190,
+        "wins": 103,
+        "win_rate": 54.2
+      },
+      {
+        "range": "90-100",
+        "total": 85,
+        "wins": 50,
+        "win_rate": 58.8
+      },
+      {
+        "range": "80-90",
+        "total": 139,
+        "wins": 85,
+        "win_rate": 61.2
+      },
+      {
+        "range": "70-80",
+        "total": 80,
+        "wins": 47,
+        "win_rate": 58.8
+      },
+      {
+        "range": "60-70",
+        "total": 10,
+        "wins": 5,
+        "win_rate": 50.0
+      }
+    ],
+    "champion_accuracy": {
+      "total": 156,
+      "wins": 87,
+      "win_rate": 55.8,
+      "roi": 5.4,
+      "profit": 16.82
+    },
+    "team_accuracy": [
+      {
+        "team": "Ottawa (Senateurs)",
+        "total": 39,
+        "wins": 28,
+        "win_rate": 71.8
+      },
+      {
+        "team": "Caroline (Hurricanes)",
+        "total": 35,
+        "wins": 24,
+        "win_rate": 68.6
+      },
+      {
+        "team": "Los Angeles (Kings)",
+        "total": 34,
+        "wins": 23,
+        "win_rate": 67.6
+      },
+      {
+        "team": "Colorado (Avalanche)",
+        "total": 34,
+        "wins": 23,
+        "win_rate": 67.6
+      },
+      {
+        "team": "Tampa Bay (Lightning)",
+        "total": 37,
+        "wins": 23,
+        "win_rate": 62.2
+      },
+      {
+        "team": "Pittsburgh (Penguins)",
+        "total": 37,
+        "wins": 21,
+        "win_rate": 56.8
+      },
+      {
+        "team": "San Jose (Sharks)",
+        "total": 32,
+        "wins": 20,
+        "win_rate": 62.5
+      },
+      {
+        "team": "Utah (Mammoth)",
+        "total": 34,
+        "wins": 20,
+        "win_rate": 58.8
+      },
+      {
+        "team": "Anaheim (Ducks)",
+        "total": 34,
+        "wins": 20,
+        "win_rate": 58.8
+      },
+      {
+        "team": "Montreal (Canadiens)",
+        "total": 36,
+        "wins": 20,
+        "win_rate": 55.6
+      },
+      {
+        "team": "Seattle (Kraken)",
+        "total": 30,
+        "wins": 19,
+        "win_rate": 63.3
+      },
+      {
+        "team": "Edmonton (Oilers)",
+        "total": 30,
+        "wins": 19,
+        "win_rate": 63.3
+      },
+      {
+        "team": "Dallas (Stars)",
+        "total": 37,
+        "wins": 19,
+        "win_rate": 51.4
+      },
+      {
+        "team": "Chicago (Blackhawks)",
+        "total": 27,
+        "wins": 18,
+        "win_rate": 66.7
+      },
+      {
+        "team": "Vancouver (Canucks)",
+        "total": 29,
+        "wins": 18,
+        "win_rate": 62.1
+      },
+      {
+        "team": "Winnipeg (Jets)",
+        "total": 29,
+        "wins": 18,
+        "win_rate": 62.1
+      },
+      {
+        "team": "Calgary (Flames)",
+        "total": 30,
+        "wins": 18,
+        "win_rate": 60.0
+      },
+      {
+        "team": "Buffalo (Sabres)",
+        "total": 34,
+        "wins": 18,
+        "win_rate": 52.9
+      },
+      {
+        "team": "Nashville (Predators)",
+        "total": 30,
+        "wins": 17,
+        "win_rate": 56.7
+      },
+      {
+        "team": "Floride (Panthers)",
+        "total": 30,
+        "wins": 17,
+        "win_rate": 56.7
+      },
+      {
+        "team": "Minnesota (Wild)",
+        "total": 34,
+        "wins": 17,
+        "win_rate": 50.0
+      },
+      {
+        "team": "Vegas (Golden Knights)",
+        "total": 34,
+        "wins": 17,
+        "win_rate": 50.0
+      },
+      {
+        "team": "Saint-Louis (Blues)",
+        "total": 28,
+        "wins": 16,
+        "win_rate": 57.1
+      },
+      {
+        "team": "Boston (Bruins)",
+        "total": 33,
+        "wins": 16,
+        "win_rate": 48.5
+      },
+      {
+        "team": "Philadelphie (Flyers)",
+        "total": 37,
+        "wins": 16,
+        "win_rate": 43.2
+      },
+      {
+        "team": "New York (Rangers)",
+        "total": 26,
+        "wins": 15,
+        "win_rate": 57.7
+      },
+      {
+        "team": "New Jersey (Devils)",
+        "total": 26,
+        "wins": 15,
+        "win_rate": 57.7
+      },
+      {
+        "team": "Toronto (Maple Leafs)",
+        "total": 24,
+        "wins": 14,
+        "win_rate": 58.3
+      },
+      {
+        "team": "Detroit (Red Wings)",
+        "total": 28,
+        "wins": 13,
+        "win_rate": 46.4
+      },
+      {
+        "team": "New York (Islanders)",
+        "total": 28,
+        "wins": 13,
+        "win_rate": 46.4
+      },
+      {
+        "team": "Columbus (Blue Jackets)",
+        "total": 28,
+        "wins": 13,
+        "win_rate": 46.4
+      },
+      {
+        "team": "Washington (Capitals)",
+        "total": 24,
+        "wins": 12,
+        "win_rate": 50.0
+      }
+    ],
+    "bet_type_accuracy": [
+      {
+        "category": "Gagnant (2 issues)",
+        "total": 219,
+        "wins": 123,
+        "win_rate": 56.2,
+        "roi": -2.6
+      },
+      {
+        "category": "Total de buts (équipe)",
+        "total": 119,
+        "wins": 70,
+        "win_rate": 58.8,
+        "roi": -2.4
+      },
+      {
+        "category": "Total de buts (match)",
+        "total": 112,
+        "wins": 70,
+        "win_rate": 62.5,
+        "roi": 8.3
+      },
+      {
+        "category": "Gagnant (3 issues)",
+        "total": 38,
+        "wins": 22,
+        "win_rate": 57.9,
+        "roi": 27.6
+      },
+      {
+        "category": "Props joueur",
+        "total": 14,
+        "wins": 5,
+        "win_rate": 35.7,
+        "roi": -41.1
+      },
+      {
+        "category": "Total de points (match)",
+        "total": 2,
+        "wins": 0,
+        "win_rate": 0.0,
+        "roi": -100.0
+      },
+      {
+        "category": "Les 2 équipes marquent",
+        "total": 1,
+        "wins": 0,
+        "win_rate": 0.0,
+        "roi": -100.0
+      }
+    ]
+  },
+  "feature_weights": {
+    "stat_vs_math": 0.55,
+    "goalie_lambda_factor": 1.0,
+    "intra_stat": {
+      "base_score": 0.34,
+      "ppPct": 0.13,
+      "pkPct": 0.1,
+      "satPct": 0.13,
+      "sfPG": 0.07,
+      "foPct": 0.04,
+      "gfPG": 0.08,
+      "gaPG": 0.08,
+      "jetLag": 0.03,
+      "injuryNet": 0.05,
+      "hotPlayer": 0.04
+    }
+  },
+  "calibration_snapshots": {
+    "bet_type_accuracy": [
+      {
+        "category": "Gagnant à 2 issues",
+        "roi": 2.5,
+        "total": 96,
+        "win_rate": 50.0,
+        "wins": 48
+      },
+      {
+        "category": "Gagnant à 3 issues (excluant prol. et TB)",
+        "roi": 63.7,
+        "total": 19,
+        "win_rate": 68.4,
+        "wins": 13
+      },
+      {
+        "category": "Total de buts plus/moins 6.5",
+        "roi": 30.2,
+        "total": 13,
+        "win_rate": 61.5,
+        "wins": 8
+      },
+      {
+        "category": "Total de buts plus/moins 5.5",
+        "roi": 56.9,
+        "total": 2,
+        "win_rate": 50.0,
+        "wins": 1
+      },
+      {
+        "category": "Ottawa (Sénateurs) Total de buts plus/moins 3.5",
+        "roi": 83.0,
+        "total": 1,
+        "win_rate": 100.0,
+        "wins": 1
+      },
+      {
+        "category": "Toronto (Maple Leafs) Total de buts plus/moins 2.5",
+        "roi": 57.0,
+        "total": 1,
+        "win_rate": 100.0,
+        "wins": 1
+      },
+      {
+        "category": "Dylan Larkin Total de points 0.5",
+        "roi": 65.0,
+        "total": 1,
+        "win_rate": 100.0,
+        "wins": 1
+      },
+      {
+        "category": "Double chance",
+        "roi": -100.0,
+        "total": 1,
+        "win_rate": 0.0,
+        "wins": 0
+      }
+    ],
+    "calibration_curve": [
+      {
+        "actual": 55.6,
+        "label": "50-55%",
+        "predicted": 52.5,
+        "total": 45,
+        "wins": 25
+      },
+      {
+        "actual": 51.6,
+        "label": "55-60%",
+        "predicted": 57.5,
+        "total": 31,
+        "wins": 16
+      },
+      {
+        "actual": 56.5,
+        "label": "60-65%",
+        "predicted": 62.5,
+        "total": 23,
+        "wins": 13
+      },
+      {
+        "actual": 54.5,
+        "label": "65-70%",
+        "predicted": 67.5,
+        "total": 11,
+        "wins": 6
+      },
+      {
+        "actual": 80.0,
+        "label": "70-75%",
+        "predicted": 72.5,
+        "total": 5,
+        "wins": 4
+      },
+      {
+        "actual": 80.0,
+        "label": "75%+",
+        "predicted": 87.5,
+        "total": 5,
+        "wins": 4
+      }
+    ],
+    "champion_accuracy": {
+      "roi": 24.9,
+      "total": 146,
+      "win_rate": 55.5,
+      "wins": 81
+    },
+    "count": 134,
+    "daily_accuracy": [
+      {
+        "champ_win_rate": 50.0,
+        "date": "2026-03-21",
+        "game_count": 11,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 9.78,
+        "roi": 97.8,
+        "total": 6,
+        "win_rate": 66.7,
+        "wins": 4
+      },
+      {
+        "champ_win_rate": 80.0,
+        "date": "2026-03-22",
+        "game_count": 9,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 8.93,
+        "roi": 89.3,
+        "total": 3,
+        "win_rate": 100.0,
+        "wins": 3
+      },
+      {
+        "champ_win_rate": null,
+        "date": "2026-03-23",
+        "game_count": 1,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": 3.48,
+        "roi": 34.8,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 80.0,
+        "date": "2026-03-24",
+        "game_count": 15,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 8.46,
+        "roi": 84.6,
+        "total": 4,
+        "win_rate": 100.0,
+        "wins": 4
+      },
+      {
+        "champ_win_rate": null,
+        "date": "2026-03-25",
+        "game_count": 2,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": -5.29,
+        "roi": -52.9,
+        "total": 3,
+        "win_rate": 33.3,
+        "wins": 1
+      },
+      {
+        "champ_win_rate": 40.0,
+        "date": "2026-03-26",
+        "game_count": 13,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 1.39,
+        "roi": 13.9,
+        "total": 5,
+        "win_rate": 60.0,
+        "wins": 3
+      },
+      {
+        "champ_win_rate": null,
+        "date": "2026-03-27",
+        "game_count": 2,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": -8.39,
+        "roi": -83.9,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-03-28",
+        "game_count": 15,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 11.0,
+        "roi": 110.0,
+        "total": 3,
+        "win_rate": 33.3,
+        "wins": 1
+      },
+      {
+        "champ_win_rate": 40.0,
+        "date": "2026-03-29",
+        "game_count": 6,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 5.88,
+        "roi": 58.8,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-03-30",
+        "game_count": 5,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": -10.0,
+        "roi": -100.0,
+        "total": 3,
+        "win_rate": 0.0,
+        "wins": 0
+      },
+      {
+        "champ_win_rate": 40.0,
+        "date": "2026-03-31",
+        "game_count": 10,
+        "invested": 9.5,
+        "kelly_warning": false,
+        "net": 3.75,
+        "roi": 39.5,
+        "total": 7,
+        "win_rate": 57.1,
+        "wins": 4
+      },
+      {
+        "champ_win_rate": 50.0,
+        "date": "2026-04-01",
+        "game_count": 3,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": 1.26,
+        "roi": 12.6,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-02",
+        "game_count": 14,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": 2.13,
+        "roi": 21.3,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 0.0,
+        "date": "2026-04-03",
+        "game_count": 2,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": -10.0,
+        "roi": -100.0,
+        "total": 3,
+        "win_rate": 0.0,
+        "wins": 0
+      },
+      {
+        "champ_win_rate": 80.0,
+        "date": "2026-04-04",
+        "game_count": 15,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 7.57,
+        "roi": 75.8,
+        "total": 7,
+        "win_rate": 71.4,
+        "wins": 5
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-05",
+        "game_count": 7,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 5.25,
+        "roi": 52.5,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-06",
+        "game_count": 4,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": -0.2,
+        "roi": -2.0,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-07",
+        "game_count": 11,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 4.41,
+        "roi": 44.1,
+        "total": 5,
+        "win_rate": 60.0,
+        "wins": 3
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-08",
+        "game_count": 3,
+        "invested": 8.5,
+        "kelly_warning": true,
+        "net": -7.58,
+        "roi": -89.2,
+        "total": 3,
+        "win_rate": 33.3,
+        "wins": 1
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-09",
+        "game_count": 14,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": -1.47,
+        "roi": -14.7,
+        "total": 7,
+        "win_rate": 57.1,
+        "wins": 4
+      },
+      {
+        "champ_win_rate": 20.0,
+        "date": "2026-04-11",
+        "game_count": 15,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": -5.8,
+        "roi": -58.1,
+        "total": 7,
+        "win_rate": 28.6,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 80.0,
+        "date": "2026-04-12",
+        "game_count": 6,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 11.34,
+        "roi": 113.4,
+        "total": 3,
+        "win_rate": 100.0,
+        "wins": 3
+      },
+      {
+        "champ_win_rate": 20.0,
+        "date": "2026-04-13",
+        "game_count": 10,
+        "invested": 9.5,
+        "kelly_warning": false,
+        "net": -3.74,
+        "roi": -39.4,
+        "total": 7,
+        "win_rate": 28.6,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 40.0,
+        "date": "2026-04-14",
+        "game_count": 9,
+        "invested": 9.5,
+        "kelly_warning": false,
+        "net": -2.9,
+        "roi": -30.5,
+        "total": 4,
+        "win_rate": 25.0,
+        "wins": 1
+      },
+      {
+        "champ_win_rate": 40.0,
+        "date": "2026-04-15",
+        "game_count": 6,
+        "invested": 9.5,
+        "kelly_warning": false,
+        "net": 4.65,
+        "roi": 48.9,
+        "total": 5,
+        "win_rate": 60.0,
+        "wins": 3
+      },
+      {
+        "champ_win_rate": 40.0,
+        "date": "2026-04-16",
+        "game_count": 6,
+        "invested": 9.5,
+        "kelly_warning": false,
+        "net": -1.8,
+        "roi": -18.9,
+        "total": 4,
+        "win_rate": 25.0,
+        "wins": 1
+      },
+      {
+        "champ_win_rate": 80.0,
+        "date": "2026-04-18",
+        "game_count": 3,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": 1.3,
+        "roi": 13.0,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 40.0,
+        "date": "2026-04-19",
+        "game_count": 4,
+        "invested": 8.5,
+        "kelly_warning": false,
+        "net": -4.45,
+        "roi": -52.4,
+        "total": 3,
+        "win_rate": 33.3,
+        "wins": 1
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-20",
+        "game_count": 4,
+        "invested": 10.0,
+        "kelly_warning": false,
+        "net": 6.33,
+        "roi": 63.3,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 80.0,
+        "date": "2026-04-21",
+        "game_count": 4,
+        "invested": 8.5,
+        "kelly_warning": false,
+        "net": 10.95,
+        "roi": 128.8,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-22",
+        "game_count": 3,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": 1.55,
+        "roi": 15.5,
+        "total": 3,
+        "win_rate": 33.3,
+        "wins": 1
+      },
+      {
+        "champ_win_rate": 100.0,
+        "date": "2026-04-23",
+        "game_count": 3,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": -2.42,
+        "roi": -24.2,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 33.3,
+        "date": "2026-04-24",
+        "game_count": 3,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": 1.83,
+        "roi": 18.3,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "champ_win_rate": 60.0,
+        "date": "2026-04-25",
+        "game_count": 3,
+        "invested": 10.0,
+        "kelly_warning": true,
+        "net": 2.28,
+        "roi": 22.8,
+        "total": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      }
+    ],
+    "dow_stats": [
+      {
+        "dow": "Lundi",
+        "net": -4.13,
+        "roi": -8.3,
+        "soirees": 5,
+        "total": 19,
+        "win_rate": 42.1,
+        "wins": 8
+      },
+      {
+        "dow": "Mardi",
+        "net": 24.67,
+        "roi": 51.9,
+        "soirees": 5,
+        "total": 23,
+        "win_rate": 60.9,
+        "wins": 14
+      },
+      {
+        "dow": "Mercredi",
+        "net": -5.41,
+        "roi": -11.3,
+        "soirees": 5,
+        "total": 17,
+        "win_rate": 47.1,
+        "wins": 8
+      },
+      {
+        "dow": "Jeudi",
+        "net": -2.17,
+        "roi": -4.4,
+        "soirees": 5,
+        "total": 22,
+        "win_rate": 54.5,
+        "wins": 12
+      },
+      {
+        "dow": "Vendredi",
+        "net": -16.56,
+        "roi": -55.2,
+        "soirees": 3,
+        "total": 9,
+        "win_rate": 44.4,
+        "wins": 4
+      },
+      {
+        "dow": "Samedi",
+        "net": 26.13,
+        "roi": 43.6,
+        "soirees": 6,
+        "total": 29,
+        "win_rate": 55.2,
+        "wins": 16
+      },
+      {
+        "dow": "Dimanche",
+        "net": 26.95,
+        "roi": 55.6,
+        "soirees": 5,
+        "total": 15,
+        "win_rate": 73.3,
+        "wins": 11
+      }
+    ],
+    "edge_stats": [
+      {
+        "label": "< 0%",
+        "net": 0.2,
+        "roi": 78.0,
+        "total": 1,
+        "win_rate": 100.0,
+        "wins": 1
+      },
+      {
+        "label": "0–5%",
+        "net": 6.95,
+        "roi": 75.1,
+        "total": 12,
+        "win_rate": 75.0,
+        "wins": 9
+      },
+      {
+        "label": "5–10%",
+        "net": -10.5,
+        "roi": -100.0,
+        "total": 11,
+        "win_rate": 0.0,
+        "wins": 0
+      },
+      {
+        "label": "> 10%",
+        "net": 1.67,
+        "roi": 8.8,
+        "total": 14,
+        "win_rate": 50.0,
+        "wins": 7
+      }
+    ],
+    "games_per_day_stats": [
+      {
+        "days": 1,
+        "game_count": 1,
+        "roi": 34.8,
+        "total_bets": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "days": 3,
+        "game_count": 2,
+        "roi": -78.9,
+        "total_bets": 9,
+        "win_rate": 33.3,
+        "wins": 3
+      },
+      {
+        "days": 7,
+        "game_count": 3,
+        "roi": -2.6,
+        "total_bets": 21,
+        "win_rate": 57.1,
+        "wins": 12
+      },
+      {
+        "days": 4,
+        "game_count": 4,
+        "roi": 34.1,
+        "total_bets": 12,
+        "win_rate": 58.3,
+        "wins": 7
+      },
+      {
+        "days": 1,
+        "game_count": 5,
+        "roi": -100.0,
+        "total_bets": 3,
+        "win_rate": 0.0,
+        "wins": 0
+      },
+      {
+        "days": 4,
+        "game_count": 6,
+        "roi": 51.5,
+        "total_bets": 15,
+        "win_rate": 60.0,
+        "wins": 9
+      },
+      {
+        "days": 1,
+        "game_count": 7,
+        "roi": 52.5,
+        "total_bets": 3,
+        "win_rate": 66.7,
+        "wins": 2
+      },
+      {
+        "days": 2,
+        "game_count": 9,
+        "roi": 30.9,
+        "total_bets": 7,
+        "win_rate": 57.1,
+        "wins": 4
+      },
+      {
+        "days": 2,
+        "game_count": 10,
+        "roi": 0.1,
+        "total_bets": 14,
+        "win_rate": 42.9,
+        "wins": 6
+      },
+      {
+        "days": 2,
+        "game_count": 11,
+        "roi": 71.0,
+        "total_bets": 11,
+        "win_rate": 63.6,
+        "wins": 7
+      },
+      {
+        "days": 1,
+        "game_count": 13,
+        "roi": 13.9,
+        "total_bets": 5,
+        "win_rate": 60.0,
+        "wins": 3
+      },
+      {
+        "days": 2,
+        "game_count": 14,
+        "roi": 3.3,
+        "total_bets": 10,
+        "win_rate": 60.0,
+        "wins": 6
+      },
+      {
+        "days": 4,
+        "game_count": 15,
+        "roi": 53.1,
+        "total_bets": 21,
+        "win_rate": 57.1,
+        "wins": 12
+      }
+    ],
+    "odds_accuracy": [
+      {
+        "avg_odds": 1.42,
+        "positive": true,
+        "range": "<1.50",
+        "roi": 41.7,
+        "seuil": 70.6,
+        "total": 3,
+        "win_rate": 100.0,
+        "wins": 3
+      },
+      {
+        "avg_odds": 1.61,
+        "positive": true,
+        "range": "1.50-1.70",
+        "roi": 3.9,
+        "seuil": 62.1,
+        "total": 31,
+        "win_rate": 64.5,
+        "wins": 20
+      },
+      {
+        "avg_odds": 1.78,
+        "positive": false,
+        "range": "1.70-1.90",
+        "roi": -10.8,
+        "seuil": 56.0,
+        "total": 38,
+        "win_rate": 50.0,
+        "wins": 19
+      },
+      {
+        "avg_odds": 2.02,
+        "positive": false,
+        "range": "1.90-2.20",
+        "roi": -5.1,
+        "seuil": 49.6,
+        "total": 34,
+        "win_rate": 47.1,
+        "wins": 16
+      },
+      {
+        "avg_odds": 2.45,
+        "positive": true,
+        "range": "2.20+",
+        "roi": 31.4,
+        "seuil": 40.8,
+        "total": 28,
+        "win_rate": 53.6,
+        "wins": 15
+      }
+    ],
+    "roi": 14.9,
+    "sim_total": {
+      "bets": 134,
+      "profit": 49.48,
+      "spent": 333.0
+    },
+    "sim_yesterday": {
+      "bets": 3,
+      "profit": 2.28,
+      "spent": 10.0
+    },
+    "team_accuracy": [],
+    "win_rate": 54.5,
+    "wins": 73
+  }
+}

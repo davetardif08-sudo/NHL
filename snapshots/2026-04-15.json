@@ -1,0 +1,336 @@
+{
+  "saved_at": "2026-04-15T13:07:55.795590",
+  "date": "2026-04-15",
+  "time": "13:07",
+  "sgp_proposals": [
+    {
+      "match": "Dallas (Stars) @ Buffalo (Sabres)",
+      "short_match": "Stars @ Sabres",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Stars + Moins de 6.5",
+      "combined_odds": 3.06,
+      "avg_score": 102.2,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Dallas (Stars)",
+          "odds": 1.7,
+          "fair_prob": 57.9,
+          "value_score": 101.4
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Moins de 6.5",
+          "odds": 1.8,
+          "fair_prob": 53.8,
+          "value_score": 102.9
+        }
+      ]
+    },
+    {
+      "match": "New York (Rangers) @ Tampa Bay (Lightning)",
+      "short_match": "Rangers @ Lightning",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Rangers + Plus de 2.5",
+      "combined_odds": 4.07,
+      "avg_score": 92.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "New York (Rangers)",
+          "odds": 2.3,
+          "fair_prob": 63.8,
+          "value_score": 101.4
+        },
+        {
+          "bet_type": "New York (Rangers) Total de buts plus/moins 2.5",
+          "selection": "Plus de 2.5",
+          "odds": 1.77,
+          "fair_prob": 53.1,
+          "value_score": 83.2
+        }
+      ]
+    },
+    {
+      "match": "San Jose (Sharks) @ Chicago (Blackhawks)",
+      "short_match": "Sharks @ Blackhawks",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Sharks + Moins de 3.5",
+      "combined_odds": 2.84,
+      "avg_score": 92.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "San Jose (Sharks)",
+          "odds": 1.82,
+          "fair_prob": 59.5,
+          "value_score": 101.4
+        },
+        {
+          "bet_type": "Chicago (Blackhawks) Total de buts plus/moins 3.5",
+          "selection": "Moins de 3.5",
+          "odds": 1.56,
+          "fair_prob": 60.1,
+          "value_score": 83.2
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "New York (Rangers) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New York (Rangers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.3,
+      "fair_prob": 63.8,
+      "value_score": 101.4,
+      "mise": 2.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "San Jose (Sharks) @ Chicago (Blackhawks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "San Jose (Sharks)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.82,
+      "fair_prob": 59.5,
+      "value_score": 101.4,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Dallas (Stars) @ Buffalo (Sabres)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Dallas (Stars)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.7,
+      "fair_prob": 57.9,
+      "value_score": 101.4,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Dallas (Stars) @ Buffalo (Sabres)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.8,
+      "fair_prob": 53.8,
+      "value_score": 102.9,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Toronto (Maple Leafs) @ Ottawa (Senateurs)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 2.5",
+      "bet_type": "Toronto (Maple Leafs) Total de buts plus/moins 2.5",
+      "odds": 1.77,
+      "fair_prob": 53.1,
+      "value_score": 83.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Seattle (Kraken) @ Vegas (Golden Knights)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Vegas (Golden Knights)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.36,
+      "fair_prob": 95,
+      "value_score": 85.4,
+      "mise": 4.5,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Toronto (Maple Leafs) @ Ottawa (Senateurs)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Ottawa (Senateurs)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.52,
+      "fair_prob": 74.2,
+      "value_score": 101.4,
+      "mise": 1.5,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "San Jose (Sharks) @ Chicago (Blackhawks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 3.5",
+      "bet_type": "Chicago (Blackhawks) Total de buts plus/moins 3.5",
+      "odds": 1.56,
+      "fair_prob": 60.1,
+      "value_score": 83.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Detroit (Red Wings) @ Floride (Panthers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Detroit (Red Wings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.66,
+      "fair_prob": 61.2,
+      "value_score": 101.4,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Seattle (Kraken) @ Vegas (Golden Knights)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 2.5",
+      "bet_type": "Seattle (Kraken) Total de buts plus/moins 2.5",
+      "odds": 1.63,
+      "fair_prob": 57.4,
+      "value_score": 83.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Detroit (Red Wings) @ Floride (Panthers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 5.5",
+      "bet_type": "Total de buts plus/moins 5.5",
+      "odds": 1.61,
+      "fair_prob": 58.3,
+      "value_score": 81.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "New York (Rangers) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Plus de 2.5",
+      "bet_type": "New York (Rangers) Total de buts plus/moins 2.5",
+      "odds": 1.77,
+      "fair_prob": 53.1,
+      "value_score": 83.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Seattle (Kraken) @ Vegas (Golden Knights)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Seattle (Kraken)",
+      "bet_type": "Double chance",
+      "odds": 2.3,
+      "fair_prob": 34.3,
+      "value_score": 45,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "San Jose (Sharks) @ Chicago (Blackhawks)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou San Jose (Sharks)",
+      "bet_type": "Double chance",
+      "odds": 1.5,
+      "fair_prob": 31.6,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Dallas (Stars) @ Buffalo (Sabres)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Buffalo (Sabres) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.73,
+      "fair_prob": 27.4,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Detroit (Red Wings) @ Floride (Panthers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Floride (Panthers) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.73,
+      "fair_prob": 27.4,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "New York (Rangers) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou New York (Rangers)",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Toronto (Maple Leafs) @ Ottawa (Senateurs)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Toronto (Maple Leafs)",
+      "bet_type": "Double chance",
+      "odds": 2,
+      "fair_prob": 23.7,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "saved_at": "2026-04-07T14:10:27.513740",
+  "date": "2026-04-07",
+  "time": "14:10",
+  "picks": [
+    {
+      "key": "",
+      "match": "Seattle (Kraken) @ Minnesota (Wild)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Minnesota (Wild)",
+      "bet_type": "Gagnant à 3 issues (excluant prol. et TB)",
+      "odds": 1.69,
+      "fair_prob": 77.1,
+      "mise_reelle": 2.25,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Tampa Bay (Lightning) @ Ottawa (Senateurs)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Ottawa (Senateurs)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.74,
+      "fair_prob": 71.7,
+      "mise_reelle": 1.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Philadelphie (Flyers) @ New Jersey (Devils)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New Jersey (Devils)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.82,
+      "fair_prob": 60.2,
+      "mise_reelle": 0.5,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Columbus (Blue Jackets) @ Detroit (Red Wings)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Detroit (Red Wings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.86,
+      "fair_prob": 56.2,
+      "mise_reelle": 0.25,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Floride (Panthers) @ Montreal (Canadiens)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Montreal (Canadiens)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.43,
+      "fair_prob": 71.6,
+      "mise_reelle": 0.25,
+      "recommendation": "Excellent ***"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "saved_at": "2026-04-16T13:03:27.741646",
+  "date": "2026-04-16",
+  "time": "13:03",
+  "picks": [
+    {
+      "key": "",
+      "match": "Anaheim (Ducks) @ Nashville (Predators)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nashville (Predators)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.05,
+      "fair_prob": 58.7,
+      "mise_reelle": 1,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Los Angeles (Kings) @ Calgary (Flames)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Los Angeles (Kings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.72,
+      "fair_prob": 65.9,
+      "mise_reelle": 0.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Saint-Louis (Blues) @ Utah (Mammoth)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Utah (Mammoth)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.05,
+      "fair_prob": 53,
+      "mise_reelle": 0.5,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Seattle (Kraken) @ Colorado (Avalanche)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Colorado (Avalanche)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.54,
+      "fair_prob": 84.8,
+      "mise_reelle": 2.5,
+      "recommendation": "Excellent ***"
+    }
+  ]
+}

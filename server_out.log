@@ -1,0 +1,5 @@
+  >> Cache payload chargé depuis le disque (08:47:07)
+[email] Planificateur démarré — envoi quotidien à 17h00 ET
+  [startup] Cache disque du jour chargé — scrape réel en arrière-plan...
+ * Serving Flask app 'app'
+ * Debug mode: off

@@ -1,0 +1,62 @@
+[
+  {
+    "match": "Philadelphia Flyers @ Pittsburgh Penguins",
+    "selection": "Under +5.5",
+    "bet_type": "totals",
+    "outlier": {
+      "sportsbook": "Unibet",
+      "odds": 1.96
+    },
+    "market_avg": 2.0,
+    "deviation_pct": 2.2,
+    "severity": "low",
+    "arbitrage_roi": 0,
+    "timestamp": "2026-04-27",
+    "detected_at": "2026-04-27T11:18:44.126083"
+  },
+  {
+    "match": "Philadelphia Flyers @ Pittsburgh Penguins",
+    "selection": "Under +5.5",
+    "bet_type": "totals",
+    "outlier": {
+      "sportsbook": "PointsBet",
+      "odds": 2.05
+    },
+    "market_avg": 2.0,
+    "deviation_pct": 2.2,
+    "severity": "low",
+    "arbitrage_roi": 0,
+    "timestamp": "2026-04-27",
+    "detected_at": "2026-04-27T11:18:44.126083"
+  },
+  {
+    "match": "Minnesota Wild @ Dallas Stars",
+    "selection": "Under +5.5",
+    "bet_type": "totals",
+    "outlier": {
+      "sportsbook": "Unibet",
+      "odds": 1.93
+    },
+    "market_avg": 1.99,
+    "deviation_pct": 3.0,
+    "severity": "low",
+    "arbitrage_roi": 0,
+    "timestamp": "2026-04-27",
+    "detected_at": "2026-04-27T11:18:44.126083"
+  },
+  {
+    "match": "Minnesota Wild @ Dallas Stars",
+    "selection": "Under +5.5",
+    "bet_type": "totals",
+    "outlier": {
+      "sportsbook": "PointsBet",
+      "odds": 2.05
+    },
+    "market_avg": 1.99,
+    "deviation_pct": 3.0,
+    "severity": "low",
+    "arbitrage_roi": 0,
+    "timestamp": "2026-04-27",
+    "detected_at": "2026-04-27T11:18:44.126083"
+  }
+]

@@ -1,0 +1,91 @@
+{
+  "saved_at": "2026-04-11T10:45:07.420087",
+  "date": "2026-04-11",
+  "time": "10:45",
+  "picks": [
+    {
+      "key": "",
+      "match": "New York (Rangers) @ Dallas (Stars)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New York (Rangers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.58,
+      "fair_prob": 54.4,
+      "mise_reelle": 1,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Calgary (Flames) @ Seattle (Kraken)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Calgary (Flames)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.2,
+      "fair_prob": 58.9,
+      "mise_reelle": 0.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Vegas (Golden Knights) @ Colorado (Avalanche)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Vegas (Golden Knights)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.16,
+      "fair_prob": 58.2,
+      "mise_reelle": 0.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Caroline (Hurricanes) @ Utah (Mammoth)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Utah (Mammoth)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.78,
+      "fair_prob": 69.3,
+      "mise_reelle": 1,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Washington (Capitals) @ Pittsburgh (Penguins)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Pittsburgh (Penguins)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.78,
+      "fair_prob": 65.6,
+      "mise_reelle": 0.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Tampa Bay (Lightning) @ Boston (Bruins)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Boston (Bruins)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2,
+      "fair_prob": 56.4,
+      "mise_reelle": 0.5,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Edmonton (Oilers) @ Los Angeles (Kings)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Los Angeles (Kings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.91,
+      "fair_prob": 55.9,
+      "mise_reelle": 0.25,
+      "recommendation": "Excellent ***"
+    }
+  ]
+}

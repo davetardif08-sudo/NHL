@@ -1,0 +1,79 @@
+{
+  "saved_at": "2026-04-13T13:10:39.424484",
+  "date": "2026-04-13",
+  "time": "13:10",
+  "picks": [
+    {
+      "key": "",
+      "match": "Detroit (Red Wings) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Detroit (Red Wings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.64,
+      "fair_prob": 52.4,
+      "mise_reelle": 0.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Los Angeles (Kings) @ Seattle (Kraken)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Los Angeles (Kings)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.66,
+      "fair_prob": 77.8,
+      "mise_reelle": 1.5,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Caroline (Hurricanes) @ Philadelphie (Flyers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Caroline (Hurricanes)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.2,
+      "fair_prob": 56.2,
+      "mise_reelle": 0.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "New York (Rangers) @ Floride (Panthers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "New York (Rangers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.72,
+      "fair_prob": 67.9,
+      "mise_reelle": 0.75,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Colorado (Avalanche) @ Edmonton (Oilers)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Edmonton (Oilers)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2,
+      "fair_prob": 57.4,
+      "mise_reelle": 0.5,
+      "recommendation": "Excellent ***"
+    },
+    {
+      "key": "",
+      "match": "Winnipeg (Jets) @ Vegas (Golden Knights)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Vegas (Golden Knights)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.56,
+      "fair_prob": 65.7,
+      "mise_reelle": 0.25,
+      "recommendation": "Excellent ***"
+    }
+  ]
+}

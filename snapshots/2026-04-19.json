@@ -1,0 +1,252 @@
+{
+  "saved_at": "2026-04-19T15:16:13.408957",
+  "date": "2026-04-19",
+  "time": "15:16",
+  "sgp_proposals": [
+    {
+      "match": "Boston (Bruins) @ Buffalo (Sabres)",
+      "short_match": "Bruins @ Sabres",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Bruins + Moins de 6.5",
+      "combined_odds": 4.15,
+      "avg_score": 102.1,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Boston (Bruins)",
+          "odds": 2.4,
+          "fair_prob": 62.5,
+          "value_score": 100.7
+        },
+        {
+          "bet_type": "Total de buts plus/moins 6.5",
+          "selection": "Moins de 6.5",
+          "odds": 1.73,
+          "fair_prob": 55.4,
+          "value_score": 103.4
+        }
+      ]
+    },
+    {
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "short_match": "Mammoth @ Golden Knights",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Golden Knights + Moins de 3.5",
+      "combined_odds": 2.71,
+      "avg_score": 92.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Vegas (Golden Knights)",
+          "odds": 1.62,
+          "fair_prob": 66.6,
+          "value_score": 100.7
+        },
+        {
+          "bet_type": "Vegas (Golden Knights) Total de buts plus/moins 3.5",
+          "selection": "Moins de 3.5",
+          "odds": 1.67,
+          "fair_prob": 56.3,
+          "value_score": 83.9
+        }
+      ]
+    },
+    {
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "short_match": "Canadiens @ Lightning",
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Lightning + Moins de 3.5",
+      "combined_odds": 2.78,
+      "avg_score": 92.3,
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "selection": "Tampa Bay (Lightning)",
+          "odds": 1.52,
+          "fair_prob": 50.9,
+          "value_score": 100.7
+        },
+        {
+          "bet_type": "Tampa Bay (Lightning) Total de buts plus/moins 3.5",
+          "selection": "Moins de 3.5",
+          "odds": 1.83,
+          "fair_prob": 51.1,
+          "value_score": 83.9
+        }
+      ]
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Buffalo (Sabres)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Boston (Bruins)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2.4,
+      "fair_prob": 62.5,
+      "value_score": 100.7,
+      "mise": 5.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Vegas (Golden Knights)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.62,
+      "fair_prob": 66.6,
+      "value_score": 100.7,
+      "mise": 2.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Buffalo (Sabres)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 6.5",
+      "bet_type": "Total de buts plus/moins 6.5",
+      "odds": 1.73,
+      "fair_prob": 55.4,
+      "value_score": 103.4,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Los Angeles (Kings) @ Colorado (Avalanche)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 2.5",
+      "bet_type": "Los Angeles (Kings) Total de buts plus/moins 2.5",
+      "odds": 1.59,
+      "fair_prob": 59.1,
+      "value_score": 83.9,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 3.5",
+      "bet_type": "Vegas (Golden Knights) Total de buts plus/moins 3.5",
+      "odds": 1.67,
+      "fair_prob": 56.3,
+      "value_score": 83.9,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Los Angeles (Kings) @ Colorado (Avalanche)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Colorado (Avalanche)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.36,
+      "fair_prob": 67.4,
+      "value_score": 84.8,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Moins de 3.5",
+      "bet_type": "Tampa Bay (Lightning) Total de buts plus/moins 3.5",
+      "odds": 1.83,
+      "fair_prob": 51.1,
+      "value_score": 83.9,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Tampa Bay (Lightning)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.52,
+      "fair_prob": 50.9,
+      "value_score": 100.7,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Boston (Bruins) @ Buffalo (Sabres)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Boston (Bruins)",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Utah (Mammoth)",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Montreal (Canadiens)",
+      "bet_type": "Double chance",
+      "odds": 1.91,
+      "fair_prob": 24.7,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Los Angeles (Kings) @ Colorado (Avalanche)",
+      "home_team": "",
+      "away_team": "",
+      "selection": "Nul ou Los Angeles (Kings)",
+      "bet_type": "Double chance",
+      "odds": 2.25,
+      "fair_prob": 21.1,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}
