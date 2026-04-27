@@ -797,9 +797,12 @@
       </div>
 
       <!-- Barre d'action -->
-      <div style="display:flex; justify-content:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+      <div style="display:flex; justify-content:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+        <div style="background:linear-gradient(135deg,#10b98122,#059669); border:1px solid #10b981; color:#10b981; padding:12px 20px; border-radius:8px; font-size:14px; font-weight:600; display:flex; align-items:center; gap:8px;">
+          ✅ Sauvegarde automatique 30 min avant le 1er match
+        </div>
         <button id="btn-save-snapshot" onclick="saveSnapshot()"
-          style="display:flex;align-items:center;gap:10px;padding:14px 32px;border-radius:12px;
+          style="display:none;align-items:center;gap:10px;padding:14px 32px;border-radius:12px;
                  border:2px solid #f59e0b;background:linear-gradient(135deg,#f59e0b22,#f59e0b11);
                  color:#f59e0b;font-size:16px;font-weight:700;cursor:pointer;
                  transition:all .2s;box-shadow:0 0 18px #f59e0b44;letter-spacing:.3px;">
