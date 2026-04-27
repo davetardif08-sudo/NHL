@@ -287,11 +287,13 @@
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       box-shadow: var(--shadow);
+      -webkit-overflow-scrolling: touch;
     }
 
-    table { width: 100%; border-collapse: collapse; }
+    table { width: 100%; border-collapse: collapse; min-width: 400px; }
     thead { background: var(--bg3); }
     th {
       padding: 10px 14px; text-align: left;
@@ -501,9 +503,46 @@
     }
 
     /* ── Responsive ──────────────────────────────────────── */
-    @media (max-width: 800px) {
+    @media (max-width: 1024px) {
+      /* Tablet: hide some columns but keep essential betting data */
       th.hide-sm, td.hide-sm { display: none; }
       main { padding: 12px; }
+    }
+
+    @media (max-width: 768px) {
+      /* Tablet/small device optimization */
+      main { padding: 8px; }
+      .table-wrap { margin-bottom: 12px; }
+      table { font-size: 12px; }
+      th { padding: 8px 10px; font-size: 10px; }
+      td { padding: 10px 10px; }
+      .match-cell .teams { font-size: 13px; }
+      .selection { font-size: 13px; }
+      .odds-pill { padding: 3px 8px; font-size: 14px; }
+    }
+
+    @media (max-width: 480px) {
+      /* Mobile phone optimization */
+      main { padding: 6px; }
+      .table-wrap { margin-bottom: 10px; }
+      table { font-size: 11px; }
+      th { padding: 6px 8px; font-size: 9px; letter-spacing: .3px; }
+      td { padding: 8px 8px; }
+      .match-cell .teams { font-size: 12px; }
+      .selection { font-size: 12px; }
+      .odds-pill { padding: 2px 6px; font-size: 13px; }
+      .bet-type { max-width: 100px; font-size: 11px; }
+      .rank { font-size: 12px; width: 24px; }
+      th.c, td.c { padding: 8px 6px; }
+      input[type="number"] { padding: 4px 6px; font-size: 12px; }
+      /* Button optimization */
+      .btn { padding: 6px 12px; font-size: 12px; }
+      button[onclick*="saveSnapshot"], button[onclick*="saveRealBets"], button[onclick*="sendEmail"] {
+        padding: 10px 16px; font-size: 13px; flex: 0 1 auto;
+      }
+      /* Header tabs wrapping */
+      .header-tabs { flex-wrap: wrap; gap: 6px; }
+      .tab-btn { padding: 6px 10px; font-size: 11px; }
     }
 
     /* ── Dev Backlog ─────────────────────────────────────── */
