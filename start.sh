@@ -1,5 +1,5 @@
 #!/bin/bash
-# Libs système installées au build (nixpacks.toml phases.install --with-deps)
-# Le binaire Chromium doit être téléchargé au démarrage (pas persisté entre builds)
-python -m playwright install chromium
+# Installe les libs système ET le binaire Chromium au démarrage.
+# Railway ne persiste pas les apt packages entre build et runtime.
+python -m playwright install --with-deps chromium
 python app.py
