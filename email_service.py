@@ -644,6 +644,7 @@ def send_real_bets_summary(sessions: list, balance_info: dict | None = None) -> 
 # ── Planificateur quotidien ───────────────────────────────────────────────────
 
 _scheduler_started = False
+_snapshot_scheduler_started = False
 
 def schedule_daily_email(get_picks_fn, get_sgp_fn=None, hour: int = SEND_HOUR_ET, minute: int = SEND_MINUTE_ET):
     """
@@ -710,13 +711,16 @@ def schedule_dynamic_snapshots(get_picks_fn, get_sgp_fn=None):
         last_check_date = None
         first_game_time = None  # (hour, minute) du premier match
         last_snapshot_date = None
+        first_run = True  # Flag pour scraper immédiatement au démarrage
 
         while True:
             now_et = _et_now()
             today = now_et.date().isoformat()
 
             # ── À 8h ET chaque matin, scraper les matchs pour trouver l'heure du premier
-            if now_et.hour == 8 and now_et.minute == 0 and last_check_date != today:
+            # ── OU au premier démarrage si on est après 8h AM (rattrapage)
+            should_scrape = (now_et.hour == 8 and now_et.minute == 0 and last_check_date != today) or (first_run and now_et.hour >= 8)
+            if should_scrape:
                 try:
                     print(f"[snapshot] Scrape des matchs du jour {today} pour trouver le premier...")
                     # Import tardif pour éviter les dépendances circulaires
@@ -746,8 +750,10 @@ def schedule_dynamic_snapshots(get_picks_fn, get_sgp_fn=None):
                         print(f"[snapshot] Aucun match NHL trouvé pour {today}")
 
                     last_check_date = today
+                    first_run = False  # Ne plus faire le rattrapage après la première exécution
                 except Exception as exc:
                     print(f"[snapshot] Erreur lors du scrape du matin: {exc}")
+                    first_run = False  # Ne plus faire le rattrapage même en cas d'erreur
 
             # ── À l'heure calculée, déclencher le snapshot
             if first_game_time and now_et.hour == first_game_time[0] and now_et.minute == first_game_time[1]:
