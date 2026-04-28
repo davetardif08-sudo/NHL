@@ -2,25 +2,4 @@
 nixpkgs = ["chromium", "libnss_nis"]
 
 [phases.setup]
-nixpkgs = [
-    "chromium",
-    "libstdc++",
-    "libxcb",
-    "libxkbcommon",
-    "mesa",
-    "alsa-lib",
-    "atk",
-    "cups",
-    "dbus",
-    "expat",
-    "fontconfig",
-    "freetype",
-    "gdk-pixbuf",
-    "glib",
-    "gtk3",
-    "libdrm",
-    "libxkbcommon",
-    "nspr",
-    "nss",
-    "pango"
-]
+nixpkgs = ["chromium", "libstdc++", "libxcb", "libxkbcommon", "mesa"]

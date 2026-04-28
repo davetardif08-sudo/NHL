@@ -343,29 +343,8 @@ class MiseOJeuScraper:
         sports : liste de sports à récupérer, ex. ["hockey"] ou ["basketball"].
                  None = tous les sports (hockey + NBA).
         """
-        # Critical Chrome args for Docker/Railway containers
-        # These fix the "/dev/shm too small" issue that causes browser crashes
-        chrome_args = [
-            "--disable-dev-shm-usage",       # Use /tmp instead of /dev/shm (64MB limit in Docker)
-            "--no-sandbox",                  # Required when running as root in containers
-            "--disable-gpu",                 # No GPU available in containers
-            "--disable-software-rasterizer", # Reduces memory usage
-            "--no-zygote",                   # Reduces memory overhead
-            "--disable-extensions",          # No extensions needed
-            "--disable-background-networking",
-            "--disable-default-apps",
-            "--disable-sync",
-            "--disable-translate",
-            "--mute-audio",
-            "--no-first-run",
-            "--hide-scrollbars",
-        ]
-
         async with async_playwright() as pw:
-            browser = await pw.chromium.launch(
-                headless=self.headless,
-                args=chrome_args,
-            )
+            browser = await pw.chromium.launch(headless=self.headless)
             context = await browser.new_context(
                 user_agent=(
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -377,15 +356,13 @@ class MiseOJeuScraper:
             )
 
             # Etape 1 : obtenir la liste des event IDs
-            # Use 'load' instead of 'networkidle' for Railway (faster, more reliable)
+            # networkidle requis pour que le React SPA charge tous les liens de matchs
             print("  >> Chargement de la page principale...")
             page = await context.new_page()
             try:
-                await page.goto(BASE_SITE, wait_until='load', timeout=40000)
-            except asyncio.TimeoutError:
-                print("  >> Timeout sur page load, continuant avec HTML partiel...")
-            except Exception as e:
-                print(f"  >> Erreur navigation: {e}, continuant...")
+                await page.goto(BASE_SITE, wait_until='networkidle', timeout=30000)
+            except Exception:
+                await asyncio.sleep(2)
 
             html    = await page.content()
 
@@ -425,33 +402,21 @@ class MiseOJeuScraper:
             # Fallback Playwright si les cookies n'ont pas suffi (anti-bot renforcé)
             if not matches:
                 print("  >> Fallback Playwright pour les events...")
-                browser2 = None
-                try:
-                    browser2 = await pw.chromium.launch(
-                        headless=self.headless,
-                        args=chrome_args,
-                    )
-                    context2 = await browser2.new_context(
-                        user_agent=(
-                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                            "AppleWebKit/537.36 (KHTML, like Gecko) "
-                            "Chrome/122.0.0.0 Safari/537.36"
-                        ),
-                        locale="fr-CA",
-                    )
-                    tasks = [self._fetch_event_async(context2, eid, url_map) for eid in event_ids]
-                    results = await asyncio.gather(*tasks, return_exceptions=True)
-                    for r in results:
-                        if isinstance(r, list):
-                            matches.extend(r)
-                except Exception as e:
-                    print(f"  >> Fallback error: {e}")
-                finally:
-                    if browser2:
-                        try:
-                            await browser2.close()
-                        except Exception:
-                            pass  # Browser already closed
+                browser2 = await pw.chromium.launch(headless=self.headless)
+                context2 = await browser2.new_context(
+                    user_agent=(
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/122.0.0.0 Safari/537.36"
+                    ),
+                    locale="fr-CA",
+                )
+                tasks = [self._fetch_event_async(context2, eid, url_map) for eid in event_ids]
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+                await browser2.close()
+                for r in results:
+                    if isinstance(r, list):
+                        matches.extend(r)
 
             return matches
 
@@ -460,8 +425,7 @@ class MiseOJeuScraper:
         api_url = f"{API_BASE}/events-by-ids?eventIds={event_id}&{API_PARAMS}"
         page = await context.new_page()
         try:
-            # Use 'load' instead of 'domcontentloaded' for Railway, increased timeout
-            await page.goto(api_url, wait_until='load', timeout=25000)
+            await page.goto(api_url, wait_until='domcontentloaded', timeout=20000)
             raw = await page.content()
             m = re.search(r'<pre[^>]*>(.*?)</pre>', raw, re.DOTALL)
             json_str = m.group(1) if m else raw
