@@ -1107,6 +1107,11 @@ def _build_payload(demo: bool = False,
     today = _get_today_et()
     hockey_list_today = [p for p in hockey_list if p.get("date") == today]
 
+    print(f"  >> DEBUG SGP: hockey_list {len(hockey_list)} → filtered to today {len(hockey_list_today)}")
+    if hockey_list and not hockey_list_today:
+        dates_in_list = set(p.get("date") for p in hockey_list)
+        print(f"     Dates in hockey_list: {dates_in_list}, looking for: {today}")
+
     # Générer les proposals SGP avant les mises pour permettre l'allocation de budget
     sgp_proposals = _generate_sgp_proposals(hockey_list_today) if refresh_hockey \
                     else _old.get("sgp_proposals", []) if _old else []
