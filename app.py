@@ -1114,7 +1114,7 @@ def _build_payload(demo: bool = False,
     t_mises = time.time()
     _any_kelly_pos = True  # défaut : pas d'avertissement
     if not demo:
-        _any_kelly_pos = _apply_mises(hockey_list, proposals=sgp_proposals if refresh_hockey else None)
+        _any_kelly_pos = _apply_mises(hockey_list_today, proposals=sgp_proposals if refresh_hockey else None)
     print(f"  [timing] apply_mises: {time.time()-t_mises:.1f}s")
 
     # Persister les mises + flag champion dans predictions.json
