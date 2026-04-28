@@ -4,7 +4,7 @@
 #
 
 app = 'nhl-rmfq7w'
-primary_region = 'yyz'
+primary_region = 'cyh'
 
 [env]
   PORT = '8080'
