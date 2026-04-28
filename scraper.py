@@ -342,12 +342,17 @@ class MiseOJeuScraper:
         Sur Linux (Railway/nixpkgs), utilise le Chromium système qui a toutes ses libs.
         En local (Windows/Mac), utilise le Chromium de Playwright.
         """
-        import shutil
+        import shutil, os
         kwargs: dict = {"headless": headless}
-        exec_path = shutil.which("chromium") or shutil.which("chromium-browser")
+        # start.sh exporte PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH quand chromium est en PATH
+        exec_path = (os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH")
+                     or shutil.which("chromium")
+                     or shutil.which("chromium-browser"))
         if exec_path:
             kwargs["executable_path"] = exec_path
-            print(f"  >> Chromium système : {exec_path}")
+            print(f"  >> Chromium : {exec_path}")
+        else:
+            print(f"  >> Chromium : Playwright bundled")
         return kwargs
 
     async def scrape_all(self, sports: list | None = None) -> list[Match]:

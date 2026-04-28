@@ -1,12 +1,12 @@
 #!/bin/bash
-# Sur Railway : on utilise le Chromium nixpkgs (installé via nixpacks.toml)
-# Pas besoin de télécharger le Chromium de Playwright (qui manque libglib sur Railway)
-# En local Windows/Mac : Playwright utilise son propre Chromium automatiquement
+# Cherche le Chromium système (installé par nixpkgs)
+CHROM=$(which chromium 2>/dev/null || which chromium-browser 2>/dev/null)
 
-if which chromium > /dev/null 2>&1; then
-    echo ">> Chromium système trouvé : $(which chromium) — skip playwright install"
+if [ -n "$CHROM" ]; then
+    echo ">> Chromium système: $CHROM — skip playwright install"
+    export PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="$CHROM"
 else
-    echo ">> Pas de Chromium système — installation Playwright..."
+    echo ">> Pas de Chromium système dans PATH — installation Playwright..."
     python -m playwright install chromium
 fi
 
