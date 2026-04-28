@@ -842,7 +842,7 @@
           ✅ Sauvegarde automatique 30 min avant le 1er match
         </div>
         <button id="btn-save-snapshot" onclick="saveSnapshot()"
-          style="display:none;align-items:center;gap:10px;padding:14px 32px;border-radius:12px;
+          style="display:flex;align-items:center;gap:10px;padding:14px 32px;border-radius:12px;
                  border:2px solid #f59e0b;background:linear-gradient(135deg,#f59e0b22,#f59e0b11);
                  color:#f59e0b;font-size:16px;font-weight:700;cursor:pointer;
                  transition:all .2s;box-shadow:0 0 18px #f59e0b44;letter-spacing:.3px;">
@@ -4412,43 +4412,6 @@
   })();
 
   // ── Sauvegarde snapshot ──────────────────────────────────────────────────────
-  function saveSnapshot() {
-    const rows = _hockeyRawRows || [];
-    if (!rows.length) { showToast('Aucune prédiction à sauvegarder', 'error'); return; }
-
-    const picks = rows.map(r => ({
-      key:            r.key,
-      match:          r.match,
-      home_team:      r.home_team      || '',
-      away_team:      r.away_team      || '',
-      bet_type:       r.bet_type,
-      selection:      r.selection,
-      odds:           r.odds,
-      fair_prob:      r.fair_prob,
-      value_score:    r.value_score,
-      recommendation: r.recommendation,
-      champion:       r.champion || false,
-      mise:           r._mise ?? null,
-    }));
-
-    const btn = document.getElementById('btn-save-snapshot');
-    btn.disabled = true;
-    fetch('/api/save-snapshot', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ picks }),
-    })
-    .then(r => r.json())
-    .then(d => {
-      if (d.error) throw new Error(d.error);
-      btn.textContent = '✅ Sauvegardé';
-      btn.style.color = 'var(--green)';
-      showToast(`💾 ${picks.length} prédictions sauvegardées à ${d.time}`, 'success');
-      _resultatsNewLoaded = false; // forcer rechargement si on revient sur l'onglet
-    })
-    .catch(e => { showToast('Erreur: ' + e.message, 'error'); btn.disabled = false; });
-  }
-
   function showToast(msg, type = 'success') {
     let t = document.getElementById('_toast');
     if (!t) {
