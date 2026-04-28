@@ -2069,6 +2069,70 @@
     }
   }
 
+  // ── AUTOMATIC SNAPSHOT SCHEDULER (30 min before first match) ────────────────
+  let _snapshotScheduler = null;
+  let _snapshotScheduled = false;
+
+  function startSnapshotScheduler() {
+    if (_snapshotScheduler || _snapshotScheduled) return;  // Déjà en cours
+
+    _snapshotScheduler = setInterval(async () => {
+      // Récupérer les données hockey actuelles
+      if (!_hockeyRawRows || _hockeyRawRows.length === 0) return;
+
+      // Extraire les heures de match de chaque pari
+      const matchTimes = _hockeyRawRows
+        .map(r => {
+          const timeMatch = (r.match || '').match(/(\d{2}):(\d{2})/);
+          if (!timeMatch) return null;
+          const [, hours, mins] = timeMatch;
+          return { hours: parseInt(hours), mins: parseInt(mins) };
+        })
+        .filter(t => t !== null);
+
+      if (matchTimes.length === 0) return;  // Pas d'heure trouvée
+
+      // Trouver le premier match (le plus tôt)
+      const firstMatch = matchTimes.reduce((min, t) => {
+        const minTime = min.hours * 60 + min.mins;
+        const tTime = t.hours * 60 + t.mins;
+        return tTime < minTime ? t : min;
+      });
+
+      // Heure actuelle
+      const now = new Date();
+      const nowTime = now.getHours() * 60 + now.getMinutes();
+
+      // Heure du snapshot (30 min avant le premier match)
+      const snapshotTime = firstMatch.hours * 60 + firstMatch.mins - 30;
+
+      // Vérifier si on est arrivé à l'heure du snapshot
+      if (nowTime >= snapshotTime && !_snapshotScheduled) {
+        _snapshotScheduled = true;
+        clearInterval(_snapshotScheduler);
+        _snapshotScheduler = null;
+
+        console.log(`[AutoSnapshot] Snapshot déclenché automatiquement à ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`);
+
+        // Déclencher le snapshot
+        await saveSnapshot();
+
+        // Afficher notification
+        showToast('📸', 'Snapshot automatique réussi!',
+          `${_hockeyRawRows.length} mise${_hockeyRawRows.length > 1 ? 's' : ''} sauvegardée${_hockeyRawRows.length > 1 ? 's' : ''} automatiquement`,
+          'var(--green)');
+      }
+    }, 60000);  // Vérifier chaque 60 secondes
+  }
+
+  function stopSnapshotScheduler() {
+    if (_snapshotScheduler) {
+      clearInterval(_snapshotScheduler);
+      _snapshotScheduler = null;
+      _snapshotScheduled = false;
+    }
+  }
+
   // ── Tab switching ──────────────────────────────────────────────────────────
 
   let _activeTab = 'hockey';   // onglet actif : "hockey" | "nba" | "yesterday" | "yesterday-nba"
@@ -2474,6 +2538,9 @@
 
     // Charger les stats de calibration
     loadCalibration();
+
+    // Démarrer le scheduler automatique du snapshot (30 min avant premier match)
+    startSnapshotScheduler();
   }
 
   async function runBackfill() {
