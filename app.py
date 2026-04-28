@@ -4098,7 +4098,10 @@ if __name__ == "__main__":
         def _get_hockey_picks():
             return (_cache.get("data") or {}).get("hockey") or []
         def _get_sgp_proposals():
-            return (_cache.get("data") or {}).get("sgp_proposals") or []
+            # Générer les SGP dynamiquement à partir des picks actuels du jour
+            # au lieu de retourner ceux en cache (qui peuvent être de la veille)
+            picks = _get_hockey_picks()
+            return _generate_sgp_proposals(picks) if picks else []
         schedule_dynamic_snapshots(_get_hockey_picks, get_sgp_fn=_get_sgp_proposals)
     except Exception as _e:
         print(f"[snapshot] Planificateur dynamique non démarré : {_e}")
