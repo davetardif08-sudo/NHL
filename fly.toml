@@ -1,0 +1,25 @@
+# Fly.io configuration for miseojeu-analyzer
+app = "nhl-rmfq7w"
+primary_region = "yyz"
+
+# Build configuration
+[build]
+  builder = "paket"
+
+# Environment variables
+[env]
+  PORT = "8080"
+
+# Services configuration
+[[services]]
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
