@@ -2152,7 +2152,34 @@
   // ── Cache pour données playoff (une fois par jour)
   let _playoffCache = { data: null, date: null };
 
+  // Get today's date in ET (from server via /api/status)
+  let _todayET = null;
+
+  async function getTodayET() {
+    if (_todayET) return _todayET;
+    try {
+      const res = await fetch('/api/status');
+      const data = await res.json();
+      // Server returns timestamp like "2026-04-28 19:30 ET"
+      // Extract the date part (YYYY-MM-DD)
+      if (data.timestamp) {
+        const dateMatch = data.timestamp.match(/(\d{4}-\d{2}-\d{2})/);
+        if (dateMatch) {
+          _todayET = dateMatch[1];
+          return _todayET;
+        }
+      }
+    } catch (e) {
+      console.warn('getTodayET error:', e);
+    }
+    // Fallback: use local date (not ideal but better than nothing)
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
   function getTodayString() {
+    // Legacy function for compatibility - returns local date
+    // Use getTodayET() for timezone-safe comparisons
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
@@ -2520,7 +2547,16 @@
     const s = data.stats;
 
     // ── Hockey ─────────────────────────────────────────────────────────────
-    _carouselHockey = data.hockey || [];  // Sauvegarder pour loadLiveScoresForCarousel
+    let hockeyData = data.hockey || [];
+
+    // Filter to show only today's matches (ET timezone)
+    const todayET = await getTodayET();
+    hockeyData = hockeyData.filter(pick => {
+      // Keep picks that match today's date or have no date specified
+      return !pick.date || pick.date === todayET;
+    });
+
+    _carouselHockey = hockeyData;  // Sauvegarder pour loadLiveScoresForCarousel
     renderTable(_carouselHockey, document.getElementById('table-hockey'));
     renderMatchesCarousel(_carouselHockey);  // Afficher carrousel matchs instantanément
     loadPlayoffDataBackground();  // Charger les données de série en arrière-plan
@@ -3575,8 +3611,11 @@
     if (resSnap.status === 'fulfilled' && resSnap.value.ok) {
       try {
         snapshotData = await resSnap.value.json();
-        const today     = new Date().toISOString().slice(0, 10);
-        const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+        const todayET = await getTodayET();
+        // Calculate yesterday in ET (subtract 24 hours conceptually)
+        const [y, m, d] = todayET.split('-');
+        const yesterdayDate = new Date(parseInt(y), parseInt(m)-1, parseInt(d)-1);
+        const yesterday = `${yesterdayDate.getFullYear()}-${String(yesterdayDate.getMonth()+1).padStart(2,'0')}-${String(yesterdayDate.getDate()).padStart(2,'0')}`;
         if (snapshotData.date === yesterday) {
           bannerTx.textContent =
             `Snapshot du ${snapshotData.date} à ${snapshotData.time} — ` +
