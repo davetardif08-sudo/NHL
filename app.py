@@ -4092,16 +4092,16 @@ if __name__ == "__main__":
     # Pré-charger le cache de blessures
     threading.Thread(target=_refresh_injuries_bg, daemon=True).start()
 
-    # Planificateur courriel quotidien (17h00 ET)
+    # Planificateur snapshot dynamique (30 min avant le premier match NHL)
     try:
-        from email_service import schedule_daily_email
+        from email_service import schedule_dynamic_snapshots
         def _get_hockey_picks():
             return (_cache.get("data") or {}).get("hockey") or []
         def _get_sgp_proposals():
             return (_cache.get("data") or {}).get("sgp_proposals") or []
-        schedule_daily_email(_get_hockey_picks, get_sgp_fn=_get_sgp_proposals)
+        schedule_dynamic_snapshots(_get_hockey_picks, get_sgp_fn=_get_sgp_proposals)
     except Exception as _e:
-        print(f"[email] Planificateur non démarré : {_e}")
+        print(f"[snapshot] Planificateur dynamique non démarré : {_e}")
 
     def _backup_stats_today():
         """Sauvegarde les tableaux Stats dans stats_backups/YYYY-MM-DD.json.

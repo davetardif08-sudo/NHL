@@ -686,3 +686,86 @@ def schedule_daily_email(get_picks_fn, get_sgp_fn=None, hour: int = SEND_HOUR_ET
 
     t = threading.Thread(target=_loop, daemon=True, name="email-scheduler")
     t.start()
+
+
+# ── Snapshot Dynamique (30 min avant le premier match NHL) ────────────────────
+
+def schedule_dynamic_snapshots(get_picks_fn, get_sgp_fn=None):
+    """
+    Lance un thread de fond qui :
+    1. Chaque matin à 8h ET, scrape les matchs NHL
+    2. Trouve l'heure du premier match
+    3. Déclenche le snapshot 30 min avant ce premier match
+
+    Cela assure que les snapshots se prennent au bon moment, indépendamment
+    de l'heure variable du premier match chaque jour.
+    """
+    global _scheduler_started
+    if _scheduler_started:
+        return
+    _scheduler_started = True
+
+    def _loop():
+        print("[snapshot] Planificateur dynamique démarré — snapshot 30 min avant le premier match NHL")
+        last_check_date = None
+        first_game_time = None  # (hour, minute) du premier match
+        last_snapshot_date = None
+
+        while True:
+            now_et = _et_now()
+            today = now_et.date().isoformat()
+
+            # ── À 8h ET chaque matin, scraper les matchs pour trouver l'heure du premier
+            if now_et.hour == 8 and now_et.minute == 0 and last_check_date != today:
+                try:
+                    print(f"[snapshot] Scrape des matchs du jour {today} pour trouver le premier...")
+                    # Import tardif pour éviter les dépendances circulaires
+                    from scraper import scrape_all_sync
+                    matches = scrape_all_sync(headless=True, sports=["hockey"])
+
+                    if matches:
+                        # Trier par heure et trouver le premier
+                        times = sorted(set(m.time for m in matches if m.time))
+                        if times:
+                            first_time_str = times[0]  # ex. "19:00"
+                            try:
+                                h, m = map(int, first_time_str.split(":"))
+                                # Soustraire 30 minutes
+                                snapshot_m = m - 30
+                                snapshot_h = h
+                                if snapshot_m < 0:
+                                    snapshot_h -= 1
+                                    snapshot_m += 60
+                                first_game_time = (snapshot_h, snapshot_m)
+                                print(f"[snapshot] Premier match: {first_time_str} ET → snapshot à {snapshot_h:02d}:{snapshot_m:02d} ET")
+                            except ValueError:
+                                print(f"[snapshot] Format d'heure invalide: {first_time_str}")
+                        else:
+                            print(f"[snapshot] Aucune heure trouvée dans les matchs")
+                    else:
+                        print(f"[snapshot] Aucun match NHL trouvé pour {today}")
+
+                    last_check_date = today
+                except Exception as exc:
+                    print(f"[snapshot] Erreur lors du scrape du matin: {exc}")
+
+            # ── À l'heure calculée, déclencher le snapshot
+            if first_game_time and now_et.hour == first_game_time[0] and now_et.minute == first_game_time[1]:
+                if last_snapshot_date != today:
+                    try:
+                        print(f"[snapshot] Déclenchement du snapshot à {now_et.hour:02d}:{now_et.minute:02d} ET")
+                        picks = get_picks_fn() or []
+                        sgps = get_sgp_fn() if get_sgp_fn else []
+                        MOIS_FR = ["janvier","février","mars","avril","mai","juin",
+                                   "juillet","août","septembre","octobre","novembre","décembre"]
+                        ds = f"{now_et.day} {MOIS_FR[now_et.month-1]} {now_et.year}"
+                        result = send_betting_summary(picks, ds, sgp_proposals=sgps)
+                        print(f"[snapshot] {result.get('message', 'Snapshot envoyé')}")
+                        last_snapshot_date = today
+                    except Exception as exc:
+                        print(f"[snapshot] Erreur lors du snapshot: {exc}")
+
+            time.sleep(30)  # vérifie toutes les 30 secondes
+
+    t = threading.Thread(target=_loop, daemon=True, name="snapshot-scheduler")
+    t.start()
