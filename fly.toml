@@ -6,8 +6,6 @@
 app = 'nhl-rmfq7w'
 primary_region = 'yyz'
 
-[build]
-
 [env]
   PORT = '8080'
 
@@ -17,10 +15,8 @@ primary_region = 'yyz'
   auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
-  processes = ['app']
 
 [[vm]]
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 256
