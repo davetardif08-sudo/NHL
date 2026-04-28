@@ -504,6 +504,20 @@ class MiseOJeuScraper:
                     seen.add(eid)
                     result.append((eid, base + path.rstrip('/'), sport))
 
+        # Debug: si aucun match trouvé, afficher des exemples de hrefs pour diagnostiquer
+        if not result:
+            # Cherche tout href contenant un ID d'événement numérique
+            broad = re.findall(r'href="(/[^"\'<>\s]*evenement/\d+[^"\'<>\s]*)"', html)[:8]
+            if broad:
+                print(f"  >> DEBUG evenements trouves (format inconnu): {broad[:4]}")
+            else:
+                sample_hrefs = re.findall(r'href="(/sports/[^"\'<>\s]{10,80})"', html)[:5]
+                print(f"  >> DEBUG hrefs /sports/ sample: {sample_hrefs}")
+                # Aussi chercher dans un format anglais possible
+                en_hrefs = re.findall(r'href="(/[^"\'<>\s]*/event/\d+[^"\'<>\s]*)"', html)[:5]
+                if en_hrefs:
+                    print(f"  >> DEBUG hrefs /event/ (anglais?): {en_hrefs}")
+
         return result
 
     # Alias pour compatibilité ascendante
