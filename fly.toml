@@ -15,6 +15,7 @@ primary_region = 'yyz'
   auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
+  max_machines_running = 1
 
 [[vm]]
   memory = '1gb'
