@@ -6,10 +6,29 @@ import json
 import os
 import time
 import threading
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+
+# ─── TIMEZONE FIX: Use Eastern Time (ET) for NHL ─────────────────────────────────
+def _get_et_now():
+    """Return current datetime in Eastern Time (ET)."""
+    et_tz = timezone(timedelta(hours=-5))  # EST = UTC-5, EDT = UTC-4 (handled by system)
+    # Better: use system timezone if available
+    try:
+        import pytz
+        et = pytz.timezone('US/Eastern')
+        return datetime.now(et)
+    except ImportError:
+        # Fallback: assume server is in UTC and convert to ET
+        utc_now = datetime.now(timezone.utc)
+        # Rough conversion (doesn't account for DST perfectly)
+        return utc_now.astimezone(timezone(timedelta(hours=-5)))
+
+def _get_today_et() -> str:
+    """Return today's date in Eastern Time as YYYY-MM-DD string."""
+    return _get_et_now().strftime("%Y-%m-%d")
 
 # Support PyInstaller : utiliser les dossiers injectés par app_launcher.py si présents
 _template_folder = os.environ.get('MISEOJEU_TEMPLATE_FOLDER') or 'templates'
@@ -49,7 +68,7 @@ def _load_payload_cache() -> dict:
             return {}
         with open(_PAYLOAD_CACHE_PATH, encoding="utf-8") as f:
             saved = json.load(f)
-        today = datetime.now().strftime("%Y-%m-%d")
+        today = _get_today_et()
         if saved.get("date") != today:
             return {}   # cache d'un autre jour → ignorer
         return saved
@@ -107,7 +126,7 @@ def _check_date_rollover():
     affichables le temps que le scrape du jour tourne en arrière-plan.
     Ça évite que l'utilisateur attende plusieurs minutes devant un spinner.
     """
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
     bg_needed = False
     with _lock:
         cached_date = _cache.get("date")
@@ -821,7 +840,7 @@ def _build_payload(demo: bool = False,
         _times = [m.time for m in matches if m.date == _today and m.time]
         first_match_time = min(_times) if _times else "23:59"
         print(f"  [timing] premier match aujourd'hui : {first_match_time} "
-              f"({'verrouillé' if datetime.now().strftime('%H:%M') >= first_match_time else 'fenêtre ouverte'})")
+              f"({'verrouillé' if _get_et_now().strftime('%H:%M') >= first_match_time else 'fenêtre ouverte'})")
 
         _all_opps_snapshot = list(hockey_opps or [])
         _first_match_time  = first_match_time
@@ -1243,8 +1262,8 @@ def _run_analysis(demo: bool = False, sports: list | None = None):
 
     try:
         payload = _build_payload(demo=demo, sports=sports)
-        ts   = datetime.now().strftime("%H:%M:%S")
-        date = datetime.now().strftime("%Y-%m-%d")
+        ts   = _get_et_now().strftime("%H:%M:%S")
+        date = _get_today_et()
         now_epoch = time.time()
         with _lock:
             _cache["data"]      = payload
@@ -1383,9 +1402,9 @@ def api_save_snapshot():
     if not picks:
         return jsonify({"error": "Aucun pari fourni"}), 400
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
     snapshot = {
-        "saved_at":      datetime.now().isoformat(),
+        "saved_at":      _get_et_now().isoformat(),
         "date":          today,
         "time":          datetime.now().strftime("%H:%M"),
         "sgp_proposals": body.get("sgp_proposals") or _generate_sgp_proposals(picks),
@@ -1425,7 +1444,7 @@ def api_save_snapshot():
 @app.route("/api/snapshot-sgp")
 def api_snapshot_sgp():
     """Retourne les sgp_proposals du snapshot sauvegardé aujourd'hui (figés)."""
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
     daily_path = os.path.join(_SNAPSHOTS_DIR, f"{today}.json")
     if not os.path.exists(daily_path):
         return jsonify({"sgp_proposals": [], "saved_at": None})
@@ -1453,7 +1472,7 @@ def api_snapshot():
 @app.route("/api/live-snapshot")
 def api_live_snapshot():
     """Retourne le snapshot du jour courant (snapshots/YYYY-MM-DD.json)."""
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
     daily_path = os.path.join(_SNAPSHOTS_DIR, f"{today}.json")
 
     if os.path.exists(daily_path):
@@ -1473,7 +1492,7 @@ def api_live_snapshot():
 @app.route("/api/live-results")
 def api_live_results():
     """Snapshot du jour + résultats NHL en temps réel depuis nhl.com."""
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
 
     # Charger le snapshot du jour
     snap = None
@@ -1552,7 +1571,7 @@ def api_live_results():
         "time":        snap.get("time"),
         "picks":       picks_out,
         "game_scores": game_scores,
-        "fetched_at":  datetime.now().strftime("%H:%M:%S"),
+        "fetched_at":  _get_et_now().strftime("%H:%M:%S"),
     })
 
 
@@ -1566,7 +1585,7 @@ def _nhl_outcomes_for_date(date_str: str) -> dict:
     """
     import re
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
     is_past = date_str < today
 
     # ── 1. Cache mémoire (dates passées seulement — aujourd'hui est toujours refetché) ──
@@ -1798,7 +1817,7 @@ def api_snapshot_results():
     """Snapshot de la VEILLE + résultats depuis nhl.com (aucun scraping Mise-O-Jeu).
     Toujours afficher le snapshot d'hier — peu importe si un nouveau snapshot a été sauvegardé aujourd'hui."""
     from datetime import timedelta
-    today     = datetime.now().strftime("%Y-%m-%d")
+    today     = _get_today_et()
 
     # 1. Chercher d'abord le fichier du jour précédent dans snapshots/
     snap = None
@@ -2033,7 +2052,7 @@ def api_compare_systems():
     if not os.path.isdir(snap_dir):
         return jsonify({"days": [], "summary": {}, "picks": []})
 
-    today      = datetime.now().strftime("%Y-%m-%d")
+    today      = _get_today_et()
     all_picks  = []
     days_out   = []
     bankroll_e = bankroll_start  # bankroll dynamique Système E
@@ -2327,7 +2346,7 @@ def api_mispricing():
                         "odds": pick.selection.odds,
                         "bet_type": pick.bet_group.bet_type,
                         "source": "Mise-o-Jeu",
-                        "date": datetime.now().strftime("%Y-%m-%d"),
+                        "date": _get_today_et(),
                     })
         except Exception as e:
             print(f"[WARNING] Mise-o-Jeu scrape error: {e}")
@@ -2357,7 +2376,7 @@ def api_mispricing():
 
         # Save anomalies to history
         if anomalies:
-            today_date = datetime.now().strftime("%Y-%m-%d")
+            today_date = _get_today_et()
             history_dir = os.path.join(os.path.dirname(__file__), "anomalies_history")
             os.makedirs(history_dir, exist_ok=True)
             history_file = os.path.join(history_dir, f"{today_date}.json")
@@ -2376,7 +2395,7 @@ def api_mispricing():
                     anom_dict = anom.to_dict()
                     key = (anom_dict['match'], anom_dict['selection'], anom_dict['outlier']['sportsbook'])
                     if key not in existing_keys:
-                        anom_dict['detected_at'] = datetime.now().isoformat()
+                        anom_dict['detected_at'] = _get_et_now().isoformat()
                         history_data.append(anom_dict)
 
                 # Save updated history
@@ -2573,7 +2592,7 @@ def api_history():
     Les outcomes viennent de la même logique que /api/snapshot-results (NHL API).
     Toutes les prédictions du snapshot sont comptées (pas seulement celles avec mise)."""
     try:
-        today = datetime.now().strftime("%Y-%m-%d")
+        today = _get_today_et()
         os.makedirs(_SNAPSHOTS_DIR, exist_ok=True)
 
         # Dates exclues manuellement de l'historique (données non représentatives)
@@ -2682,7 +2701,7 @@ def api_history():
 def api_history_by_bettype():
     """Historique des win rates par type de pari (bet_type) et par date."""
     try:
-        today = datetime.now().strftime("%Y-%m-%d")
+        today = _get_today_et()
         os.makedirs(_SNAPSHOTS_DIR, exist_ok=True)
 
         # Dates exclues manuellement
@@ -2942,7 +2961,7 @@ def api_sgp_history():
     Un combo gagne uniquement si TOUS ses picks gagnent.
     """
     from collections import defaultdict
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
     _excluded = {"2026-03-19", "2026-03-20"}
 
     if not os.path.isdir(_SNAPSHOTS_DIR):
@@ -3060,7 +3079,7 @@ def api_calibration_snapshots():
     N'inclut que les picks avec une mise Kelly (paris réellement joués).
     Outcomes résolus via l'API NHL pour chaque date passée.
     """
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = _get_today_et()
     if not os.path.isdir(_SNAPSHOTS_DIR):
         return jsonify({"daily_accuracy": []})
 
@@ -3786,7 +3805,7 @@ def api_playoff_nhl():
     result = {
         "east": east,
         "west": west,
-        "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "updated_at": _get_et_now().strftime("%Y-%m-%d %H:%M"),
     }
 
     # ── Cacher le résultat pour la journée ─────────────────────────────────
@@ -3829,8 +3848,8 @@ def backlog_create():
             "priority":    body.get("priority", "moyenne"),
             "type":        body.get("type", "feature"),
             "status":      body.get("status", "a_faire"),
-            "created_at":  datetime.now().isoformat(),
-            "updated_at":  datetime.now().isoformat(),
+            "created_at":  _get_et_now().isoformat(),
+            "updated_at":  _get_et_now().isoformat(),
         }
         if not item["title"]:
             return jsonify({"error": "Titre requis"}), 400
@@ -3848,7 +3867,7 @@ def backlog_update(item_id):
                 for field in ("title", "description", "priority", "type", "status"):
                     if field in body:
                         item[field] = body[field]
-                item["updated_at"] = datetime.now().isoformat()
+                item["updated_at"] = _get_et_now().isoformat()
                 _save_backlog(items)
                 return jsonify(item)
     return jsonify({"error": "Non trouvé"}), 404
@@ -3992,7 +4011,7 @@ def api_export_analytics():
             "outcomes_by_date": outcomes_by_date,
             "calibration": calibration,
             "csv_export": csv_buffer.getvalue(),
-            "export_date": datetime.now().isoformat(),
+            "export_date": _get_et_now().isoformat(),
             "total_snapshots": len(snapshots),
             "total_picks": sum(len(s.get("picks", [])) for s in snapshots.values())
         })
@@ -4087,7 +4106,7 @@ if __name__ == "__main__":
     def _backup_stats_today():
         """Sauvegarde les tableaux Stats dans stats_backups/YYYY-MM-DD.json.
         Idempotent : ne crée le fichier qu'une seule fois par jour."""
-        today      = datetime.now().strftime("%Y-%m-%d")
+        today      = _get_today_et()
         backup_dir = Path(__file__).parent / "stats_backups"
         backup_dir.mkdir(exist_ok=True)
         out_path   = backup_dir / f"{today}.json"
