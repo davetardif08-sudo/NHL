@@ -488,14 +488,16 @@ class MiseOJeuScraper:
         seen   = set()
         result = []
 
-        # Cherche les chemins relatifs ET absolus, segments en-jeux ou sportif
+        # Cherche les chemins relatifs ET absolus, segments en-jeux, sportif ou sports
         base = "https://miseojeuplus.espacejeux.com"
         patterns = [
-            (r'href="(/sports/fr/(?:en-jeux|sportif)/evenement/(\d+)/hockey/amerique-du-nord/nhl/[^"\'<>\s]*)"',
+            (r'href="(/sports/fr/(?:en-jeux|sportif|sports)/evenement/(\d+)/hockey/amerique-du-nord/nhl/[^"\'<>\s]*)"',
              "hockey"),
-            (r'href="(/sports/fr/(?:en-jeux|sportif)/evenement/(\d+)/basketball/amerique-du-nord/nba/[^"\'<>\s]*)"',
+            (r'href="(/sports/fr/(?:en-jeux|sportif|sports)/evenement/(\d+)/basketball/amerique-du-nord/nba/[^"\'<>\s]*)"',
              "basketball"),
         ]
+        total_hrefs = html.count('href="')
+        print(f"  >> HTML: {len(html)} chars, {total_hrefs} hrefs totaux")
         for pattern, sport in patterns:
             for path, eid in re.findall(pattern, html):
                 if eid not in seen:
