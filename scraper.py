@@ -343,8 +343,29 @@ class MiseOJeuScraper:
         sports : liste de sports à récupérer, ex. ["hockey"] ou ["basketball"].
                  None = tous les sports (hockey + NBA).
         """
+        # Critical Chrome args for Docker/Railway containers
+        # These fix the "/dev/shm too small" issue that causes browser crashes
+        chrome_args = [
+            "--disable-dev-shm-usage",       # Use /tmp instead of /dev/shm (64MB limit in Docker)
+            "--no-sandbox",                  # Required when running as root in containers
+            "--disable-gpu",                 # No GPU available in containers
+            "--disable-software-rasterizer", # Reduces memory usage
+            "--no-zygote",                   # Reduces memory overhead
+            "--disable-extensions",          # No extensions needed
+            "--disable-background-networking",
+            "--disable-default-apps",
+            "--disable-sync",
+            "--disable-translate",
+            "--mute-audio",
+            "--no-first-run",
+            "--hide-scrollbars",
+        ]
+
         async with async_playwright() as pw:
-            browser = await pw.chromium.launch(headless=self.headless)
+            browser = await pw.chromium.launch(
+                headless=self.headless,
+                args=chrome_args,
+            )
             context = await browser.new_context(
                 user_agent=(
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -406,7 +427,10 @@ class MiseOJeuScraper:
                 print("  >> Fallback Playwright pour les events...")
                 browser2 = None
                 try:
-                    browser2 = await pw.chromium.launch(headless=self.headless)
+                    browser2 = await pw.chromium.launch(
+                        headless=self.headless,
+                        args=chrome_args,
+                    )
                     context2 = await browser2.new_context(
                         user_agent=(
                             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
