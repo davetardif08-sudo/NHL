@@ -208,8 +208,21 @@ def _parse_event(data: dict) -> Optional[Match]:
     league_upper = league.upper()
     if any(k in league_upper for k in ("NBA", "BASKETBALL", "BBALL")):
         sport = "basketball"
-    else:
+    elif any(k in league_upper for k in ("NHL", "HOCKEY", "LNH", "AHL", "LIGUE", "MARLIES",
+                                          "ROCKET", "REMPARTS", "CONDORS", "MOOSE", "WOLVES")):
         sport = "hockey"
+    elif any(k in league_upper for k in ("TENNIS", "ATP", "WTA", "ITF")):
+        sport = "tennis"
+    elif any(k in league_upper for k in ("MLS", "SOCCER", "FOOTBALL", "FIFA", "UEFA",
+                                          "CF MONTREAL", "UNITED FC")):
+        sport = "soccer"
+    else:
+        # Vérifier depuis le nom de l'événement si c'est du hockey NHL
+        name_up = name.upper()
+        if any(k in name_up for k in ("NHL", "HOCKEY")):
+            sport = "hockey"
+        else:
+            sport = "other"
 
     match = Match(
         sport=sport,
@@ -435,6 +448,15 @@ class MiseOJeuScraper:
             # Beaucoup plus rapide que d'ouvrir un onglet Playwright par event
             await browser.close()
             matches = _fetch_events_parallel(event_ids, url_map, max_workers=10)
+
+            # Filtrer les matchs par sport demandé — important pour les événements "unknown"
+            # qui peuvent inclure du tennis, soccer, AHL, etc.
+            if sports:
+                before = len(matches)
+                matches = [m for m in matches if m.sport in sports]
+                dropped = before - len(matches)
+                if dropped:
+                    print(f"  >> Filtre sport: {dropped} matchs non-{'/'.join(sports)} retirés")
 
             # Fallback Playwright si les cookies n'ont pas suffi (anti-bot renforcé)
             if not matches:
