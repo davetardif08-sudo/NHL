@@ -336,6 +336,20 @@ class MiseOJeuScraper:
     def __init__(self, headless: bool = True):
         self.headless = headless
 
+    @staticmethod
+    def _launch_kwargs(headless: bool) -> dict:
+        """Retourne les kwargs pour pw.chromium.launch().
+        Sur Linux (Railway/nixpkgs), utilise le Chromium système qui a toutes ses libs.
+        En local (Windows/Mac), utilise le Chromium de Playwright.
+        """
+        import shutil
+        kwargs: dict = {"headless": headless}
+        exec_path = shutil.which("chromium") or shutil.which("chromium-browser")
+        if exec_path:
+            kwargs["executable_path"] = exec_path
+            print(f"  >> Chromium système : {exec_path}")
+        return kwargs
+
     async def scrape_all(self, sports: list | None = None) -> list[Match]:
         """
         Scrape les événements Mise-O-Jeu.
@@ -344,7 +358,7 @@ class MiseOJeuScraper:
                  None = tous les sports (hockey + NBA).
         """
         async with async_playwright() as pw:
-            browser = await pw.chromium.launch(headless=self.headless)
+            browser = await pw.chromium.launch(**self._launch_kwargs(self.headless))
             context = await browser.new_context(
                 user_agent=(
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -402,7 +416,7 @@ class MiseOJeuScraper:
             # Fallback Playwright si les cookies n'ont pas suffi (anti-bot renforcé)
             if not matches:
                 print("  >> Fallback Playwright pour les events...")
-                browser2 = await pw.chromium.launch(headless=self.headless)
+                browser2 = await pw.chromium.launch(**self._launch_kwargs(self.headless))
                 context2 = await browser2.new_context(
                     user_agent=(
                         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
