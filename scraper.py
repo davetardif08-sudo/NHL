@@ -339,7 +339,17 @@ class MiseOJeuScraper:
     @staticmethod
     def _launch_kwargs(headless: bool) -> dict:
         """Retourne les kwargs pour pw.chromium.launch()."""
-        return {"headless": headless}
+        return {
+            "headless": headless,
+            # Requis pour Docker/Linux root : sans ces flags, Chromium rend
+            # une page partielle (~275K au lieu de 2.4MB)
+            "args": [
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-setuid-sandbox",
+            ],
+        }
 
     async def scrape_all(self, sports: list | None = None) -> list[Match]:
         """
@@ -491,10 +501,14 @@ class MiseOJeuScraper:
         # Cherche les chemins relatifs ET absolus, segments en-jeux, sportif ou sports
         base = "https://miseojeuplus.espacejeux.com"
         patterns = [
+            # Format long (local/Québec) : URL inclut le sport dans le chemin
             (r'href="(/sports/fr/(?:en-jeux|sportif|sports)/evenement/(\d+)/hockey/amerique-du-nord/nhl/[^"\'<>\s]*)"',
              "hockey"),
             (r'href="(/sports/fr/(?:en-jeux|sportif|sports)/evenement/(\d+)/basketball/amerique-du-nord/nba/[^"\'<>\s]*)"',
              "basketball"),
+            # Format court (Fly.io/Ontario) : URL sans suffixe sport — sport déterminé plus tard
+            (r'href="(/sports/fr/(?:en-jeux|sportif|sports)/evenement/(\d+))(?:["\'\s])',
+             "unknown"),
         ]
         total_hrefs = html.count('href="')
         print(f"  >> HTML: {len(html)} chars, {total_hrefs} hrefs totaux")
