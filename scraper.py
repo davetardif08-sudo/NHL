@@ -299,6 +299,54 @@ _API_SESSION = _requests_mod.Session()
 _API_SESSION.headers.update(_API_HEADERS)
 
 
+# Drilldown tag IDs côté Mise-o-Jeu (utilisés par l'API event-list)
+# Ces IDs identifient une compétition spécifique indépendamment du géo-contenu.
+DRILLDOWN_TAG_IDS = {
+    "hockey": "574",      # NHL
+    "basketball": "606",  # NBA (à confirmer si NBA ne se charge plus)
+}
+
+
+def _fetch_event_ids_via_api(sport: str) -> list[tuple[str, str, str]]:
+    """
+    Récupère directement la liste des matchs (sortCode=MTCH) pour un sport
+    en passant par l'API event-list, sans charger la page d'accueil.
+
+    Avantage : contourne la discrimination géographique de la page web
+    (Toronto/Ontario voit AHL au lieu de NHL).
+
+    Retourne list[(event_id, event_url, sport)].
+    """
+    tag_id = DRILLDOWN_TAG_IDS.get(sport)
+    if not tag_id:
+        return []
+    api_url = (
+        f"{API_BASE}/event-list"
+        f"?eventSortsIncluded=MTCH"
+        f"&includeChildMarkets=false"
+        f"&drilldownTagIds={tag_id}"
+        f"&lang=fr-CA&channel=I"
+    )
+    try:
+        resp = _API_SESSION.get(api_url, timeout=15)
+        resp.raise_for_status()
+        data = resp.json()
+        events = data.get("data", {}).get("events") or []
+        result = []
+        for ev in events:
+            eid = str(ev.get("id", ""))
+            if not eid:
+                continue
+            # URL canonique (placeholder — l'event_url n'est utilisée que pour le lien UI)
+            url = f"https://miseojeuplus.espacejeux.com/sports/fr/sportif/evenement/{eid}"
+            result.append((eid, url, sport))
+        print(f"  >> API event-list ({sport}): {len(result)} matchs")
+        return result
+    except Exception as e:
+        print(f"  [!] API event-list ({sport}) échouée: {e}")
+        return []
+
+
 def _fetch_one_event(event_id: str, url_map: dict) -> list[Match]:
     """Récupère les cotes d'un événement via requests (HTTP simple, sans Playwright)."""
     api_url = f"{API_BASE}/events-by-ids?eventIds={event_id}&{API_PARAMS}"
@@ -363,6 +411,24 @@ class MiseOJeuScraper:
         sports : liste de sports à récupérer, ex. ["hockey"] ou ["basketball"].
                  None = tous les sports (hockey + NBA).
         """
+        # ── API-first path : court-circuite la page d'accueil
+        # (qui est filtrée par géo-IP : Toronto/Ontario voit AHL au lieu de NHL).
+        # On interroge directement event-list?drilldownTagIds=574 pour NHL.
+        sports_to_try = sports or ["hockey", "basketball"]
+        api_event_data: list[tuple[str, str, str]] = []
+        for sp in sports_to_try:
+            api_event_data.extend(_fetch_event_ids_via_api(sp))
+
+        if api_event_data:
+            url_map = {eid: url for eid, url, _ in api_event_data}
+            event_ids = [eid for eid, _, _ in api_event_data]
+            matches = _fetch_events_parallel(event_ids, url_map, max_workers=10)
+            if sports:
+                matches = [m for m in matches if m.sport in sports]
+            if matches:
+                return matches
+            print("  >> API a renvoyé des IDs mais aucun match parsé — fallback page")
+
         async with async_playwright() as pw:
             browser = await pw.chromium.launch(**self._launch_kwargs(self.headless))
             context = await browser.new_context(
