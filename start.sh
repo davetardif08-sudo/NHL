@@ -1,6 +1,3 @@
 #!/bin/bash
-# Install Playwright's Chromium browser (libs provided by apt in nixpacks.toml)
-python -m playwright install chromium
-
-# Start the Flask app
+# Playwright + deps already installed at build time (nixpacks.toml phases.install)
 python app.py
