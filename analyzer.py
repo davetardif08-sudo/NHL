@@ -338,11 +338,11 @@ class OddsAnalyzer:
                     )
                     opportunities.append(opp)
 
-        # Garder seulement les matchs d'aujourd'hui et du passé (pas de demain)
-        # En mode include_eviter, inclure aussi demain (matchs du soir décalés par UTC)
+        # Inclure aujourd'hui ET demain — Mise-o-Jeu liste parfois les matchs
+        # du soir suivant (ex: après 18h ET, ou en l'absence de matchs aujourd'hui).
         from datetime import date as _date, timedelta as _td
         today = _date.today().isoformat()
-        cutoff = (_date.today() + _td(days=1)).isoformat() if include_eviter else today
+        cutoff = (_date.today() + _td(days=1)).isoformat()
         opportunities = [o for o in opportunities
                          if (o.match.date or "9999-99-99") <= cutoff]
 
