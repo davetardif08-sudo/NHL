@@ -4096,7 +4096,10 @@ if __name__ == "__main__":
     try:
         from email_service import schedule_dynamic_snapshots
         def _get_hockey_picks():
-            return (_cache.get("data") or {}).get("hockey") or []
+            # Retourner SEULEMENT les picks d'aujourd'hui (pas demain/après)
+            today = _get_today_et()
+            all_picks = (_cache.get("data") or {}).get("hockey") or []
+            return [p for p in all_picks if p.get("date") == today]
         def _get_sgp_proposals():
             # Générer les SGP dynamiquement à partir des picks actuels du jour
             # au lieu de retourner ceux en cache (qui peuvent être de la veille)
