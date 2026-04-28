@@ -1,13 +1,30 @@
 [build]
-nixpkgs = ["chromium", "libnss_nis"]
+nixpkgs = ["libnss_nis"]
 
 [phases.setup]
-nixpkgs = [
-  "chromium", "libstdc++", "libxcb", "libxkbcommon", "mesa",
-  "glib", "nss", "nspr", "atk", "at-spi2-atk", "cups", "dbus",
-  "libdrm", "gtk3", "pango", "cairo", "alsa-lib",
-  "xorg.libX11", "xorg.libXcomposite", "xorg.libXcursor",
-  "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes",
-  "xorg.libXi", "xorg.libXrandr", "xorg.libXrender",
-  "xorg.libXScrnSaver", "xorg.libXtst"
+aptPkgs = [
+  "libglib2.0-0",
+  "libnss3",
+  "libnspr4",
+  "libatk1.0-0",
+  "libatk-bridge2.0-0",
+  "libcups2",
+  "libdrm2",
+  "libgbm1",
+  "libgtk-3-0",
+  "libpango-1.0-0",
+  "libcairo2",
+  "libasound2",
+  "libx11-6",
+  "libxcomposite1",
+  "libxdamage1",
+  "libxext6",
+  "libxfixes3",
+  "libxi6",
+  "libxrandr2",
+  "libxrender1",
+  "libxss1",
+  "libxtst6",
+  "libxcb1",
+  "libxkbcommon0"
 ]

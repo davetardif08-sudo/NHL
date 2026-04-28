@@ -338,22 +338,8 @@ class MiseOJeuScraper:
 
     @staticmethod
     def _launch_kwargs(headless: bool) -> dict:
-        """Retourne les kwargs pour pw.chromium.launch().
-        Sur Linux (Railway/nixpkgs), utilise le Chromium système qui a toutes ses libs.
-        En local (Windows/Mac), utilise le Chromium de Playwright.
-        """
-        import shutil, os
-        kwargs: dict = {"headless": headless}
-        # start.sh exporte PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH quand chromium est en PATH
-        exec_path = (os.environ.get("PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH")
-                     or shutil.which("chromium")
-                     or shutil.which("chromium-browser"))
-        if exec_path:
-            kwargs["executable_path"] = exec_path
-            print(f"  >> Chromium : {exec_path}")
-        else:
-            print(f"  >> Chromium : Playwright bundled")
-        return kwargs
+        """Retourne les kwargs pour pw.chromium.launch()."""
+        return {"headless": headless}
 
     async def scrape_all(self, sports: list | None = None) -> list[Match]:
         """
