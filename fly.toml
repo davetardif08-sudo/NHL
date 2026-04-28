@@ -1,25 +1,26 @@
-# Fly.io configuration for miseojeu-analyzer
-app = "nhl-rmfq7w"
-primary_region = "yyz"
+# fly.io app configuration file generated for nhl-rmfq7w on 2026-04-28T13:41:54Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-# Build configuration
+app = 'nhl-rmfq7w'
+primary_region = 'yyz'
+
 [build]
-  builder = "paket"
 
-# Environment variables
 [env]
-  PORT = "8080"
+  PORT = '8080'
 
-# Services configuration
-[[services]]
+[http_service]
   internal_port = 8080
-  processes = ["app"]
-  protocol = "tcp"
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
 
-  [[services.ports]]
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
