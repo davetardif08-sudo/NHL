@@ -381,6 +381,28 @@ class MiseOJeuScraper:
 
             event_data = self._extract_all_event_ids(html)
 
+            # Si peu de matchs hockey trouvés sur la page principale, charger aussi
+            # la page de compétition NHL (playoffs apparaissent sous /competition/574/)
+            nhl_found = sum(1 for _, _, sp in event_data if sp == "hockey")
+            if nhl_found < 3:
+                print("  >> Peu de matchs NHL — chargement page playoffs...")
+                NHL_COMP_URL = "https://miseojeuplus.espacejeux.com/sports/fr/sports/competition/574/hockey/amerique-du-nord/nhl/matches"
+                page2 = await context.new_page()
+                try:
+                    await page2.goto(NHL_COMP_URL, wait_until='networkidle', timeout=30000)
+                except Exception:
+                    await asyncio.sleep(2)
+                html2 = await page2.content()
+                await page2.close()
+                extra = self._extract_all_event_ids(html2)
+                seen_ids = {eid for eid, _, _ in event_data}
+                for item in extra:
+                    if item[0] not in seen_ids:
+                        event_data.append(item)
+                        seen_ids.add(item[0])
+                nhl_now = sum(1 for _, _, sp in event_data if sp == "hockey")
+                print(f"  >> Après playoffs: {nhl_now} NHL")
+
             # Filtrer par sport si demandé (garder "unknown" pour les nouveaux IDs courts)
             if sports:
                 event_data = [(eid, url, sp) for eid, url, sp in event_data if sp in sports or sp == "unknown"]
