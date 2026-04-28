@@ -208,21 +208,13 @@ def _parse_event(data: dict) -> Optional[Match]:
     league_upper = league.upper()
     if any(k in league_upper for k in ("NBA", "BASKETBALL", "BBALL")):
         sport = "basketball"
-    elif any(k in league_upper for k in ("NHL", "HOCKEY", "LNH", "AHL", "LIGUE", "MARLIES",
-                                          "ROCKET", "REMPARTS", "CONDORS", "MOOSE", "WOLVES")):
-        sport = "hockey"
     elif any(k in league_upper for k in ("TENNIS", "ATP", "WTA", "ITF")):
         sport = "tennis"
-    elif any(k in league_upper for k in ("MLS", "SOCCER", "FOOTBALL", "FIFA", "UEFA",
-                                          "CF MONTREAL", "UNITED FC")):
+    elif any(k in league_upper for k in ("MLS", "SOCCER", "FOOTBALL", "FIFA", "UEFA")):
         sport = "soccer"
     else:
-        # Vérifier depuis le nom de l'événement si c'est du hockey NHL
-        name_up = name.upper()
-        if any(k in name_up for k in ("NHL", "HOCKEY")):
-            sport = "hockey"
-        else:
-            sport = "other"
+        # Par défaut: hockey (NHL, AHL, ou inconnu — filtré plus bas si nécessaire)
+        sport = "hockey"
 
     match = Match(
         sport=sport,
