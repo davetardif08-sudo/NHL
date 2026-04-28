@@ -1102,8 +1102,13 @@ def _build_payload(demo: bool = False,
 
         return any_kelly_positive
 
+    # Filtrer hockey_list pour ne contenir que les picks d'aujourd'hui
+    # (le scraper retourne matchs d'aujourd'hui ET demain)
+    today = _get_today_et()
+    hockey_list_today = [p for p in hockey_list if p.get("date") == today]
+
     # Générer les proposals SGP avant les mises pour permettre l'allocation de budget
-    sgp_proposals = _generate_sgp_proposals(hockey_list) if refresh_hockey \
+    sgp_proposals = _generate_sgp_proposals(hockey_list_today) if refresh_hockey \
                     else _old.get("sgp_proposals", []) if _old else []
 
     t_mises = time.time()
