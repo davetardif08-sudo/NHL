@@ -1487,14 +1487,16 @@ def api_data():
 
 
 # ─── Snapshot des mises ────────────────────────────────────────────────────────
-_SNAPSHOT_PATH     = os.path.join(os.path.dirname(__file__), "snapshot.json")
-_SNAPSHOTS_DIR     = os.path.join(os.path.dirname(__file__), "snapshots")
-_REAL_BETS_DIR     = os.path.join(os.path.dirname(__file__), "real_bets")
-_BALANCE_LOG_PATH  = os.path.join(os.path.dirname(__file__), "balance_log.json")
+# Utilise /data/ sur Fly.io (volume persistant) ou le répertoire courant en local
+_DATA_DIR          = os.environ.get('DATA_DIR', os.path.dirname(__file__))
+_SNAPSHOT_PATH     = os.path.join(_DATA_DIR, "snapshot.json")
+_SNAPSHOTS_DIR     = os.path.join(_DATA_DIR, "snapshots")
+_REAL_BETS_DIR     = os.path.join(_DATA_DIR, "real_bets")
+_BALANCE_LOG_PATH  = os.path.join(_DATA_DIR, "balance_log.json")
 
 # ─── Cache NHL outcomes ────────────────────────────────────────────────────────
 # Cache disque : résultats passés figés (ne changent jamais)
-_NHL_CACHE_DIR     = os.path.join(os.path.dirname(__file__), "nhl_cache")
+_NHL_CACHE_DIR     = os.path.join(_DATA_DIR, "nhl_cache")
 # Cache mémoire partagé entre tous les endpoints (session serveur)
 _NHL_OUTCOMES_CACHE: dict = {}
 
@@ -3020,7 +3022,7 @@ def api_send_real_bets_email():
 
     # Balance info depuis balance_log.json
     balance_info = None
-    bal_path = os.path.join(os.path.dirname(__file__), "balance_log.json")
+    bal_path = _BALANCE_LOG_PATH
     if os.path.isfile(bal_path):
         try:
             with open(bal_path, encoding="utf-8") as f:

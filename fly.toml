@@ -8,6 +8,7 @@ primary_region = 'yyz'
 
 [env]
   PORT = '8080'
+  DATA_DIR = '/data'
 
 [http_service]
   internal_port = 8080
@@ -21,3 +22,11 @@ primary_region = 'yyz'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[[mounts]]
+  source = "miseojeu_data"
+  destination = "/data"
+
+[[mounts]]
+  source = "miseojeu_data_backup"
+  destination = "/data_backup"
