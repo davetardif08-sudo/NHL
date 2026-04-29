@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Layout Example</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .prediction-card {
+      background: linear-gradient(135deg, #1a1f26, #252d38);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.3s;
+    }
+
+    .prediction-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .team-logos {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .match-info {
+      font-size: 13px;
+      color: #8b949e;
+    }
+
+    .match-name {
+      font-weight: 600;
+      color: #e6edf3;
+      font-size: 14px;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .selection-row {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid #3fb950;
+    }
+
+    .selection-label {
+      font-size: 11px;
+      color: #8b949e;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .selection-value {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .odds-mise {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #8b949e;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 16px;
+      color: #ffa657;
+    }
+
+    .stat-value.positive {
+      color: #3fb950;
+    }
+
+    .stat-value.negative {
+      color: #f85149;
+    }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(63, 185, 80, 0.15);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      color: #3fb950;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .result-badge.loss {
+      background: rgba(248, 81, 73, 0.15);
+      border-color: rgba(248, 81, 73, 0.3);
+      color: #f85149;
+    }
+
+    .time-info {
+      font-size: 11px;
+      color: #8b949e;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .card-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 style="margin-bottom: 24px; text-align: center;">📱 Card Layout Mobile</h1>
+
+  <div class="card-container">
+    <!-- Card 1 -->
+    <div class="prediction-card">
+      <div class="card-header">
+        <div class="team-logos">
+          <div class="logo">🦆</div>
+          <div class="logo">⭐</div>
+        </div>
+      </div>
+
+      <div class="match-name">Ducks vs Stars</div>
+      <div class="match-info">Moneyline • 20h00</div>
+
+      <div class="card-body">
+        <div class="selection-row">
+          <div class="selection-label">Sélection</div>
+          <div class="selection-value">
+            ⭐ Stars Win
+          </div>
+        </div>
+
+        <div class="odds-mise">
+          <div class="stat">
+            <div class="stat-label">Cote</div>
+            <div class="stat-value">1.78</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Mise</div>
+            <div class="stat-value" style="color: #3fb950;">$3.50</div>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Gain/Perte</div>
+          <div class="stat-value positive">+2.73$</div>
+        </div>
+
+        <div class="result-badge">✅ Gagnée</div>
+
+        <div class="time-info">📅 Débute à 20h00</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="prediction-card">
+      <div class="card-header">
+        <div class="team-logos">
+          <div class="logo">🦆</div>
+          <div class="logo">🔶</div>
+        </div>
+      </div>
+
+      <div class="match-name">Ducks vs Oilers</div>
+      <div class="match-info">Spread • 22h00</div>
+
+      <div class="card-body">
+        <div class="selection-row">
+          <div class="selection-label">Sélection</div>
+          <div class="selection-value">
+            🔶 Oilers -1.5
+          </div>
+        </div>
+
+        <div class="odds-mise">
+          <div class="stat">
+            <div class="stat-label">Cote</div>
+            <div class="stat-value">1.63</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Mise</div>
+            <div class="stat-value" style="color: #3fb950;">$3.00</div>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Gain/Perte</div>
+          <div class="stat-value positive">+1.89$</div>
+        </div>
+
+        <div class="result-badge">✅ Gagnée</div>
+
+        <div class="time-info">📅 Débute à 22h00</div>
+      </div>
+    </div>
+
+    <!-- Card 3 (En cours) -->
+    <div class="prediction-card">
+      <div class="card-header">
+        <div class="team-logos">
+          <div class="logo">🐺</div>
+          <div class="logo">🏒</div>
+        </div>
+      </div>
+
+      <div class="match-name">Wild vs Avalanche</div>
+      <div class="match-info">Over/Under • 23h30</div>
+
+      <div class="card-body">
+        <div class="selection-row">
+          <div class="selection-label">Sélection</div>
+          <div class="selection-value">
+            ❄️ Over 6.5
+          </div>
+        </div>
+
+        <div class="odds-mise">
+          <div class="stat">
+            <div class="stat-label">Cote</div>
+            <div class="stat-value">1.64</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Mise</div>
+            <div class="stat-value" style="color: #3fb950;">$2.24</div>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Statut</div>
+          <div class="stat-value" style="color: #ffa657;">⏳ En cours...</div>
+        </div>
+
+        <div class="time-info">📅 Débute à 23h30</div>
+      </div>
+    </div>
+
+    <!-- Card 4 (Perdue) -->
+    <div class="prediction-card">
+      <div class="card-header">
+        <div class="team-logos">
+          <div class="logo">🦅</div>
+          <div class="logo">🐧</div>
+        </div>
+      </div>
+
+      <div class="match-name">Eagles vs Penguins</div>
+      <div class="match-info">Moneyline • 19h00</div>
+
+      <div class="card-body">
+        <div class="selection-row">
+          <div class="selection-label">Sélection</div>
+          <div class="selection-value">
+            🦅 Eagles Win
+          </div>
+        </div>
+
+        <div class="odds-mise">
+          <div class="stat">
+            <div class="stat-label">Cote</div>
+            <div class="stat-value">1.85</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Mise</div>
+            <div class="stat-value" style="color: #3fb950;">$2.00</div>
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Gain/Perte</div>
+          <div class="stat-value negative">-2.00$</div>
+        </div>
+
+        <div class="result-badge loss">❌ Perdue</div>
+
+        <div class="time-info">📅 Débute à 19h00</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
