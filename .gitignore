@@ -1,6 +1,7 @@
 # Runtime data files (generated, not committed)
 snapshot.json
 snapshots/
+backlog.json
 real_bets/
 balance_log.json
 nhl_cache/
@@ -35,6 +36,9 @@ venv/
 *.swp
 *.swo
 *~
+
+# Claude Code (plans, tasks, dev work)
+.claude/
 
 # OS
 .DS_Store
