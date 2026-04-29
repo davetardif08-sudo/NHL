@@ -1820,6 +1820,9 @@
     const container = document.getElementById('cards-hockey');
     if (!container || !rows) return;
 
+    // Mettre à jour _hockeyRawRows pour que saveSnapshot() fonctionne correctement
+    _hockeyRawRows = rows;
+
     // Trier: mises > 0 en premier, ensuite par ordre original
     const sorted = [...rows].sort((a, b) => {
       const miseA = parseFloat(a._mise || a.mise || 0);
