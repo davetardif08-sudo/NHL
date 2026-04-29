@@ -1505,7 +1505,27 @@ def _initialize_data_from_repo():
         print("[INIT] DATA_DIR not set, skipping data restore")
         return
 
+    # Try multiple possible project root locations
     project_root = os.path.dirname(__file__)
+    possible_roots = [
+        project_root,
+        '/app',
+        '/app/src',
+        os.getcwd(),
+    ]
+
+    actual_root = None
+    for root in possible_roots:
+        if os.path.exists(os.path.join(root, 'snapshot.json')) or os.path.isdir(os.path.join(root, 'snapshots')):
+            actual_root = root
+            print(f"[INIT] Found data files in {root}")
+            break
+
+    if not actual_root:
+        print(f"[INIT] No data files found in any of: {possible_roots}")
+        return
+
+    project_root = actual_root
     data_files = ['snapshot.json', 'predictions.json', 'balance_log.json']
     data_dirs = ['snapshots', 'real_bets', 'nhl_cache']
 
@@ -1554,7 +1574,9 @@ def _initialize_data_from_repo():
             print(f"[INIT] {dirname}/ already exists in {data_dir}")
 
 # Call initialization on startup
+print("[INIT] ===== DATA BOOTSTRAP STARTING =====", flush=True)
 _initialize_data_from_repo()
+print("[INIT] ===== DATA BOOTSTRAP COMPLETE =====", flush=True)
 
 # ─── Cache NHL outcomes ────────────────────────────────────────────────────────
 # Cache disque : résultats passés figés (ne changent jamais)
