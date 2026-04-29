@@ -1,0 +1,210 @@
+{
+  "saved_at": "2026-04-29T11:38:55.640179-04:00",
+  "date": "2026-04-29",
+  "time": "11:38",
+  "sgp_proposals": [
+    {
+      "avg_score": 103.6,
+      "combined_odds": 3.66,
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Penguins + Plus de 5.5",
+      "match": "Pittsburgh (Penguins) @ Philadelphie (Flyers)",
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "fair_prob": 54.5,
+          "odds": 2,
+          "selection": "Pittsburgh (Penguins)",
+          "value_score": 101.2
+        },
+        {
+          "bet_type": "Total de buts plus/moins 5.5",
+          "fair_prob": 52.8,
+          "odds": 1.83,
+          "selection": "Plus de 5.5",
+          "value_score": 106
+        }
+      ],
+      "short_match": "Penguins @ Flyers"
+    },
+    {
+      "avg_score": 103.6,
+      "combined_odds": 2.8,
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Golden Knights + Plus de 5.5",
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "fair_prob": 57.6,
+          "odds": 1.62,
+          "selection": "Vegas (Golden Knights)",
+          "value_score": 101.2
+        },
+        {
+          "bet_type": "Total de buts plus/moins 5.5",
+          "fair_prob": 55.4,
+          "odds": 1.73,
+          "selection": "Plus de 5.5",
+          "value_score": 106
+        }
+      ],
+      "short_match": "Mammoth @ Golden Knights"
+    },
+    {
+      "avg_score": 91.6,
+      "combined_odds": 2.54,
+      "combo_type": "Gagnant + Total de buts",
+      "label": "Victoire Lightning + Moins de 3.5",
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "mise": null,
+      "picks": [
+        {
+          "bet_type": "Gagnant à 2 issues",
+          "fair_prob": 57.3,
+          "odds": 1.58,
+          "selection": "Tampa Bay (Lightning)",
+          "value_score": 101.2
+        },
+        {
+          "bet_type": "Tampa Bay (Lightning) Total de buts plus/moins 3.5",
+          "fair_prob": 58.3,
+          "odds": 1.61,
+          "selection": "Moins de 3.5",
+          "value_score": 82
+        }
+      ],
+      "short_match": "Canadiens @ Lightning"
+    }
+  ],
+  "picks": [
+    {
+      "key": "",
+      "match": "Pittsburgh (Penguins) @ Philadelphie (Flyers)",
+      "home_team": "Philadelphie (Flyers)",
+      "away_team": "Pittsburgh (Penguins)",
+      "selection": "Pittsburgh (Penguins)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 2,
+      "fair_prob": 54.5,
+      "value_score": 101.2,
+      "mise": 9,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "home_team": "Tampa Bay (Lightning)",
+      "away_team": "Montreal (Canadiens)",
+      "selection": "Moins de 3.5",
+      "bet_type": "Tampa Bay (Lightning) Total de buts plus/moins 3.5",
+      "odds": 1.61,
+      "fair_prob": 58.3,
+      "value_score": 82,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "home_team": "Vegas (Golden Knights)",
+      "away_team": "Utah (Mammoth)",
+      "selection": "Vegas (Golden Knights)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.62,
+      "fair_prob": 57.6,
+      "value_score": 101.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "home_team": "Tampa Bay (Lightning)",
+      "away_team": "Montreal (Canadiens)",
+      "selection": "Tampa Bay (Lightning)",
+      "bet_type": "Gagnant à 2 issues",
+      "odds": 1.58,
+      "fair_prob": 57.3,
+      "value_score": 101.2,
+      "mise": null,
+      "recommendation": "Excellent ***",
+      "champion": true
+    },
+    {
+      "key": "",
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "home_team": "Vegas (Golden Knights)",
+      "away_team": "Utah (Mammoth)",
+      "selection": "Plus de 5.5",
+      "bet_type": "Total de buts plus/moins 5.5",
+      "odds": 1.73,
+      "fair_prob": 55.4,
+      "value_score": 106,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Pittsburgh (Penguins) @ Philadelphie (Flyers)",
+      "home_team": "Philadelphie (Flyers)",
+      "away_team": "Pittsburgh (Penguins)",
+      "selection": "Plus de 5.5",
+      "bet_type": "Total de buts plus/moins 5.5",
+      "odds": 1.83,
+      "fair_prob": 52.8,
+      "value_score": 106,
+      "mise": 0.5,
+      "recommendation": "Excellent ***",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Pittsburgh (Penguins) @ Philadelphie (Flyers)",
+      "home_team": "Philadelphie (Flyers)",
+      "away_team": "Pittsburgh (Penguins)",
+      "selection": "Philadelphie (Flyers) ou Nul",
+      "bet_type": "Double chance",
+      "odds": 1.5,
+      "fair_prob": 31.7,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Montreal (Canadiens) @ Tampa Bay (Lightning)",
+      "home_team": "Tampa Bay (Lightning)",
+      "away_team": "Montreal (Canadiens)",
+      "selection": "Nul ou Montreal (Canadiens)",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.4,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    },
+    {
+      "key": "",
+      "match": "Utah (Mammoth) @ Vegas (Golden Knights)",
+      "home_team": "Vegas (Golden Knights)",
+      "away_team": "Utah (Mammoth)",
+      "selection": "Nul ou Utah (Mammoth)",
+      "bet_type": "Double chance",
+      "odds": 1.8,
+      "fair_prob": 26.3,
+      "value_score": 40,
+      "mise": null,
+      "recommendation": "Neutre *",
+      "champion": false
+    }
+  ]
+}
