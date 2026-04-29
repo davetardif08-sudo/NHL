@@ -26,7 +26,3 @@ primary_region = 'yyz'
 [[mounts]]
   source = "miseojeu_data"
   destination = "/data"
-
-[[mounts]]
-  source = "miseojeu_data_backup"
-  destination = "/data_backup"
