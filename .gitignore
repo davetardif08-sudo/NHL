@@ -1,0 +1,41 @@
+# Runtime data files (generated, not committed)
+snapshot.json
+snapshots/
+real_bets/
+balance_log.json
+nhl_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Cache files
+.payload_cache.json
+payload_cache.json
+.advanced_stats_cache.json
+.injuries_cache.json
+.nba_stats_cache.json
+
+# Logs
+*.log
+notify.log
+
+# Environment
+.env
+.venv
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
