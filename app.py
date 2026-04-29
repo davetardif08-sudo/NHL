@@ -1552,7 +1552,7 @@ def _initialize_data_from_repo():
         elif data_exists:
             print(f"[INIT] {filename} already exists in {data_dir}")
 
-    # Copy directories
+    # Copy directories (important: sync if repo has more files)
     for dirname in data_dirs:
         repo_path = os.path.join(project_root, dirname)
         data_path = os.path.join(data_dir, dirname)
@@ -1560,18 +1560,28 @@ def _initialize_data_from_repo():
         repo_exists = os.path.isdir(repo_path)
         data_exists = os.path.isdir(data_path)
 
-        print(f"[INIT] {dirname}/: repo={repo_exists}, data={data_exists}")
+        repo_count = len(os.listdir(repo_path)) if repo_exists else 0
+        data_count = len(os.listdir(data_path)) if data_exists else 0
 
-        # If dir exists in repo but not in /data, copy it
-        if repo_exists and not data_exists:
+        print(f"[INIT] {dirname}/: repo={repo_exists}({repo_count}), data={data_exists}({data_count})")
+
+        # Copy if: repo has files AND (data doesn't exist OR repo has more files than data)
+        if repo_exists and repo_count > 0 and (not data_exists or repo_count > data_count):
             try:
-                shutil.copytree(repo_path, data_path, dirs_exist_ok=True)
-                num_files = len(os.listdir(data_path)) if os.path.isdir(data_path) else 0
-                print(f"[INIT] ✓ Restored {dirname}/ ({num_files} files) to {data_dir}")
+                # Remove old dir if it exists and is incomplete
+                if data_exists:
+                    shutil.rmtree(data_path)
+                    print(f"[INIT] Removed incomplete {dirname}/")
+
+                shutil.copytree(repo_path, data_path)
+                new_count = len(os.listdir(data_path))
+                print(f"[INIT] ✓ Restored {dirname}/ ({new_count} files) to {data_dir}")
             except Exception as e:
                 print(f"[INIT] ✗ Failed to copy {dirname}/: {e}")
+        elif data_exists and repo_count == data_count:
+            print(f"[INIT] {dirname}/ complete ({data_count} files)")
         elif data_exists:
-            print(f"[INIT] {dirname}/ already exists in {data_dir}")
+            print(f"[INIT] {dirname}/ exists but incomplete ({data_count}/{repo_count} files)")
 
 # Call initialization on startup
 print("[INIT] ===== DATA BOOTSTRAP STARTING =====", flush=True)
