@@ -14967,7 +14967,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.904658",
+    "saved_at": "2026-04-29T11:35:30.513341",
     "locked_at": "19:00",
     "champion": true
   },
@@ -14987,7 +14987,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.904658",
+    "saved_at": "2026-04-29T11:35:30.513341",
     "locked_at": "19:00",
     "champion": false,
     "mise": 0.5
@@ -15024,7 +15024,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.905691",
+    "saved_at": "2026-04-29T11:35:30.522713",
     "locked_at": "19:00",
     "champion": true
   },
@@ -15059,7 +15059,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.905691",
+    "saved_at": "2026-04-29T11:35:30.524714",
     "locked_at": "19:00",
     "champion": true
   },
@@ -15079,7 +15079,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.905691",
+    "saved_at": "2026-04-29T11:35:30.524714",
     "locked_at": "19:00",
     "champion": false,
     "mise": 0.5
@@ -15115,7 +15115,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.910621",
+    "saved_at": "2026-04-29T11:35:30.527712",
     "locked_at": "19:00",
     "champion": true,
     "mise": 9.0
@@ -15136,7 +15136,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.910621",
+    "saved_at": "2026-04-29T11:35:30.527712",
     "locked_at": "19:00"
   },
   {
@@ -15170,7 +15170,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.913721",
+    "saved_at": "2026-04-29T11:35:30.553996",
     "locked_at": "19:00"
   },
   {
@@ -15189,7 +15189,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.913721",
+    "saved_at": "2026-04-29T11:35:30.553996",
     "locked_at": "19:00"
   },
   {
@@ -15200,10 +15200,10 @@
     "away_team": "Dallas (Stars)",
     "bet_type": "Gagnant à 2 issues",
     "selection": "Minnesota (Wild)",
-    "odds": 1.84,
-    "fair_prob": 0.5132,
+    "odds": 1.82,
+    "fair_prob": 0.515,
     "value_score": 95.0,
-    "p_math": 0.5258,
+    "p_math": 0.5297,
     "signals": {
       "is_home": true,
       "win_pct": false,
@@ -15223,7 +15223,7 @@
     "recommendation": "Excellent ***",
     "sport": "hockey",
     "outcome": null,
-    "saved_at": "2026-04-29T10:43:26.915907",
+    "saved_at": "2026-04-29T11:35:30.567143",
     "locked_at": "19:00"
   }
 ]
