@@ -503,6 +503,149 @@
     }
 
     /* ── Responsive ──────────────────────────────────────── */
+    /* ── CARD VIEW (Mobile) ──────────────────────────────────────── */
+    .cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .prediction-card {
+      background: linear-gradient(135deg, var(--bg2), var(--bg3));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.3s;
+    }
+
+    .prediction-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .team-logos {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .card-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .match-info {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .match-name {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .selection-row {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--green);
+    }
+
+    .selection-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .selection-value {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .odds-mise {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .card-stat {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .card-stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .card-stat-value {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--orange);
+    }
+
+    .card-stat-value.positive {
+      color: var(--green);
+    }
+
+    .card-stat-value.negative {
+      color: var(--red);
+    }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(63, 185, 80, 0.15);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      color: var(--green);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .result-badge.loss {
+      background: rgba(248, 81, 73, 0.15);
+      border-color: rgba(248, 81, 73, 0.3);
+      color: var(--red);
+    }
+
+    .card-time-info {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+
     @media (max-width: 1024px) {
       /* Tablet: hide some columns but keep essential betting data */
       th.hide-sm, td.hide-sm { display: none; }
@@ -512,6 +655,11 @@
     @media (max-width: 768px) {
       /* Tablet/small device optimization */
       main { padding: 8px; }
+
+      /* MOBILE CARD VIEW */
+      .cards-wrap { display: grid; grid-template-columns: 1fr; }
+      .table-wrap { display: none; }
+
       .table-wrap { margin-bottom: 12px; }
       table { font-size: 12px; }
       th { padding: 8px 10px; font-size: 10px; }
@@ -863,6 +1011,10 @@
           📧 Envoyer par courriel
         </button>
       </div>
+      <!-- MOBILE CARD VIEW -->
+      <div id="cards-hockey" class="cards-wrap" style="display:none;"></div>
+
+      <!-- DESKTOP TABLE VIEW -->
       <div id="table-hockey" class="table-wrap"><div class="empty"><div class="empty-icon">⏳</div><h3>Chargement...</h3></div></div>
 
     </div><!-- fin tab-hockey -->
@@ -1565,10 +1717,69 @@
     container.innerHTML = html;
   }
 
+  function renderCards(rows) {
+    const container = document.getElementById('cards-hockey');
+    if (!container || !rows) return;
+
+    container.innerHTML = rows.map((r, idx) => {
+      const gainPerte = r.result_delta || 0;
+      const gainClass = gainPerte > 0 ? 'positive' : gainPerte < 0 ? 'negative' : '';
+      const resultClass = r.result_delta > 0 ? '' : r.result_delta < 0 ? 'loss' : '';
+      const resultText = r.result_delta > 0 ? '✅ Gagnée' : r.result_delta < 0 ? '❌ Perdue' : '⏳ En attente';
+
+      const homeLogoUrl = r.home_logo || '';
+      const awayLogoUrl = r.away_logo || '';
+
+      return `
+        <div class="prediction-card">
+          <div class="card-header">
+            <div class="team-logos">
+              ${awayLogoUrl ? `<img class="card-logo" src="${awayLogoUrl}" alt="${r.away_team}">` : ''}
+              ${homeLogoUrl ? `<img class="card-logo" src="${homeLogoUrl}" alt="${r.home_team}">` : ''}
+            </div>
+          </div>
+
+          <div class="match-name">${r.match || ''}</div>
+          <div class="match-info">${r.bet_type || ''} • ${(r.match || '').match(/(\d{2}):(\d{2})/) ? (r.match.match(/(\d{2}):(\d{2})/) || [])[0] : 'TBA'}</div>
+
+          <div class="card-body">
+            <div class="selection-row">
+              <div class="selection-label">Sélection</div>
+              <div class="selection-value">${r.selection || ''}</div>
+            </div>
+
+            <div class="odds-mise">
+              <div class="card-stat">
+                <div class="card-stat-label">Cote</div>
+                <div class="card-stat-value">${(r.odds || 0).toFixed(2)}</div>
+              </div>
+              <div class="card-stat">
+                <div class="card-stat-label">Mise</div>
+                <div class="card-stat-value" style="color: var(--green);">$${((r._mise || r.mise) || 0).toFixed(2)}</div>
+              </div>
+            </div>
+
+            <div class="card-stat">
+              <div class="card-stat-label">Gain/Perte</div>
+              <div class="card-stat-value ${gainClass}">${gainPerte > 0 ? '+' : ''}$${gainPerte.toFixed(2)}</div>
+            </div>
+
+            <div class="result-badge ${resultClass}">${resultText}</div>
+
+            <div class="card-time-info">📅 ${(r.match || '').match(/(\d{2}):(\d{2})/) ? 'Débute à ' + (r.match.match(/(\d{2}):(\d{2})/) || [])[0] : 'Heure TBA'}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
   function sortHockeyBy(col) {
     if (_hockeySort.col === col) _hockeySort.dir *= -1;
     else { _hockeySort.col = col; _hockeySort.dir = 1; }
-    if (_hockeyRawRows) renderTable(_hockeyRawRows, document.getElementById('table-hockey'));
+    if (_hockeyRawRows) {
+      renderTable(_hockeyRawRows, document.getElementById('table-hockey'));
+      renderCards(_hockeyRawRows);
+    }
   }
 
   function renderAnalystSummary(text, kellyWarning) {
@@ -2558,6 +2769,7 @@
 
     _carouselHockey = hockeyData;  // Sauvegarder pour loadLiveScoresForCarousel
     renderTable(_carouselHockey, document.getElementById('table-hockey'));
+    renderCards(_carouselHockey);  // Afficher cartes mobile
     renderMatchesCarousel(_carouselHockey);  // Afficher carrousel matchs instantanément
     loadPlayoffDataBackground();  // Charger les données de série en arrière-plan
     loadLiveScoresForCarousel();  // Charger les scores live pour le carrousel
