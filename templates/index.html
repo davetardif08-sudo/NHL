@@ -2443,7 +2443,7 @@
         btn.style.background   = 'rgba(63,185,80,.15)';
         btn.style.borderColor  = 'var(--green)';
         btn.style.color        = 'var(--green)';
-        btn.textContent        = '✓ Mises sauvegardées';
+        btn.textContent        = '✓';
         showToast('💾', `${data.saved} mis${data.saved > 1 ? 'es' : 'e'} sauvegardée${data.saved > 1 ? 's' : ''}`,
           `Snapshot à ${data.time} — accessible dans Résultats d'hier demain`);
       } else {
@@ -4865,7 +4865,7 @@
       if (res.ok) {
         btn.style.borderColor = 'var(--green)';
         btn.style.color = 'var(--green)';
-        btn.textContent = '✓ Mises réelles sauvegardées';
+        btn.textContent = '✓';
         showToast('💰', `${data.saved} mise${data.saved > 1 ? 's' : ''} réelle${data.saved > 1 ? 's' : ''} sauvegardée${data.saved > 1 ? 's' : ''}`,
           `Snapshot à ${data.time} — visible dans l'onglet Mises réelles`);
         _realBetsLoaded = false; // forcer rechargement si on retourne dans l'onglet
