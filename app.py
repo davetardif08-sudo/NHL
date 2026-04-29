@@ -1494,6 +1494,32 @@ _SNAPSHOTS_DIR     = os.path.join(_DATA_DIR, "snapshots")
 _REAL_BETS_DIR     = os.path.join(_DATA_DIR, "real_bets")
 _BALANCE_LOG_PATH  = os.path.join(_DATA_DIR, "balance_log.json")
 
+# ─── Initialize data from repo if volume is empty ────────────────────────────────
+# On Fly.io, /data is a volume that starts empty. Copy data files from repo if needed.
+def _initialize_data_from_repo():
+    """Copy data files from project repo to /data volume if they don't exist."""
+    if not os.environ.get('DATA_DIR'):  # Only on Fly.io where DATA_DIR=/data
+        return
+
+    project_root = os.path.dirname(__file__)
+    data_files = ['snapshot.json', 'predictions.json', 'balance_log.json']
+
+    for filename in data_files:
+        repo_path = os.path.join(project_root, filename)
+        data_path = os.path.join(_DATA_DIR, filename)
+
+        # If file exists in repo but not in /data, copy it
+        if os.path.exists(repo_path) and not os.path.exists(data_path):
+            try:
+                import shutil
+                shutil.copy2(repo_path, data_path)
+                print(f"[INIT] Restored {filename} to {_DATA_DIR}")
+            except Exception as e:
+                print(f"[INIT] Failed to copy {filename}: {e}")
+
+# Call initialization on startup
+_initialize_data_from_repo()
+
 # ─── Cache NHL outcomes ────────────────────────────────────────────────────────
 # Cache disque : résultats passés figés (ne changent jamais)
 _NHL_CACHE_DIR     = os.path.join(_DATA_DIR, "nhl_cache")
