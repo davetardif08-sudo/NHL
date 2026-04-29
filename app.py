@@ -1498,24 +1498,37 @@ _BALANCE_LOG_PATH  = os.path.join(_DATA_DIR, "balance_log.json")
 # On Fly.io, /data is a volume that starts empty. Copy data files from repo if needed.
 def _initialize_data_from_repo():
     """Copy data files from project repo to /data volume if they don't exist."""
-    if not os.environ.get('DATA_DIR'):  # Only on Fly.io where DATA_DIR=/data
+    import shutil
+
+    data_dir = os.environ.get('DATA_DIR')
+    if not data_dir:  # Only on Fly.io where DATA_DIR=/data
+        print("[INIT] DATA_DIR not set, skipping data restore")
         return
 
     project_root = os.path.dirname(__file__)
     data_files = ['snapshot.json', 'predictions.json', 'balance_log.json']
 
+    print(f"[INIT] Checking for data files in {project_root}")
+    print(f"[INIT] Target data directory: {data_dir}")
+
     for filename in data_files:
         repo_path = os.path.join(project_root, filename)
-        data_path = os.path.join(_DATA_DIR, filename)
+        data_path = os.path.join(data_dir, filename)
+
+        repo_exists = os.path.exists(repo_path)
+        data_exists = os.path.exists(data_path)
+
+        print(f"[INIT] {filename}: repo={repo_exists}, data={data_exists}")
 
         # If file exists in repo but not in /data, copy it
-        if os.path.exists(repo_path) and not os.path.exists(data_path):
+        if repo_exists and not data_exists:
             try:
-                import shutil
                 shutil.copy2(repo_path, data_path)
-                print(f"[INIT] Restored {filename} to {_DATA_DIR}")
+                print(f"[INIT] ✓ Restored {filename} to {data_dir}")
             except Exception as e:
-                print(f"[INIT] Failed to copy {filename}: {e}")
+                print(f"[INIT] ✗ Failed to copy {filename}: {e}")
+        elif data_exists:
+            print(f"[INIT] {filename} already exists in {data_dir}")
 
 # Call initialization on startup
 _initialize_data_from_repo()
