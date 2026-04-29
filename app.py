@@ -1507,10 +1507,12 @@ def _initialize_data_from_repo():
 
     project_root = os.path.dirname(__file__)
     data_files = ['snapshot.json', 'predictions.json', 'balance_log.json']
+    data_dirs = ['snapshots', 'real_bets', 'nhl_cache']
 
     print(f"[INIT] Checking for data files in {project_root}")
     print(f"[INIT] Target data directory: {data_dir}")
 
+    # Copy individual files
     for filename in data_files:
         repo_path = os.path.join(project_root, filename)
         data_path = os.path.join(data_dir, filename)
@@ -1529,6 +1531,27 @@ def _initialize_data_from_repo():
                 print(f"[INIT] ✗ Failed to copy {filename}: {e}")
         elif data_exists:
             print(f"[INIT] {filename} already exists in {data_dir}")
+
+    # Copy directories
+    for dirname in data_dirs:
+        repo_path = os.path.join(project_root, dirname)
+        data_path = os.path.join(data_dir, dirname)
+
+        repo_exists = os.path.isdir(repo_path)
+        data_exists = os.path.isdir(data_path)
+
+        print(f"[INIT] {dirname}/: repo={repo_exists}, data={data_exists}")
+
+        # If dir exists in repo but not in /data, copy it
+        if repo_exists and not data_exists:
+            try:
+                shutil.copytree(repo_path, data_path, dirs_exist_ok=True)
+                num_files = len(os.listdir(data_path)) if os.path.isdir(data_path) else 0
+                print(f"[INIT] ✓ Restored {dirname}/ ({num_files} files) to {data_dir}")
+            except Exception as e:
+                print(f"[INIT] ✗ Failed to copy {dirname}/: {e}")
+        elif data_exists:
+            print(f"[INIT] {dirname}/ already exists in {data_dir}")
 
 # Call initialization on startup
 _initialize_data_from_repo()
