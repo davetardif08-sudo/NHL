@@ -7914,6 +7914,29 @@
       const awayCircleClass = awayIsSelected ? 'win' : 'loss';
       const homeCircleClass = homeIsSelected ? 'win' : 'loss';
 
+      // Format bet type with selection intelligently
+      const formatBetType = (betType, sel) => {
+        if (!betType || !sel) return betType || 'Type inconnu';
+
+        // For "Gagnant" bets, don't repeat team name (already shown in green circle)
+        if (betType.includes('Gagnant')) {
+          return 'Gagnant à 2 issues';
+        }
+
+        // For "Total de buts" bets, replace "plus/moins" with selected direction in CAPS
+        if (betType.includes('Total de buts')) {
+          if (sel.includes('Plus')) {
+            return betType.replace(/plus\/moins/i, 'PLUS');
+          } else if (sel.includes('Moins')) {
+            return betType.replace(/plus\/moins/i, 'MOINS');
+          }
+        }
+
+        // For other bets, return as-is
+        return betType;
+      };
+      const formattedBetType = formatBetType(pick.bet_type, selection);
+
       // Status text
       let statusHtml = '';
       const cleanOutcome = outcome || 'pending';
@@ -7953,8 +7976,8 @@
             </div>
           </div>
 
-          <div style="width:100%; text-align:center; font-size:11px; color:#8b949e; margin-top:4px; margin-bottom:8px; font-weight:500;">
-            ${pick.bet_type || 'Type inconnu'}
+          <div style="width:100%; text-align:center; font-size:12px; color:#8b949e; margin-top:4px; margin-bottom:8px; font-weight:500;">
+            ${formattedBetType}
           </div>
 
           <div class="live-card-stats">
