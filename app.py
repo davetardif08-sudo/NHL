@@ -6,10 +6,14 @@ import json
 import os
 import time
 import threading
+import concurrent.futures
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+import pytz
 
 # ─── TIMEZONE FIX: Use Eastern Time (ET) for NHL ─────────────────────────────────
 def _get_et_now():
@@ -873,6 +877,52 @@ def _build_payload(demo: bool = False,
         """Vrai si la cote tombe dans une zone historiquement rentable."""
         return any(lo <= odds < hi for lo, hi, _ in _profitable)
 
+    def _get_team_logo_url(team_name):
+        """Retourne l'URL du logo NHL pour une équipe donnée."""
+        if not team_name:
+            return ""
+        # Extraire juste le nom avant la parenthèse (ex: "Buffalo (Sabres)" → "Buffalo")
+        team_name = team_name.split("(")[0].strip() if "(" in team_name else team_name
+        # Mapping vers abréviations NHL (même que dans templates/index.html)
+        abbrev_map = {
+            "anaheim": "ANA", "ducks": "ANA",
+            "arizona": "UTA", "utah": "UTA", "coyotes": "UTA",
+            "boston": "BOS", "bruins": "BOS",
+            "buffalo": "BUF", "sabres": "BUF",
+            "calgary": "CGY", "flames": "CGY",
+            "carolina": "CAR", "hurricanes": "CAR",
+            "chicago": "CHI", "blackhawks": "CHI",
+            "colorado": "COL", "avalanche": "COL",
+            "columbus": "CBJ", "blue jackets": "CBJ",
+            "dallas": "DAL", "stars": "DAL",
+            "detroit": "DET", "red wings": "DET",
+            "edmonton": "EDM", "oilers": "EDM",
+            "florida": "FLA", "panthers": "FLA",
+            "los angeles": "LAK", "kings": "LAK",
+            "minnesota": "MIN", "wild": "MIN",
+            "montreal": "MTL", "canadiens": "MTL",
+            "nashville": "NSH", "predators": "NSH",
+            "new jersey": "NJD", "devils": "NJD",
+            "new york islanders": "NYI", "islanders": "NYI",
+            "new york rangers": "NYR", "rangers": "NYR",
+            "ottawa": "OTT", "senators": "OTT",
+            "philadelphia": "PHI", "flyers": "PHI",
+            "pittsburgh": "PIT", "penguins": "PIT",
+            "san jose": "SJS", "sharks": "SJS",
+            "seattle": "SEA", "kraken": "SEA",
+            "st. louis": "STL", "blues": "STL",
+            "tampa bay": "TBL", "lightning": "TBL",
+            "toronto": "TOR",
+            "vancouver": "VAN", "canucks": "VAN",
+            "vegas": "VGK",
+            "washington": "WSH", "capitals": "WSH",
+            "winnipeg": "WPG", "jets": "WPG",
+        }
+        abbrev = abbrev_map.get(team_name.lower(), None)
+        if abbrev:
+            return f"https://assets.nhle.com/logos/nhl/svg/{abbrev}_light.svg"
+        return ""
+
     def opp_to_dict(o):
         is_excellent = "Excellent" in o.recommendation
         champion_candidate = is_excellent and _is_champion(o.odds)
@@ -887,6 +937,10 @@ def _build_payload(demo: bool = False,
         return {
             "rank":           0,
             "match":          f"{o.match.away_team} @ {o.match.home_team}",
+            "home_team":      o.match.home_team or "",
+            "away_team":      o.match.away_team or "",
+            "home_logo":      _get_team_logo_url(o.match.home_team),
+            "away_logo":      _get_team_logo_url(o.match.away_team),
             "_pred_key":      _key,
             "league":         o.league,
             "sport":          o.sport,
@@ -1241,6 +1295,52 @@ def _build_payload(demo: bool = False,
             "champion_tonight_acc": h_champion_acc,
         },
     }
+
+
+# ─── APScheduler: 5 AM Pre-scrape ─────────────────────────────────────────────────
+
+def _preschedule_5am():
+    """5 AM pré-scrape: Scrape Hockey NHL et met à jour le cache pour la journée.
+
+    IMPORTANT: utilise _run_analysis (pas _build_payload) pour que le cache mémoire
+    ET le cache disque (.payload_cache.json) soient mis à jour. Sinon le résultat
+    du scrape serait jeté et l'utilisateur devrait attendre au matin.
+    """
+    print("[5AM] Pre-scrape démarré...")
+    try:
+        # Retry jusqu'à 3 fois si Mise-O-Jeu retourne 0 matchs
+        for attempt in range(3):
+            _run_analysis(demo=False, sports=["hockey"])
+            data = _cache.get("data") or {}
+            h = len(data.get("hockey") or [])
+            if h > 0:
+                print(f"[5AM] Pre-scrape OK — {h} matchs hockey en cache (tentative {attempt+1}/3)")
+                return
+            if attempt < 2:
+                wait = 10 * (attempt + 1)
+                print(f"[5AM] Pre-scrape vide (tentative {attempt+1}/3) — réessai dans {wait}s...")
+                time.sleep(wait)
+        print("[5AM] Pre-scrape — tous les retries échoués (cache pas mis à jour)")
+    except Exception as e:
+        print(f"[5AM] Pre-scrape erreur: {e}")
+
+
+def _init_scheduler():
+    """Initialise APScheduler pour lancer le pré-scrape à 5 AM ET."""
+    try:
+        et_tz = pytz.timezone('US/Eastern')
+        scheduler = BackgroundScheduler(timezone=et_tz)
+        scheduler.add_job(
+            func=_preschedule_5am,
+            trigger=CronTrigger(hour=5, minute=0, timezone=et_tz),
+            id='preschedule_5am',
+            name='Pre-scrape at 5 AM ET',
+            replace_existing=True
+        )
+        scheduler.start()
+        print("  >> APScheduler démarré (5 AM pre-scrape activé)")
+    except Exception as e:
+        print(f"  >> APScheduler erreur: {e}")
 
 
 def _run_analysis(demo: bool = False, sports: list | None = None):
@@ -4153,6 +4253,25 @@ if __name__ == "__main__":
         win_rate = (snaps or {}).get("win_rate", cal.get("win_rate", "—"))
         print(f"  [startup] Backup stats {today} sauvegardé — {count} picks, {win_rate}% win rate → {out_path.name}")
 
+    def _retry_hockey_scrape(max_attempts: int = 3) -> bool:
+        """Retries Hockey NHL scrape avec backoff réduit.
+
+        Retourne True si scrape réussi, False si tous les retries ont échoué.
+        """
+        for attempt in range(max_attempts):
+            _run_analysis(demo=False, sports=["hockey"])
+            data = _cache.get("data") or {}
+            h = len(data.get("hockey") or [])
+            if h > 0:
+                print(f"  [startup] Hockey NHL OK — {h} matchs (tentative {attempt+1}/{max_attempts}).")
+                return True
+            wait = 10 * (attempt + 1)  # 10s, 20s, 30s (au lieu de 5s, 10s, 15s, 20s, 25s, 30s)
+            if attempt < max_attempts - 1:  # Ne pas attendre après le dernier essai
+                print(f"  [startup] Hockey vide (tentative {attempt+1}/{max_attempts}) — réessai dans {wait}s...")
+                time.sleep(wait)
+        print(f"  [startup] Hockey NHL — tous les retries échoués après {max_attempts} tentatives")
+        return False
+
     def _startup_sequence():
         """Scrape réel au démarrage. Si le cache disque du jour est disponible,
         l'UI affiche les dernières données pendant que le scrape tourne en arrière-plan.
@@ -4194,19 +4313,38 @@ if __name__ == "__main__":
             print(f"  [startup] Backfill ignoré : {e}")
 
         try:
-            # OPTIMISATION : retries courts (5s, 10s, 15s) au lieu de 60s/120s/180s.
-            # Mise-O-Jeu retourne souvent 0 matchs au 1er essai — pas besoin
-            # d'attendre 1 minute entre chaque tentative.
-            for attempt in range(6):       # 6 tentatives au lieu de 4
-                _run_analysis(demo=False, sports=["hockey"])
-                data = _cache.get("data") or {}
-                h = len(data.get("hockey") or [])
-                if h > 0:
-                    print(f"  [startup] Scrape réel OK — {h} hockey (tentative {attempt+1}).")
-                    break
-                wait = 5 * (attempt + 1)  # 5s, 10s, 15s, 20s, 25s
-                print(f"  [startup] Scrape vide (tentative {attempt+1}/6) — réessai dans {wait}s...")
-                time.sleep(wait)
+            # OPTIMISATION : Paralléliser Hockey NHL + Résultats au démarrage
+            # Réduire retries de 6 à 3 (avec pré-scrape 5 AM, moins de retries nécessaires)
+            def _load_results_bg():
+                """Pré-charger le snapshot du jour en arrière-plan (I/O-bound)."""
+                try:
+                    today = _get_today_et()
+                    daily_path = os.path.join(_SNAPSHOTS_DIR, f"{today}.json")
+                    if os.path.exists(daily_path):
+                        with open(daily_path, encoding="utf-8") as f:
+                            json.load(f)
+                        print(f"  [startup] Résultats pré-chargés ({today}.json)")
+                    elif os.path.exists(_SNAPSHOT_PATH):
+                        with open(_SNAPSHOT_PATH, encoding="utf-8") as f:
+                            snap = json.load(f)
+                        if snap.get("date") == today:
+                            print(f"  [startup] Résultats pré-chargés (snapshot.json)")
+                except Exception as e:
+                    print(f"  [startup] Résultats pré-charge erreur: {e}")
+
+            # Lancer Hockey NHL et Résultats en parallèle
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+                hockey_future = executor.submit(
+                    lambda: _retry_hockey_scrape(max_attempts=3)
+                )
+                results_future = executor.submit(_load_results_bg)
+
+                # Attendre Hockey NHL (priorité 1)
+                hockey_success = hockey_future.result()
+
+                # Résultats chargent en background (pas de bloc sur hockey)
+                # Les deux finissent avant que le startup_sequence se termine
+
         finally:
             # Libérer le verrou pour permettre les refreshs manuels ultérieurs
             with _lock:
@@ -4219,5 +4357,9 @@ if __name__ == "__main__":
             print(f"  [startup] Backup stats ignoré : {e}")
 
     threading.Thread(target=_startup_sequence, daemon=True).start()
+
+    # Initialiser APScheduler pour pré-scrape à 5 AM
+    _init_scheduler()
+
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, port=port, host='0.0.0.0', use_reloader=False)
