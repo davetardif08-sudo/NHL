@@ -505,10 +505,14 @@
     /* ── Responsive ──────────────────────────────────────── */
     /* ── CARD VIEW (Mobile) ──────────────────────────────────────── */
     .cards-wrap {
-      display: grid;
+      display: none;  /* Caché par défaut (desktop) */
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
       padding: 16px 0;
+    }
+
+    .table-wrap {
+      display: block;  /* Visible par défaut (desktop) */
     }
 
     .prediction-card {
@@ -656,11 +660,10 @@
       /* Tablet/small device optimization */
       main { padding: 8px; }
 
-      /* MOBILE CARD VIEW */
-      .cards-wrap { display: grid; grid-template-columns: 1fr; }
-      .table-wrap { display: none; }
+      /* MOBILE: afficher cartes, cacher tableau */
+      .cards-wrap { display: grid !important; grid-template-columns: 1fr; }
+      .table-wrap { display: none !important; }
 
-      .table-wrap { margin-bottom: 12px; }
       table { font-size: 12px; }
       th { padding: 8px 10px; font-size: 10px; }
       td { padding: 10px 10px; }
@@ -1012,7 +1015,7 @@
         </button>
       </div>
       <!-- MOBILE CARD VIEW -->
-      <div id="cards-hockey" class="cards-wrap" style="display:none;"></div>
+      <div id="cards-hockey" class="cards-wrap"></div>
 
       <!-- DESKTOP TABLE VIEW -->
       <div id="table-hockey" class="table-wrap"><div class="empty"><div class="empty-icon">⏳</div><h3>Chargement...</h3></div></div>
@@ -1721,7 +1724,17 @@
     const container = document.getElementById('cards-hockey');
     if (!container || !rows) return;
 
-    container.innerHTML = rows.map((r, idx) => {
+    // Trier: mises > 0 en premier, ensuite par ordre original
+    const sorted = [...rows].sort((a, b) => {
+      const miseA = parseFloat(a._mise || a.mise || 0);
+      const miseB = parseFloat(b._mise || b.mise || 0);
+      if (miseB > 0 && miseA === 0) return 1;   // B a une mise, pas A → B en premier
+      if (miseA > 0 && miseB === 0) return -1;  // A a une mise, pas B → A en premier
+      if (miseA !== miseB) return miseB - miseA; // Trier par mise décroissante
+      return 0;
+    });
+
+    container.innerHTML = sorted.map((r, idx) => {
       const gainPerte = r.result_delta || 0;
       const gainClass = gainPerte > 0 ? 'positive' : gainPerte < 0 ? 'negative' : '';
       const resultClass = r.result_delta > 0 ? '' : r.result_delta < 0 ? 'loss' : '';
