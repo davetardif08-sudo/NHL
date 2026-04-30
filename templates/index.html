@@ -762,7 +762,7 @@
       .logo-circle { width: 75px; height: 75px; }
       .card-logo { width: 60px; height: 60px; }
       .bet-type-label { max-width: 75px; font-size: 10px; }
-      .table-wrap { display: none !important; }
+      .table-wrap:not(#table-resultats-new) { display: none !important; }
 
       table { font-size: 12px; }
       th { padding: 8px 10px; font-size: 10px; }
@@ -782,7 +782,7 @@
       .logo-circle { width: 70px; height: 70px; }
       .card-logo { width: 55px; height: 55px; }
       .bet-type-label { max-width: 70px; font-size: 9px; }
-      .table-wrap { margin-bottom: 10px; display: none !important; }
+      .table-wrap:not(#table-resultats-new) { margin-bottom: 10px; display: none !important; }
 
       table { font-size: 11px; }
       th { padding: 6px 8px; font-size: 9px; letter-spacing: .3px; }
@@ -2750,8 +2750,6 @@
 
   // ── Render matches carousel (NHL style) ──────────────────────────────────
   function renderMatchesCarousel(picks, seriesMap = {}, gameScores = {}) {
-    if (!picks || !Array.isArray(picks)) return;
-
     const carousel = document.getElementById('matches-carousel-inner');
     if (!carousel) return;
 
@@ -2764,30 +2762,51 @@
       }
     }
 
-    // Group picks by match
+    // Start with ALL game_scores (not just picks)
     const matchMap = {};
-    picks.forEach(p => {
-      const matchStr = p.match || 'Unknown';
-      if (!matchMap[matchStr]) {
-        let homeTeam = '', awayTeam = '';
 
-        if (matchStr && matchStr.includes('@')) {
-          const parts = matchStr.split('@');
-          if (parts.length === 2) {
-            awayTeam = parts[0].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
-            homeTeam = parts[1].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
-          }
-        }
-
+    // First, add all games from gameScores
+    for (const gs of Object.values(gameScores)) {
+      const matchStr = gs.away_abbrev && gs.home_abbrev ? `${gs.away_abbrev}@${gs.home_abbrev}` : '';
+      if (matchStr && !matchMap[matchStr]) {
         matchMap[matchStr] = {
           match: matchStr,
-          homeTeam: homeTeam,
-          awayTeam: awayTeam,
-          time: p.time || '',
-          date: p.date || '',
+          homeTeam: gs.home_team || gs.home_abbrev || '',
+          awayTeam: gs.away_team || gs.away_abbrev || '',
+          time: gs.start_time_utc ? new Date(gs.start_time_utc).toLocaleTimeString('fr-CA', {hour:'2-digit', minute:'2-digit', hour12:false}) : '',
+          date: '',
+          _awayAbbr: gs.away_abbrev,
+          _homeAbbr: gs.home_abbrev,
+          _startTime: gs.start_time_utc,
         };
       }
-    });
+    }
+
+    // Then, add/override with picks data (predictions on top)
+    if (picks && Array.isArray(picks)) {
+      picks.forEach(p => {
+        const matchStr = p.match || 'Unknown';
+        if (!matchMap[matchStr]) {
+          let homeTeam = '', awayTeam = '';
+
+          if (matchStr && matchStr.includes('@')) {
+            const parts = matchStr.split('@');
+            if (parts.length === 2) {
+              awayTeam = parts[0].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
+              homeTeam = parts[1].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
+            }
+          }
+
+          matchMap[matchStr] = {
+            match: matchStr,
+            homeTeam: homeTeam,
+            awayTeam: awayTeam,
+            time: p.time || '',
+            date: p.date || '',
+          };
+        }
+      });
+    }
 
     const matches = Object.values(matchMap);
     carousel.innerHTML = matches.map(m => {
