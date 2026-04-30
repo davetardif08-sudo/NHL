@@ -288,7 +288,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow-x: auto;
-      overflow-y: hidden;
+      overflow-y: visible;
       box-shadow: var(--shadow);
       -webkit-overflow-scrolling: touch;
     }
@@ -515,6 +515,12 @@
 
     .table-wrap {
       display: none;  /* Caché partout pour HOCKEY NHL */
+    }
+
+    /* Show Results tab specifically */
+    #table-resultats-new {
+      display: block !important;
+      overflow-y: visible;
     }
 
     .prediction-card {
@@ -1505,18 +1511,19 @@
 
     <!-- ═══════════ ONGLET RÉSULTATS NEW ═══════════ -->
     <div id="tab-resultats-new" class="tab-content">
+      <div id="rn-summary-cards" style="margin-bottom:16px;"></div>
+      <div id="results-cards-container" style="margin-bottom:20px;"></div>
+      <div id="table-resultats-new" class="table-wrap">
+        <div class="empty"><div class="empty-icon">📋</div><h3>Cliquez sur l'onglet pour charger</h3></div>
+      </div>
       <!-- Vignettes Combos Même Match résolus -->
-      <div id="sgp-result-cards-block" style="display:none; margin-bottom:20px;">
+      <div id="sgp-result-cards-block" style="display:none; margin-top:30px; margin-bottom:20px;">
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;">
           <span style="font-size:18px;">🎯</span>
           <span style="font-weight:700;font-size:13px;color:#f59e0b;letter-spacing:.4px;text-transform:uppercase;">Combos Même Match</span>
           <span id="sgp-result-cards-date" style="font-size:11px;color:var(--muted);"></span>
         </div>
         <div id="sgp-result-cards" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;"></div>
-      </div>
-      <div id="rn-summary-cards" style="margin-bottom:16px;"></div>
-      <div id="table-resultats-new" class="table-wrap">
-        <div class="empty"><div class="empty-icon">📋</div><h3>Cliquez sur l'onglet pour charger</h3></div>
       </div>
 
       <!-- vignette SGP injectée dynamiquement dans rn-summary-cards -->
@@ -6684,6 +6691,12 @@
   }
 
   function renderResultatsNew(data, container) {
+    console.log('renderResultatsNew called, container exists:', !!container, 'container id:', container?.id);
+    if (!container) {
+      console.error('No container provided to renderResultatsNew');
+      return;
+    }
+
     const picks = data.picks || [];
     if (!picks.length) {
       container.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>Snapshot vide</h3></div>`;
@@ -6729,32 +6742,42 @@
         </div>
       </div>` : '';
 
-    const thStyle = 'cursor:pointer;user-select:none;white-space:nowrap;';
-
-    container.innerHTML = `
+    // Afficher le résumé en haut
+    const summaryHtml = `
       ${warningBanner}
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
         <span style="font-size:13px;color:var(--muted);">Snapshot du <strong style="color:var(--text);">${dateLabel}</strong> à <strong style="color:var(--text);">${timeLabel}</strong></span>
         <span style="font-size:13px;color:var(--muted);">${miseCount} mise${miseCount>1?'s':''} · <strong style="color:var(--green);">${totalMise.toFixed(2)}$ distribués</strong></span>
         ${kellyResolved > 0 ? `<span style="font-size:13px;font-weight:700;color:${netColor};">Net: ${netSign}${kellyNet.toFixed(2)}$ (${kellyWins}/${kellyResolved} gagnés)</span>` : ''}
         <span style="font-size:11px;color:var(--muted);">${nhlGames} matchs NHL trouvés</span>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th style="width:32px">#</th>
-            <th style="${thStyle}" data-rn-col="match"     onclick="_rnThClick('match')">Match<span class="rn-arrow" style="opacity:.35"> ⇅</span></th>
-            <th style="${thStyle}" data-rn-col="bet_type"  onclick="_rnThClick('bet_type')"  class="hide-sm">Type de pari<span class="rn-arrow" style="opacity:.35"> ⇅</span></th>
-            <th style="${thStyle}" data-rn-col="selection" onclick="_rnThClick('selection')">Sélection<span class="rn-arrow" style="opacity:.35"> ⇅</span></th>
-            <th style="${thStyle}" data-rn-col="odds"      onclick="_rnThClick('odds')"      class="c">Cote<span class="rn-arrow" style="opacity:.35"> ⇅</span></th>
-            <th style="${thStyle}" data-rn-col="mise"      onclick="_rnThClick('mise')"      class="c">💰 Mise<span class="rn-arrow" style="opacity:.35"> ⇅</span></th>
-            <th style="${thStyle}" data-rn-col="outcome"   onclick="_rnThClick('outcome')">Résultat<span class="rn-arrow" style="opacity:.35"> ⇅</span></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>`;
+    `;
 
-    _rnRenderBody();
+    // Afficher les cartes des résultats
+    let cardsHtml = '';
+    try {
+      cardsHtml = renderResultsAsCards(picks);
+      console.log('cardsHtml length:', cardsHtml?.length || 0);
+    } catch(e) {
+      console.error('Error rendering cards:', e);
+      cardsHtml = `<div style="color:red;padding:20px;">Erreur: ${e.message}</div>`;
+    }
+
+    // DEBUG: Afficher le contenu final
+    console.log('Final HTML will contain:');
+    console.log('- summaryHtml:', summaryHtml?.substring(0, 100));
+    console.log('- cardsHtml:', cardsHtml?.substring(0, 100));
+
+    // Remplir le container avec le résumé et les cartes
+    container.innerHTML = `
+      <div style="padding:20px 0;">
+        ${summaryHtml}
+      </div>
+      <div style="padding:20px 0;">
+        <h3 style="margin-top:0;">Résultats Individuels</h3>
+        ${cardsHtml}
+      </div>
+    `;
   }
 
   // ═══════════════════════════════════════════════════════════════════
@@ -8016,6 +8039,95 @@
     }).join('');
 
     return `<div class="live-cards-wrap">${cardsHtml}</div>`;
+  }
+
+  function renderResultsAsCards(picks) {
+    if (!picks || !picks.length) {
+      return `<div style="text-align:center;padding:40px;color:var(--text);">
+        <p style="font-size:14px;">📊 Aucun résultat individual</p>
+      </div>`;
+    }
+
+    // Sort by mise descending (with mise > 0 first)
+    const sorted = [...picks].sort((a, b) => {
+      const miseA = parseFloat(a.mise || 0);
+      const miseB = parseFloat(b.mise || 0);
+      if (miseB > 0 && miseA === 0) return 1;
+      if (miseA > 0 && miseB === 0) return -1;
+      return miseB - miseA;
+    });
+
+    const cardsHtml = sorted.map((pick, idx) => {
+      try {
+        const { away_team, home_team, selection, odds, mise, outcome } = pick;
+
+        // Determine logo circle colors (vert si selection = team, gris sinon)
+        const awayIsSelected = selection && (selection.includes(away_team) || selection.includes(teamAbbrev(away_team)));
+        const homeIsSelected = selection && (selection.includes(home_team) || selection.includes(teamAbbrev(home_team)));
+        const awayCircleClass = awayIsSelected ? 'win' : 'loss';
+        const homeCircleClass = homeIsSelected ? 'win' : 'loss';
+
+        // Logos HTML
+        const awayLogoHtml = teamLogoImg(away_team, 70) || `<span>${away_team}</span>`;
+        const homeLogoHtml = teamLogoImg(home_team, 70) || `<span>${home_team}</span>`;
+
+        // Status text
+        let statusHtml = '';
+        const cleanOutcome = outcome || 'pending';
+        const miseNum = parseFloat(mise || 0);
+
+        if (cleanOutcome === 'win') {
+          // Display "Gagné" + gain (only if mise exists)
+          if (miseNum > 0) {
+            const gain = (miseNum * (parseFloat(odds) - 1)).toFixed(2);
+            statusHtml = `<div class="live-card-status win">✓ Gagné • +$${gain}</div>`;
+          } else {
+            statusHtml = `<div class="live-card-status win">✓ Gagné</div>`;
+          }
+        } else if (cleanOutcome === 'loss') {
+          // Display "Perdu" + loss (only if mise exists)
+          if (miseNum > 0) {
+            statusHtml = `<div class="live-card-status loss">✗ Perdu • -$${miseNum.toFixed(2)}</div>`;
+          } else {
+            statusHtml = `<div class="live-card-status loss">✗ Perdu</div>`;
+          }
+        } else {
+          // Pending - show "En attente"
+          statusHtml = `<div class="live-card-status pending">⏳ En attente</div>`;
+        }
+
+        return `
+          <div class="live-prediction-card">
+            <div class="live-card-logos">
+              <div class="live-logo-circle ${awayCircleClass}">
+                ${awayLogoHtml}
+              </div>
+              <span style="font-size:14px; font-weight:600; color:#8b949e;">vs</span>
+              <div class="live-logo-circle ${homeCircleClass}">
+                ${homeLogoHtml}
+              </div>
+            </div>
+
+            <div class="live-card-stats">
+              <div>
+                <div class="live-stat-label">Cote</div>
+                <div class="live-stat-value">${parseFloat(odds || 0).toFixed(2)}</div>
+              </div>
+              <div>
+                <div class="live-stat-label">Mise</div>
+                <div class="live-stat-value mise">$${parseFloat(mise || 0).toFixed(2)}</div>
+              </div>
+            </div>
+
+            ${statusHtml}
+          </div>
+        `;
+      } catch(e) {
+        return `<div class="live-prediction-card" style="color:red;">Erreur pick ${idx}: ${e.message}</div>`;
+      }
+    }).join('');
+
+    return `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;padding:20px 0;max-width:1000px;margin:0 auto;">${cardsHtml}</div>`;
   }
 </script>
 
