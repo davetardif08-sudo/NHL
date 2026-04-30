@@ -513,6 +513,16 @@
       margin: 0 auto;
     }
 
+    /* Results Cards Grid */
+    .results-cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px 0;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
     .table-wrap {
       display: none;  /* Caché partout pour HOCKEY NHL */
     }
@@ -764,6 +774,7 @@
 
       /* MOBILE: afficher cartes (2 colonnes), cacher tableau */
       .cards-wrap { display: grid !important; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .results-cards-wrap { grid-template-columns: repeat(2, 1fr); gap: 16px; }
       .prediction-card { padding: 14px; }
       .logo-circle { width: 75px; height: 75px; }
       .card-logo { width: 60px; height: 60px; }
@@ -784,6 +795,7 @@
 
       /* MOBILE: afficher cartes (1 colonne) */
       .cards-wrap { grid-template-columns: 1fr !important; }
+      .results-cards-wrap { grid-template-columns: 1fr !important; gap: 12px; }
       .prediction-card { padding: 12px; }
       .logo-circle { width: 70px; height: 70px; }
       .card-logo { width: 55px; height: 55px; }
@@ -8127,7 +8139,7 @@
       }
     }).join('');
 
-    return `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;padding:20px 0;max-width:1000px;margin:0 auto;">${cardsHtml}</div>`;
+    return `<div class="results-cards-wrap">${cardsHtml}</div>`;
   }
 </script>
 
