@@ -505,8 +505,8 @@
     /* ── Responsive ──────────────────────────────────────── */
     /* ── CARD VIEW (Mobile) ──────────────────────────────────────── */
     .cards-wrap {
-      display: none;  /* Caché par défaut (desktop) */
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      display: grid;  /* Visible partout (cartes au lieu de tableau) */
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
       padding: 16px 0;
       max-width: 1000px;
@@ -514,7 +514,7 @@
     }
 
     .table-wrap {
-      display: block;  /* Visible par défaut (desktop) */
+      display: none;  /* Caché partout pour HOCKEY NHL */
     }
 
     .prediction-card {
@@ -949,9 +949,9 @@
     /* ─── Live Cards Layout ────────────────────────────────────────── */
     .live-cards-wrap {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: 1fr;
       gap: 16px;
-      max-width: 1200px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 0 12px;
     }
