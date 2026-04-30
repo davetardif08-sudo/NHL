@@ -236,6 +236,62 @@
       border-bottom-color: #38bdf8;
     }
 
+    /* Mobile Menu Styles */
+    .tab-menu-mobile {
+      display: none;
+      position: relative;
+    }
+
+    .tab-menu-btn {
+      padding: 12px 16px;
+      border-radius: 0;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 18px;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .tab-menu-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 0 0 8px 8px;
+      flex-direction: column;
+      z-index: 1000;
+      min-width: 180px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-menu-dropdown.open {
+      display: flex;
+    }
+
+    .tab-menu-dropdown .tab-btn {
+      border: none;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      padding: 12px 16px;
+      justify-content: flex-start;
+    }
+
+    .tab-menu-dropdown .tab-btn:last-child {
+      border-bottom: none;
+    }
+
+    .tab-btn-hidden {
+      display: block;
+    }
+
     .badge {
       padding: 2px 8px; border-radius: 20px; font-size: 11px;
       font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
@@ -793,6 +849,10 @@
       /* Mobile phone optimization */
       main { padding: 6px; }
 
+      /* Mobile menu tabs - show only first 3, hide others */
+      .tab-btn-hidden { display: none; }
+      .tab-menu-mobile { display: block; }
+
       /* MOBILE: afficher cartes (1 colonne) */
       .cards-wrap { grid-template-columns: 1fr !important; }
       .results-cards-wrap { grid-template-columns: 1fr !important; gap: 12px; }
@@ -1175,16 +1235,29 @@
 
     <!-- Tab Navigation (NHL style) -->
     <div class="header-tabs">
-      <button class="tab-btn hockey active" data-tab="hockey"        onclick="switchTab('hockey')">HOCKEY NHL<span id="tab-pill-hockey" class="tab-pill"></span></button>
-      <button class="tab-btn hockey"        data-tab="resultats-new" onclick="switchTab('resultats-new')">NHL RESULTS</button>
-      <button class="tab-btn hockey"        data-tab="nhl-live"      onclick="switchTab('nhl-live')">NHL LIVE</button>
-      <button class="tab-btn hockey"        data-tab="playoff-nhl"   onclick="switchTab('playoff-nhl')">PLAYOFF NHL</button>
-      <button class="tab-btn hockey"        data-tab="stats-nhl"     onclick="switchTab('stats-nhl')">NHL STATS</button>
-      <button class="tab-btn hockey"        data-tab="mises-reelles" onclick="switchTab('mises-reelles')">MISES RÉELLES</button>
-      <button class="tab-btn" data-tab="comparaison" onclick="switchTab('comparaison')">COMPARAISON</button>
-      <button class="tab-btn" data-tab="anomalies" onclick="switchTab('anomalies')" style="background:linear-gradient(135deg,#f59e0b22,#d97706); border-color:#f59e0b55; color:#fbbf24;">ANOMALIES</button>
-      <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')" style="background:linear-gradient(135deg,#8b5cf622,#7c3aed22); border-color:#8b5cf655; color:#a78bfa;">ANALYTICS</button>
-      <button class="tab-btn" id="tab-btn-dev-backlog-hdr" data-tab="dev-backlog" onclick="switchTab('dev-backlog')">DEV</button>
+      <button class="tab-btn hockey active" data-tab="hockey"        onclick="switchTab('hockey')">BETS<span id="tab-pill-hockey" class="tab-pill"></span></button>
+      <button class="tab-btn hockey"        data-tab="resultats-new" onclick="switchTab('resultats-new')">RESULTS</button>
+      <button class="tab-btn hockey"        data-tab="nhl-live"      onclick="switchTab('nhl-live')">LIVE</button>
+      <button class="tab-btn hockey tab-btn-hidden"        data-tab="playoff-nhl"   onclick="switchTab('playoff-nhl')">PLAYOFFS</button>
+      <button class="tab-btn hockey tab-btn-hidden"        data-tab="stats-nhl"     onclick="switchTab('stats-nhl')">STATS</button>
+      <button class="tab-btn hockey tab-btn-hidden"        data-tab="mises-reelles" onclick="switchTab('mises-reelles')">MISES RÉELLES</button>
+      <button class="tab-btn tab-btn-hidden" data-tab="comparaison" onclick="switchTab('comparaison')">COMPARAISON</button>
+      <button class="tab-btn tab-btn-hidden" data-tab="anomalies" onclick="switchTab('anomalies')" style="background:linear-gradient(135deg,#f59e0b22,#d97706); border-color:#f59e0b55; color:#fbbf24;">ANOMALIES</button>
+      <button class="tab-btn tab-btn-hidden" data-tab="analytics" onclick="switchTab('analytics')" style="background:linear-gradient(135deg,#8b5cf622,#7c3aed22); border-color:#8b5cf655; color:#a78bfa;">ANALYTICS</button>
+      <button class="tab-btn tab-btn-hidden" id="tab-btn-dev-backlog-hdr" data-tab="dev-backlog" onclick="switchTab('dev-backlog')">DEV</button>
+      <!-- Hamburger Menu Mobile -->
+      <div class="tab-menu-mobile">
+        <button class="tab-menu-btn" onclick="toggleTabMenu()" title="Menu">☰</button>
+        <div id="tab-menu-dropdown" class="tab-menu-dropdown">
+          <button class="tab-btn hockey" data-tab="playoff-nhl" onclick="switchTab('playoff-nhl'); closeTabMenu()">PLAYOFFS</button>
+          <button class="tab-btn hockey" data-tab="stats-nhl" onclick="switchTab('stats-nhl'); closeTabMenu()">STATS</button>
+          <button class="tab-btn hockey" data-tab="mises-reelles" onclick="switchTab('mises-reelles'); closeTabMenu()">MISES RÉELLES</button>
+          <button class="tab-btn" data-tab="comparaison" onclick="switchTab('comparaison'); closeTabMenu()">COMPARAISON</button>
+          <button class="tab-btn" data-tab="anomalies" onclick="switchTab('anomalies'); closeTabMenu()" style="background:linear-gradient(135deg,#f59e0b22,#d97706); border-color:#f59e0b55; color:#fbbf24;">ANOMALIES</button>
+          <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics'); closeTabMenu()" style="background:linear-gradient(135deg,#8b5cf622,#7c3aed22); border-color:#8b5cf655; color:#a78bfa;">ANALYTICS</button>
+          <button class="tab-btn" id="tab-btn-dev-backlog-mobile" data-tab="dev-backlog" onclick="switchTab('dev-backlog'); closeTabMenu()">DEV</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -3057,6 +3130,25 @@
       loadAnalytics();
     }
   }
+
+  // ── Mobile tab menu toggle ────────────────────────────────────────────
+  function toggleTabMenu() {
+    const dropdown = document.getElementById('tab-menu-dropdown');
+    dropdown.classList.toggle('open');
+  }
+
+  function closeTabMenu() {
+    const dropdown = document.getElementById('tab-menu-dropdown');
+    dropdown.classList.remove('open');
+  }
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const menu = document.querySelector('.tab-menu-mobile');
+    if (menu && !menu.contains(e.target)) {
+      closeTabMenu();
+    }
+  });
 
   // ── Dev-only: afficher l'onglet Backlog uniquement en local ────────────────
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
