@@ -5969,6 +5969,11 @@
     const bestDay  = summary.best_day;
     const worstDay = summary.worst_day;
 
+    // Gain moyen GLOBAL (tous les jours actifs)
+    const avgNightGlobal = activeDays.length > 0 ? cumNet / activeDays.length : null;
+    const avgNightGlobalSign = avgNightGlobal != null && avgNightGlobal >= 0 ? '+' : '';
+    const avgNightGlobalColor = avgNightGlobal == null ? 'var(--muted)' : avgNightGlobal > 0 ? 'var(--green)' : avgNightGlobal < 0 ? 'var(--red)' : 'var(--muted)';
+
     const fmtNet = (v) => { const s = v >= 0 ? '+' : ''; return `${s}${v.toFixed(2)}$`; };
     const vignetteBest  = bestDay  ? `<div class="stat-card"><div class="stat-value" style="color:var(--green);">${fmtNet(bestDay.kelly_net)}</div><div class="stat-label">Meilleur jour (${bestDay.date.slice(5)})</div></div>` : '';
     const vignetteWorst = worstDay ? `<div class="stat-card"><div class="stat-value" style="color:var(--red);">${fmtNet(worstDay.kelly_net)}</div><div class="stat-label">Pire jour (${worstDay.date.slice(5)})</div></div>` : '';
@@ -5983,6 +5988,10 @@
     const avgNightAdvised = advisedDays.length > 0 ? cumNetAdvised / advisedDays.length : null;
     const avgNightSign  = avgNightAdvised != null && avgNightAdvised >= 0 ? '+' : '';
     const avgNightColor = avgNightAdvised == null ? 'var(--muted)' : avgNightAdvised > 0 ? 'var(--green)' : avgNightAdvised < 0 ? 'var(--red)' : 'var(--muted)';
+
+    // Meilleur/pire jour parmi les jours conseillés uniquement
+    const bestDayAdvised = advisedDays.length > 0 ? advisedDays.reduce((max, d) => (d.kelly_net > max.kelly_net) ? d : max) : null;
+    const worstDayAdvised = advisedDays.length > 0 ? advisedDays.reduce((min, d) => (d.kelly_net < min.kelly_net) ? d : min) : null;
 
     // Vignettes en haut
     cardsSection.innerHTML = `
@@ -6003,13 +6012,9 @@
           <div class="stat-value" style="color:${netColor};">${netSign}${cumNet.toFixed(2)}$</div>
           <div class="stat-label">Net cumulatif Kelly</div>
         </div>
-        <div class="stat-card" title="Gain cumulatif en excluant les ${activeDays.length - advisedDays.length} soirée(s) non conseillée(s)">
-          <div class="stat-value" style="color:${netAdvisedColor};">${netAdvisedSign}${cumNetAdvised.toFixed(2)}$</div>
-          <div class="stat-label">Net soirées conseillées <span style="opacity:.6;font-size:10px;">(excl. ⚠️)</span></div>
-        </div>
-        <div class="stat-card" title="Moyenne sur ${advisedDays.length} soirée(s) conseillée(s)">
-          <div class="stat-value" style="color:${avgNightColor};">${avgNightAdvised != null ? avgNightSign + avgNightAdvised.toFixed(2) + '$' : '—'}</div>
-          <div class="stat-label">Gain moyen / soir ✅</div>
+        <div class="stat-card" title="Moyenne sur ${activeDays.length} soirée(s) actives">
+          <div class="stat-value" style="color:${avgNightGlobalColor};">${avgNightGlobal != null ? avgNightGlobalSign + avgNightGlobal.toFixed(2) + '$' : '—'}</div>
+          <div class="stat-label">Gain moyen / soir</div>
         </div>
         ${vignetteBest}
         ${vignetteWorst}
@@ -6039,7 +6044,7 @@
             <div class="stat-label">Prédictions résolues</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" style="color:${wrColor};">${advisedDays.length > 0 ? ((advisedDays.reduce((s, d) => s + (d.won ?? 0), 0) / advisedDays.reduce((s, d) => s + (d.resolved ?? 0), 0) * 100) || 0).toFixed(0) + '%' : '—'}</div>
+            <div class="stat-value" style="color:${wrColor};">${advisedDays.length > 0 ? ((advisedDays.reduce((s, d) => s + (d.wins ?? 0), 0) / advisedDays.reduce((s, d) => s + (d.resolved ?? 0), 0) * 100) || 0).toFixed(0) + '%' : '—'}</div>
             <div class="stat-label">Taux de victoire</div>
           </div>
           <div class="stat-card">
@@ -6052,11 +6057,11 @@
           </div>
           ${advisedDays.length > 0 ? `
             <div class="stat-card">
-              <div class="stat-value" style="color:var(--green);">${bestDay && advisedDays.some(d => d.date === bestDay.date) ? fmtNet(bestDay.kelly_net) : '—'}</div>
+              <div class="stat-value" style="color:var(--green);">${bestDayAdvised ? fmtNet(bestDayAdvised.kelly_net) : '—'}</div>
               <div class="stat-label">Meilleur jour</div>
             </div>
             <div class="stat-card">
-              <div class="stat-value" style="color:var(--red);">${worstDay && advisedDays.some(d => d.date === worstDay.date) ? fmtNet(worstDay.kelly_net) : '—'}</div>
+              <div class="stat-value" style="color:var(--red);">${worstDayAdvised ? fmtNet(worstDayAdvised.kelly_net) : '—'}</div>
               <div class="stat-label">Pire jour</div>
             </div>
           ` : ''}
@@ -6643,23 +6648,31 @@
     // Injecter la vignette dans la stats-bar des résultats
     // (attendre que renderHistory ait créé le conteneur si nécessaire)
     function _injectSGPCard() {
-      const statsBar = document.getElementById('sgp-stat-container');
-      if (!statsBar) { setTimeout(_injectSGPCard, 200); return; }
-      if (statsBar.querySelector('#sgp-stat-card')) return; // déjà injecté
+      const container = document.getElementById('sgp-stat-container');
+      if (!container) { setTimeout(_injectSGPCard, 200); return; }
+      if (container.querySelector('#sgp-stat-card')) return; // déjà injecté
 
       const wins     = s.wins || 0;
       const losses   = (s.resolved || 0) - wins;
       const wrColor  = (s.win_rate >= 55) ? 'var(--green)' : (s.win_rate < 45) ? 'var(--red)' : 'var(--yellow)';
-      const roiColor = (s.roi > 0) ? 'var(--green)' : 'var(--red)';
 
       const card = document.createElement('div');
-      card.className = 'stat-card';
       card.id = 'sgp-stat-card';
       const wr = s.win_rate != null ? s.win_rate : (s.resolved ? Math.round(wins / s.resolved * 100) : 0);
+      card.style.cssText = `
+        background: #1a1f2e;
+        border: 1px solid #e74c3c;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 13px;
+        color: #fff;
+        display: inline-block;
+        margin-bottom: 12px;
+      `;
       card.innerHTML = `
-        <div class="stat-value" style="color:${wrColor};">${wins}V/${losses}D</div>
-        <div class="stat-label">Combos (<span style="color:${wrColor};font-weight:700;">${wr}%</span> réussite)</div>`;
-      statsBar.appendChild(card);
+        <div style="font-weight:700;margin-bottom:2px;">${wins}V/${losses}D</div>
+        <div style="font-size:12px;color:#ccc;">Combos (<span style="color:${wrColor};font-weight:700;">${wr}%</span> réussite)</div>`;
+      container.appendChild(card);
     }
     _injectSGPCard();
   }
