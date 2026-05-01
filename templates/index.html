@@ -6836,30 +6836,18 @@
     const nMatches  = data.n_matches  ?? 0;
     const isWarning = data.kelly_warning === true;
 
-    const warningBanner = isWarning ? `
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:14px;
-                  background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);
-                  border-radius:8px;color:#f59e0b;">
-        <span style="font-size:18px;">⚠️</span>
-        <div>
-          <div style="font-weight:700;font-size:13px;">Soirée non conseillée</div>
-          <div style="font-size:11px;opacity:.85;">
-            ${nMatches <= 3
-              ? `Seulement ${nMatches} match${nMatches > 1 ? 's' : ''} NHL ce soir-là — volume insuffisant pour un avantage statistique fiable.`
-              : `Aucun pari avec avantage Kelly positif ce soir-là.`}
-            Les mises affichées sont données à titre indicatif uniquement.
-          </div>
-        </div>
-      </div>` : '';
-
-    // Afficher le résumé en haut
+    // Afficher le résumé en stats-bar vignettes (épuré, sans avertissement)
     const summaryHtml = `
-      ${warningBanner}
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
-        <span style="font-size:13px;color:var(--muted);">Snapshot du <strong style="color:var(--text);">${dateLabel}</strong> à <strong style="color:var(--text);">${timeLabel}</strong></span>
-        <span style="font-size:13px;color:var(--muted);">${miseCount} mise${miseCount>1?'s':''} · <strong style="color:var(--green);">${totalMise.toFixed(2)}$ distribués</strong></span>
-        ${kellyResolved > 0 ? `<span style="font-size:13px;font-weight:700;color:${netColor};">Net: ${netSign}${kellyNet.toFixed(2)}$ (${kellyWins}/${kellyResolved} gagnés)</span>` : ''}
-        <span style="font-size:11px;color:var(--muted);">${nhlGames} matchs NHL trouvés</span>
+      <div class="stats-bar" style="margin-bottom:16px; grid-template-columns: 220px 220px; gap:10px; justify-content:center;">
+        <div class="stat-card" style="background:#ffffff; border:1px solid #e5e7eb; text-align:center; padding:10px 14px;">
+          <div class="stat-label" style="color:#8b949e; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px;">Snapshot</div>
+          <div class="stat-value" style="color:#1f2937; font-size:14px; font-weight:600;">${dateLabel}</div>
+          <div style="color:#8b949e; font-size:13px; margin-top:2px;">${timeLabel}</div>
+        </div>
+        <div class="stat-card" style="background:#ffffff; border:1px solid #e5e7eb; text-align:center; padding:10px 14px;">
+          <div class="stat-label" style="color:#8b949e; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px;">Net Kelly</div>
+          <div class="stat-value" style="color: ${netColor}; font-size:18px; font-weight:700;">${netSign}$${kellyNet.toFixed(2)}</div>
+        </div>
       </div>
     `;
 
@@ -6884,7 +6872,6 @@
         ${summaryHtml}
       </div>
       <div style="padding:20px 0;">
-        <h3 style="margin-top:0;">Résultats Individuels</h3>
         ${cardsHtml}
       </div>
     `;
@@ -8186,6 +8173,14 @@
         const cleanOutcome = outcome || 'pending';
         const miseNum = parseFloat(mise || 0);
 
+        // Determine card background color based on outcome
+        let cardBgColor = '#ffffff'; // default white for pending
+        if (cleanOutcome === 'win') {
+          cardBgColor = 'rgba(63, 185, 80, 0.12)'; // light green
+        } else if (cleanOutcome === 'loss') {
+          cardBgColor = 'rgba(248, 81, 73, 0.12)'; // light red
+        }
+
         if (cleanOutcome === 'win') {
           // Display "Gagné" + gain (only if mise exists)
           if (miseNum > 0) {
@@ -8207,7 +8202,7 @@
         }
 
         return `
-          <div class="live-prediction-card">
+          <div class="live-prediction-card" style="background-color: ${cardBgColor};">
             <div class="live-card-logos">
               <div class="live-logo-circle ${awayCircleClass}">
                 ${awayLogoHtml}
