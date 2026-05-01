@@ -2408,7 +2408,7 @@ def api_compare_systems():
     excluded       = {"2026-03-19", "2026-03-20"}
     _MIN_BET       = 0.50  # mise minimale pour E
 
-    snap_dir = os.path.join(os.path.dirname(__file__), "snapshots")
+    snap_dir = _SNAPSHOTS_DIR
     if not os.path.isdir(snap_dir):
         return jsonify({"days": [], "summary": {}, "picks": []})
 
@@ -4314,7 +4314,7 @@ def api_export_analytics():
 
     try:
         # Load snapshots directory
-        snap_dir = os.path.join(os.path.dirname(__file__), "snapshots")
+        snap_dir = _SNAPSHOTS_DIR
         snapshots = {}
         outcomes_by_date = {}
 
@@ -4398,7 +4398,7 @@ def api_export_analytics():
 def api_export_csv():
     """Export analytics data as CSV file (downloadable)."""
     try:
-        snap_dir = os.path.join(os.path.dirname(__file__), "snapshots")
+        snap_dir = _SNAPSHOTS_DIR
         snapshots = {}
         outcomes_by_date = {}
 
