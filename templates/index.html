@@ -6028,6 +6028,39 @@
         </div>
       </div>
       <div style="margin-top:24px;">
+        <!-- Vignettes pour le graphique Soirées conseillées -->
+        <div class="stats-bar" style="margin-bottom:16px;">
+          <div class="stat-card">
+            <div class="stat-value">${advisedDays.length}</div>
+            <div class="stat-label">Jours enregistrés</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${advisedDays.reduce((s, d) => s + (d.resolved ?? 0), 0)}</div>
+            <div class="stat-label">Prédictions résolues</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:${wrColor};">${advisedDays.length > 0 ? ((advisedDays.reduce((s, d) => s + (d.won ?? 0), 0) / advisedDays.reduce((s, d) => s + (d.resolved ?? 0), 0) * 100) || 0).toFixed(0) + '%' : '—'}</div>
+            <div class="stat-label">Taux de victoire</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:${netAdvisedColor};">${netAdvisedSign}${cumNetAdvised.toFixed(2)}$</div>
+            <div class="stat-label">Net cumulatif Kelly</div>
+          </div>
+          <div class="stat-card" title="Moyenne sur ${advisedDays.length} soirée(s)">
+            <div class="stat-value" style="color:${avgNightColor};">${avgNightAdvised != null ? avgNightSign + avgNightAdvised.toFixed(2) + '$' : '—'}</div>
+            <div class="stat-label">Gain moyen / soir</div>
+          </div>
+          ${advisedDays.length > 0 ? `
+            <div class="stat-card">
+              <div class="stat-value" style="color:var(--green);">${bestDay && advisedDays.some(d => d.date === bestDay.date) ? fmtNet(bestDay.kelly_net) : '—'}</div>
+              <div class="stat-label">Meilleur jour</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color:var(--red);">${worstDay && advisedDays.some(d => d.date === worstDay.date) ? fmtNet(worstDay.kelly_net) : '—'}</div>
+              <div class="stat-label">Pire jour</div>
+            </div>
+          ` : ''}
+        </div>
         <h3 style="font-size:15px;font-weight:700;margin:0 0 12px;color:var(--text);">✅ Soirées conseillées uniquement</h3>
         <div style="position:relative;height:220px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;">
           <canvas id="advised-chart"></canvas>
