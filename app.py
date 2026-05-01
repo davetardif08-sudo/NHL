@@ -1642,6 +1642,149 @@ def api_save_snapshot():
     return jsonify({"ok": True, "saved": len(snapshot["picks"]), "time": snapshot["time"]})
 
 
+# ─── Cron auto-snapshot (request-driven, idempotent) ───────────────────────────
+_AUTO_SNAPSHOT_LOCK = os.path.join(_DATA_DIR, "last_auto_snapshot.txt")
+
+@app.route("/api/cron/auto-snapshot", methods=["GET", "POST"])
+def api_cron_auto_snapshot():
+    """Endpoint cron déclenché par UptimeRobot (~5 min). Idempotent.
+
+    Logique :
+    1. Lit la lockfile pour voir si déjà fait aujourd'hui → skip
+    2. Récupère les picks du jour depuis le cache
+    3. Calcule l'heure cible = premier match - 30 min
+    4. Si now >= target ET pas fait → save snapshot + email
+    5. Écrit la lockfile
+
+    Avantage vs thread Python : exécuté à chaque requête HTTP, donc tolère
+    le sleep des plateformes hosting (Render, Fly.io, etc.).
+    """
+    today = _get_today_et()
+    now_et = _get_et_now()
+
+    # 1. Lock : déjà fait aujourd'hui ?
+    if os.path.exists(_AUTO_SNAPSHOT_LOCK):
+        try:
+            with open(_AUTO_SNAPSHOT_LOCK) as f:
+                last_date = f.read().strip()
+            if last_date == today:
+                return jsonify({
+                    "ok": True,
+                    "skipped": "already_done_today",
+                    "last_date": last_date,
+                    "now": now_et.strftime("%Y-%m-%d %H:%M ET"),
+                })
+        except Exception:
+            pass
+
+    # 2. Picks du jour depuis le cache
+    all_picks = (_cache.get("data") or {}).get("hockey") or []
+    today_picks = [p for p in all_picks if p.get("date") == today]
+
+    if not today_picks:
+        return jsonify({
+            "ok": True,
+            "skipped": "no_picks_today",
+            "cache_size": len(all_picks),
+            "now": now_et.strftime("%Y-%m-%d %H:%M ET"),
+        })
+
+    # 3. Heure du premier match → calcul de la fenêtre cible
+    times = sorted({p.get("time") for p in today_picks if p.get("time")})
+    if not times:
+        return jsonify({"ok": True, "skipped": "no_match_times"})
+
+    first_time = times[0]  # ex. "19:00"
+    try:
+        h, m = map(int, first_time.split(":"))
+        target = now_et.replace(hour=h, minute=m, second=0, microsecond=0) - timedelta(minutes=30)
+    except Exception as e:
+        return jsonify({"ok": False, "error": f"format heure invalide: {first_time}"}), 400
+
+    if now_et < target:
+        return jsonify({
+            "ok": True,
+            "skipped": "before_target_window",
+            "now": now_et.strftime("%H:%M"),
+            "target": target.strftime("%H:%M"),
+            "first_match": first_time,
+            "minutes_until": int((target - now_et).total_seconds() // 60),
+        })
+
+    # 4. Déclenchement : save snapshot + email
+    try:
+        snapshot = {
+            "saved_at":      now_et.isoformat(),
+            "date":          today,
+            "time":          now_et.strftime("%H:%M"),
+            "auto":          True,
+            "first_match":   first_time,
+            "sgp_proposals": _generate_sgp_proposals(today_picks),
+            "picks": [
+                {
+                    "key":            p.get("key", ""),
+                    "match":          p.get("match", ""),
+                    "home_team":      p.get("home_team", ""),
+                    "away_team":      p.get("away_team", ""),
+                    "selection":      p.get("selection", ""),
+                    "bet_type":       p.get("bet_type", ""),
+                    "odds":           p.get("odds"),
+                    "fair_prob":      p.get("fair_prob"),
+                    "value_score":    p.get("value_score"),
+                    "mise":           p.get("mise"),
+                    "recommendation": p.get("recommendation", ""),
+                    "champion":       p.get("champion", False),
+                }
+                for p in today_picks
+            ],
+        }
+
+        # Snapshot courant
+        with open(_SNAPSHOT_PATH, "w", encoding="utf-8") as f:
+            json.dump(snapshot, f, ensure_ascii=False, indent=2)
+
+        # Snapshot historique (par date)
+        os.makedirs(_SNAPSHOTS_DIR, exist_ok=True)
+        daily_path = os.path.join(_SNAPSHOTS_DIR, f"{today}.json")
+        with open(daily_path, "w", encoding="utf-8") as f:
+            json.dump(snapshot, f, ensure_ascii=False, indent=2)
+
+        print(f"  [auto-snapshot] {len(today_picks)} paris sauvegardés à {snapshot['time']} (1er match: {first_time})")
+
+        # Email (best-effort, n'empêche pas le snapshot d'être marqué OK)
+        email_result = {"ok": False, "message": "non tenté"}
+        try:
+            from email_service import send_betting_summary
+            MOIS_FR = ["janvier", "février", "mars", "avril", "mai", "juin",
+                       "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
+            ds = f"{now_et.day} {MOIS_FR[now_et.month - 1]} {now_et.year}"
+            email_result = send_betting_summary(today_picks, ds, sgp_proposals=snapshot["sgp_proposals"])
+            print(f"  [auto-snapshot] Email: {email_result.get('message', 'envoyé')}")
+        except Exception as e:
+            print(f"  [auto-snapshot] Email erreur: {e}")
+            email_result = {"ok": False, "message": str(e)}
+
+        # 5. Lock pour idempotence
+        try:
+            with open(_AUTO_SNAPSHOT_LOCK, "w") as f:
+                f.write(today)
+        except Exception as e:
+            print(f"  [auto-snapshot] Lock write erreur: {e}")
+
+        return jsonify({
+            "ok": True,
+            "snapshot_saved": True,
+            "picks_count": len(today_picks),
+            "first_match": first_time,
+            "snapshot_time": snapshot["time"],
+            "email": email_result,
+        })
+
+    except Exception as e:
+        print(f"  [auto-snapshot] ERREUR: {e}")
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
 @app.route("/api/snapshot-sgp")
 def api_snapshot_sgp():
     """Retourne les sgp_proposals du snapshot sauvegardé aujourd'hui (figés)."""
