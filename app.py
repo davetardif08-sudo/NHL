@@ -2434,7 +2434,18 @@ def api_compare_systems():
 
         # ── Filtre kelly_warning : logique identique à /api/history ─────────
         # Soirée exclue si aucun pick avec Kelly > 0 OU ≤ 3 matchs uniques
+        # Support both old format (picks) and new format (sgp_proposals)
         snap_picks = snap.get("picks", [])
+        if not snap_picks and snap.get("sgp_proposals"):
+            # Extract picks from sgp_proposals (new format)
+            for proposal in snap.get("sgp_proposals", []):
+                for pick in proposal.get("picks", []):
+                    # Flatten the structure to match old format
+                    snap_picks.append({
+                        **pick,
+                        "match": proposal.get("match"),
+                        "bet_type": pick.get("bet_type"),
+                    })
 
         def _hk_day(p):
             fp = float(p.get("fair_prob") or 0)
