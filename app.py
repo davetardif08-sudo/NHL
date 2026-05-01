@@ -4188,7 +4188,7 @@ def api_playoff_nhl():
 
 
 # ─── Dev Backlog ──────────────────────────────────────────────────────────────
-_BACKLOG_PATH = os.path.join(os.path.dirname(__file__), "data", "backlog.json")
+_BACKLOG_PATH = os.path.join(_DATA_DIR, "backlog.json")
 _backlog_lock = threading.Lock()
 
 def _load_backlog():
