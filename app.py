@@ -3040,6 +3040,8 @@ def api_history():
                 "losses":        len(losses),
                 "win_rate":      win_rate,
                 "kelly_bets":    len(kelly_preds),
+                "kelly_wins":    len(k_wins),
+                "kelly_losses":  len(k_losses),
                 "kelly_net":     kelly_net,
                 "kelly_warning": kelly_warning,
                 "n_matches":     n_matches_day,

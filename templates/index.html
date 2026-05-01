@@ -5993,6 +5993,21 @@
     const bestDayAdvised = advisedDays.length > 0 ? advisedDays.reduce((max, d) => (d.kelly_net > max.kelly_net) ? d : max) : null;
     const worstDayAdvised = advisedDays.length > 0 ? advisedDays.reduce((min, d) => (d.kelly_net < min.kelly_net) ? d : min) : null;
 
+    // Mises réelles = jours conseillés WITH mise (kelly_warning=false AND mise>0)
+    const realBetsDays = activeDays.filter(d => !d.kelly_warning && (d.kelly_bets > 0));
+    const realBetsWins = realBetsDays.reduce((s, d) => s + (d.kelly_wins ?? 0), 0);
+    const realBetsTotal = realBetsDays.reduce((s, d) => s + (d.kelly_bets ?? 0), 0);
+    const realBetsNet = realBetsDays.reduce((s, d) => s + (d.kelly_net ?? 0), 0);
+    const realBetsWR = realBetsTotal > 0 ? Math.round(realBetsWins / realBetsTotal * 100) : 0;
+    const realBetsAvg = realBetsDays.length > 0 ? realBetsNet / realBetsDays.length : null;
+    const realBetsAvgSign = realBetsAvg != null && realBetsAvg >= 0 ? '+' : '';
+    const realBetsAvgColor = realBetsAvg == null ? 'var(--muted)' : realBetsAvg > 0 ? 'var(--green)' : realBetsAvg < 0 ? 'var(--red)' : 'var(--muted)';
+    const realBetsNetSign = realBetsNet >= 0 ? '+' : '';
+    const realBetsNetColor = realBetsNet > 0 ? 'var(--green)' : realBetsNet < 0 ? 'var(--red)' : 'var(--muted)';
+    const realBetsWRColor = realBetsWR >= 55 ? 'var(--green)' : realBetsWR < 45 ? 'var(--red)' : 'var(--yellow)';
+    const bestDayRealBets = realBetsDays.length > 0 ? realBetsDays.reduce((max, d) => (d.kelly_net > max.kelly_net) ? d : max) : null;
+    const worstDayRealBets = realBetsDays.length > 0 ? realBetsDays.reduce((min, d) => (d.kelly_net < min.kelly_net) ? d : min) : null;
+
     // Vignettes en haut
     cardsSection.innerHTML = `
       <div class="stats-bar" style="margin-bottom:0;" id="global-stats-bar">
@@ -6074,6 +6089,16 @@
           Exclut les soirées ⚠️ sans avantage mathématique confirmé.
         </div>
       </div>
+
+      <!-- Section Mises Réelles -->
+      <div style="margin-top:24px;">
+        <div id="real-bets-stats-bar" style="margin-bottom:16px;"></div>
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 12px;color:var(--text);">💰 Mises Réelles - Soirées Conseillées</h3>
+        <div style="position:relative;height:220px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;">
+          <canvas id="chart-real-bets"></canvas>
+        </div>
+      </div>
+
       <!-- Vignette Combos stats -->
       <div id="sgp-stat-container" style="margin-top:24px;margin-bottom:16px;"></div>
 
@@ -6091,6 +6116,44 @@
           </div>
         </div>
       </div>`;
+
+    // Remplir les vignettes pour Mises Réelles
+    const realBetsStatsBar = document.getElementById('real-bets-stats-bar');
+    if (realBetsStatsBar) {
+      realBetsStatsBar.innerHTML = `
+        <div class="stats-bar" style="margin-bottom:16px;">
+          <div class="stat-card">
+            <div class="stat-value">${realBetsDays.length}</div>
+            <div class="stat-label">Jours avec mises</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${realBetsTotal}<span style="font-size:0.7em;color:var(--green);margin-left:4px;">(${realBetsWins}✓)</span></div>
+            <div class="stat-label">Mises résolues</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:${realBetsWRColor};">${realBetsWR}%</div>
+            <div class="stat-label">Taux de victoire</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:${realBetsNetColor};">${realBetsNetSign}${realBetsNet.toFixed(2)}$</div>
+            <div class="stat-label">Net des mises</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:${realBetsAvgColor};">${realBetsAvg != null ? realBetsAvgSign + realBetsAvg.toFixed(2) + '$' : '—'}</div>
+            <div class="stat-label">Gain moyen / mise</div>
+          </div>
+          ${realBetsDays.length > 0 ? `
+            <div class="stat-card">
+              <div class="stat-value" style="color:var(--green);">${bestDayRealBets ? fmtNet(bestDayRealBets.kelly_net) : '—'}</div>
+              <div class="stat-label">Meilleur jour</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" style="color:var(--red);">${worstDayRealBets ? fmtNet(worstDayRealBets.kelly_net) : '—'}</div>
+              <div class="stat-label">Pire jour</div>
+            </div>
+          ` : ''}
+        </div>`;
+    }
 
     // Construire les données du graphique
     const labels    = [];
@@ -6337,6 +6400,115 @@
           },
         },
         plugins: _advPlayoffPlugin ? [_advPlayoffPlugin] : [],
+      });
+    }
+
+    // ── Graphique mises réelles ────────────────────────────────────────
+    const realBetsCanvas = document.getElementById('chart-real-bets');
+    if (realBetsCanvas && realBetsDays.length) {
+      const rbLabels    = [];
+      const rbBarData   = [];
+      const rbBarColors = [];
+      const rbCumData   = [];
+      let   rbCum       = 0;
+
+      for (const d of realBetsDays) {
+        const parts = d.date.split('-');
+        const dateStr = `${parseInt(parts[2])}/${parseInt(parts[1])}`;
+        rbLabels.push(dateStr);
+        rbBarData.push(d.kelly_net);
+        rbBarColors.push(d.kelly_net >= 0 ? 'rgba(63,185,80,0.65)' : 'rgba(248,81,73,0.65)');
+        rbCum += d.kelly_net ?? 0;
+        rbCumData.push(parseFloat(rbCum.toFixed(2)));
+      }
+
+      const rbLineColor = rbCum >= 0 ? '#3fb950' : '#f85149';
+      let _realBetsChart = null;
+
+      _realBetsChart = new Chart(realBetsCanvas, {
+        type: 'bar',
+        data: {
+          labels: rbLabels,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'Gain Kelly journalier ($)',
+              data: rbBarData,
+              backgroundColor: rbBarColors,
+              borderWidth: 0,
+              borderRadius: 3,
+              yAxisID: 'yBar',
+              order: 2,
+            },
+            {
+              type: 'line',
+              label: 'Gain cumulatif ($)',
+              data: rbCumData,
+              borderColor: rbLineColor,
+              backgroundColor: 'transparent',
+              pointBackgroundColor: rbCumData.map(v => v >= 0 ? '#3fb950' : '#f85149'),
+              pointBorderColor:     rbCumData.map(v => v >= 0 ? '#3fb950' : '#f85149'),
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              tension: 0.3,
+              fill: false,
+              yAxisID: 'yCum',
+              order: 1,
+            },
+            {
+              type: 'line',
+              label: 'Seuil zéro',
+              data: new Array(rbLabels.length).fill(0),
+              borderColor: 'rgba(139,148,158,0.25)',
+              borderDash: [4, 4],
+              pointRadius: 0,
+              fill: false,
+              yAxisID: 'yCum',
+              order: 3,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: true, position: 'top', labels: { color: '#8b949e', usePointStyle: true, font: { size: 11 } } },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: 'rgba(0,0,0,0.8)',
+              padding: 10,
+              titleColor: '#fff',
+              bodyColor: '#ccc',
+              borderColor: '#555',
+              borderWidth: 1,
+              callbacks: {
+                label: function(context) {
+                  if (context.dataset.label === 'Gain cumulatif ($)') {
+                    return ` Cumulatif : ${fmtNet(rbCumData[context.dataIndex])}`;
+                  }
+                  return ` ${context.dataset.label}: ${fmtNet(context.parsed.y)}`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: 'rgba(48,54,61,0.6)' } },
+            yBar: {
+              position: 'left',
+              title: { display: true, text: 'Gain Kelly jour ($)', color: '#8b949e', font: { size: 10 } },
+              ticks: { color: '#8b949e', font: { size: 10 } },
+              grid:  { color: 'rgba(48,54,61,0.4)' },
+            },
+            yCum: {
+              position: 'right',
+              title: { display: true, text: 'Cumulatif ($)', color: rbLineColor, font: { size: 10 } },
+              ticks: { color: '#8b949e', font: { size: 10 } },
+              grid:  { drawOnChartArea: false },
+            },
+          },
+        },
       });
     }
 
