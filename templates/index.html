@@ -2923,11 +2923,15 @@
       let scoreDisplay = '';
       if (gs) {
         if (gs.state === 'LIVE' || gs.state === 'CRIT') {
-          // Match en cours - afficher le score live au centre en orange
+          // Match en cours - afficher le score live au centre en orange + période + temps
+          const periodLabel = gs.period ? `P${gs.period}` : '';
+          const timeLabel = gs.time_remaining || '';
+          const periodTimeLabel = [periodLabel, timeLabel].filter(Boolean).join(' | ');
           scoreDisplay = `<div style="display:flex;flex-direction:column;align-items:center;gap:1px;margin:0 2px;">
             <div style="font-size:13px;color:#f59e0b;font-weight:800;letter-spacing:1px;">${gs.away_score ?? 0}</div>
             <div style="font-size:7px;color:var(--muted);">–</div>
             <div style="font-size:13px;color:#f59e0b;font-weight:800;letter-spacing:1px;">${gs.home_score ?? 0}</div>
+            ${periodTimeLabel ? `<div style="font-size:6px;color:#f59e0b;font-weight:600;margin-top:1px;">${periodTimeLabel}</div>` : ''}
           </div>`;
         } else if (gs.state === 'FINAL' || gs.state === 'FINAL/OT' || gs.state === 'FINAL/SO' || gs.state === 'OFF') {
           // Match terminé - afficher le score final en blanc
@@ -7639,7 +7643,27 @@
 
   function startLivePolling() {
     stopLivePolling();
-    _liveInterval = setInterval(() => loadNhlLive(false), 30000);
+    // Premier chargement
+    loadNhlLive(false).then(() => {
+      _updateLivePollingInterval();
+    });
+  }
+
+  function _updateLivePollingInterval() {
+    // Vérifier s'il y a des matchs en cours (in_progress)
+    const inProgress = _liveData?.picks?.some(p => p.outcome === 'in_progress') || false;
+    // Si matchs en cours: refresh rapide (15s), sinon lent (30s)
+    const interval = inProgress ? 15000 : 30000;
+
+    if (_liveInterval) clearInterval(_liveInterval);
+    _liveInterval = setInterval(() => {
+      loadNhlLive(false).then(() => {
+        // Rafraîchir aussi le carousel (header) avec les derniers scores
+        loadLiveScoresForCarousel();
+        // Après chaque chargement, recalculer l'intervalle (matchs pourraient se terminer)
+        _updateLivePollingInterval();
+      });
+    }, interval);
   }
 
   function stopLivePolling() {
