@@ -5986,7 +5986,7 @@
 
     // Vignettes en haut
     cardsSection.innerHTML = `
-      <div class="stats-bar" style="margin-bottom:0;">
+      <div class="stats-bar" style="margin-bottom:0;" id="global-stats-bar">
         <div class="stat-card">
           <div class="stat-value">${activeDays.length}</div>
           <div class="stat-label">Jours enregistrés</div>
@@ -6069,6 +6069,9 @@
           Exclut les soirées ⚠️ sans avantage mathématique confirmé.
         </div>
       </div>
+      <!-- Vignette Combos stats -->
+      <div id="sgp-stat-container" style="margin-top:24px;margin-bottom:16px;"></div>
+
       <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px;">
         <div>
           <h3 style="font-size:15px;font-weight:700;margin:0 0 12px;color:var(--text);">🎯 Combos Même Match</h3>
@@ -6640,7 +6643,7 @@
     // Injecter la vignette dans la stats-bar des résultats
     // (attendre que renderHistory ait créé le conteneur si nécessaire)
     function _injectSGPCard() {
-      const statsBar = document.querySelector('#rn-summary-cards .stats-bar');
+      const statsBar = document.getElementById('sgp-stat-container');
       if (!statsBar) { setTimeout(_injectSGPCard, 200); return; }
       if (statsBar.querySelector('#sgp-stat-card')) return; // déjà injecté
 

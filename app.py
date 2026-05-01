@@ -2988,6 +2988,15 @@ def api_history():
                 snap = json.load(fh)
 
             picks = snap.get("picks", [])
+            # Backward compatibility: extract from sgp_proposals if picks is empty
+            if not picks and snap.get("sgp_proposals"):
+                for proposal in snap.get("sgp_proposals", []):
+                    for pick in proposal.get("picks", []):
+                        picks.append({
+                            **pick,
+                            "match": proposal.get("match"),
+                            "bet_type": pick.get("bet_type"),
+                        })
             if not picks:
                 continue
 
