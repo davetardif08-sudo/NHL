@@ -5370,6 +5370,11 @@
     const container = document.getElementById('cmp-cards');
     if (!container) return;
 
+    // Guard: provide default params if undefined
+    if (!params) {
+      params = { edge_min: 10, cap: 5, bankroll_start: 100, nightly_pct: 10, topn: 3 };
+    }
+
     const systems = [
       {
         key: 'A', label: 'Système A', sub: '½ Kelly',
