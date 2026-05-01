@@ -8080,6 +8080,14 @@
       let statusHtml = '';
       const cleanOutcome = outcome || 'pending';
 
+      // Determine card background color based on outcome
+      let cardBgColor = '#ffffff'; // default white for pending/in progress
+      if (cleanOutcome === 'win') {
+        cardBgColor = 'rgba(63, 185, 80, 0.12)'; // light green
+      } else if (cleanOutcome === 'loss') {
+        cardBgColor = 'rgba(248, 81, 73, 0.12)'; // light red
+      }
+
       if (cleanOutcome === 'not_found' || cleanOutcome === 'pending') {
         // Display start time
         const startTime = gameScore?.start_time_utc;
@@ -8104,7 +8112,7 @@
       }
 
       return `
-        <div class="live-prediction-card">
+        <div class="live-prediction-card" style="background-color: ${cardBgColor};">
           <div class="live-card-logos">
             <div class="live-logo-circle ${awayCircleClass}">
               ${awayLogoHtml}
