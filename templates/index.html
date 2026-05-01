@@ -2875,24 +2875,32 @@
     }
 
     // Then, add/override with picks data (predictions on top)
+    // ⚠️ IMPORTANT: Utiliser abbréviations pour la clé (même que gameScores) pour éviter doublons
     if (picks && Array.isArray(picks)) {
       picks.forEach(p => {
-        const matchStr = p.match || 'Unknown';
-        if (!matchMap[matchStr]) {
-          let homeTeam = '', awayTeam = '';
+        const pMatchStr = p.match || 'Unknown';
+        let homeTeam = '', awayTeam = '';
 
-          if (matchStr && matchStr.includes('@')) {
-            const parts = matchStr.split('@');
-            if (parts.length === 2) {
-              awayTeam = parts[0].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
-              homeTeam = parts[1].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
-            }
+        if (pMatchStr && pMatchStr.includes('@')) {
+          const parts = pMatchStr.split('@');
+          if (parts.length === 2) {
+            awayTeam = parts[0].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
+            homeTeam = parts[1].trim().replace(/\s*\([^)]*\)\s*$/g, '').trim();
           }
+        }
 
-          matchMap[matchStr] = {
-            match: matchStr,
+        // Créer clé avec abbréviations (même format que gameScores à ligne 2862)
+        const awayAbbr = teamAbbrev(awayTeam);
+        const homeAbbr = teamAbbrev(homeTeam);
+        const abbrevKey = awayAbbr && homeAbbr ? `${awayAbbr}@${homeAbbr}` : pMatchStr;
+
+        if (!matchMap[abbrevKey]) {  // ← Utiliser clé d'abbréviation pour déduplication
+          matchMap[abbrevKey] = {
+            match: pMatchStr,
             homeTeam: homeTeam,
             awayTeam: awayTeam,
+            _awayAbbr: awayAbbr,
+            _homeAbbr: homeAbbr,
             time: p.time || '',
             date: p.date || '',
           };
@@ -2978,11 +2986,7 @@
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data && data.game_scores) {
-          // Créer des "picks" synthétiques pour tous les matchs avec scores (pas seulement ceux du snapshot)
-          const allMatches = [];
-          const seenMatches = new Set();
-
-          // Construire un index des abbréviations déjà couverts par les picks existants
+          // Index des abbréviations déjà couverts par les picks existants
           const seenAbbrevPairs = new Set();
           _carouselHockey.forEach(p => {
             const matchStr = p.match || '';
@@ -2994,10 +2998,10 @@
             const awayAbbr = teamAbbrev(awayRaw);
             const homeAbbr = teamAbbrev(homeRaw);
             if (awayAbbr && homeAbbr) seenAbbrevPairs.add(`${awayAbbr}@${homeAbbr}`);
-            allMatches.push(p);
           });
 
-          // Ensuite ajouter les matchs des game_scores qui ne sont pas encore couverts
+          // Créer SEULEMENT les matchs synthétiques pour les game_scores non couverts
+          const syntheticMatches = [];
           for (const [gameKey, gameData] of Object.entries(data.game_scores)) {
             if (!gameKey.includes('@')) continue;
             const [awayAbbr, homeAbbr] = gameKey.split('@');
@@ -3008,7 +3012,7 @@
             seenAbbrevPairs.add(pairKey);
             const awayName = normalizeTeamName(gameData.away_name || awayAbbr);
             const homeName = normalizeTeamName(gameData.home_name || homeAbbr);
-            allMatches.push({
+            syntheticMatches.push({
               match: `${awayName} @ ${homeName}`,
               time: '',
               date: data.date || '',
@@ -3018,6 +3022,8 @@
             });
           }
 
+          // Combiner picks existants + nouveaux matchs synthétiques (évite doublons)
+          const allMatches = [..._carouselHockey, ...syntheticMatches];
           renderMatchesCarousel(allMatches, _lastSeriesMap, data.game_scores);
         }
       })

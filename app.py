@@ -2187,6 +2187,14 @@ def api_snapshot_results():
     snap_date = snap.get("date", "")
     nhl_map   = _nhl_outcomes_for_date(snap_date)
 
+    # Aussi chercher les résultats du jour suivant (matchs qui ont terminé après minuit)
+    try:
+        next_day = (datetime.strptime(snap_date, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+        nhl_map_next = _nhl_outcomes_for_date(next_day)
+        nhl_map = {**nhl_map, **nhl_map_next}  # Fusionner (jour suivant écrase en cas de doublon)
+    except:
+        pass  # Fallback silencieux si parsing de date échoue
+
     enriched = []
     for pick in snap.get("picks", []):
         resolved = _resolve_pick_outcome(pick, nhl_map)
@@ -2339,6 +2347,14 @@ def api_real_bets():
 
         date    = session.get("date", "")
         nhl_map = _nhl_outcomes_for_date(date)
+
+        # Aussi chercher les résultats du jour suivant (matchs qui ont terminé après minuit)
+        try:
+            next_day = (datetime.strptime(date, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+            nhl_map_next = _nhl_outcomes_for_date(next_day)
+            nhl_map = {**nhl_map, **nhl_map_next}  # Fusionner
+        except:
+            pass
 
         enriched = []
         for p in session.get("picks", []):

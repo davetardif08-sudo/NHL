@@ -1,0 +1,142 @@
+[
+  {
+    "id": "d2f85e5d-2a10-4aef-bc88-e5ed31029ba9",
+    "title": "Mes tâches DEV ne se save pas",
+    "description": "",
+    "priority": "critique",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-29T14:29:35.938952-04:00",
+    "updated_at": "2026-04-29T14:29:35.938952-04:00"
+  },
+  {
+    "id": "65e891eb-dbb6-497f-b0e7-a8515019ba6f",
+    "title": "changer le style dans Hockey NHL pour prendre lui du mobile sur ordi",
+    "description": "Ajouter Edge et % dans la vignette",
+    "priority": "moyenne",
+    "type": "feature",
+    "status": "termine",
+    "created_at": "2026-04-29T14:30:10.286892-04:00",
+    "updated_at": "2026-04-30T10:55:20.977520-04:00"
+  },
+  {
+    "id": "30603517-45d8-406e-9bac-019d8a9e209d",
+    "title": "Comparaison ne fonctionne pas en Prod",
+    "description": "",
+    "priority": "moyenne",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-29T14:30:41.379553-04:00",
+    "updated_at": "2026-04-30T07:56:39.863335-04:00"
+  },
+  {
+    "id": "4a495256-a658-44c0-8586-91641f46d35f",
+    "title": "Anomalie ne fonctionne pas",
+    "description": "",
+    "priority": "basse",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-29T14:30:58.070672-04:00",
+    "updated_at": "2026-04-29T14:30:58.070672-04:00"
+  },
+  {
+    "id": "9b979005-f0e2-437f-b639-7a914ea0b540",
+    "title": "Dans l'entête, enlever En direct  et Mdp (conserver cadenas)",
+    "description": "",
+    "priority": "basse",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-29T14:32:44.825784-04:00",
+    "updated_at": "2026-04-29T14:32:44.825784-04:00"
+  },
+  {
+    "id": "0953e4e0-91d4-48da-9f0d-4c15e35f6025",
+    "title": "Taux de victoire de mes bets",
+    "description": "",
+    "priority": "haute",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-29T14:35:14.894059-04:00",
+    "updated_at": "2026-04-30T12:12:09.528653-04:00"
+  },
+  {
+    "id": "c15a1319-2d0c-4446-ba4a-7fd99e757878",
+    "title": "Enlever l'envoi par courriel quand la sauvegarde automatique fonctionnera",
+    "description": "",
+    "priority": "basse",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-29T14:52:17.269085-04:00",
+    "updated_at": "2026-04-29T14:52:17.269085-04:00"
+  },
+  {
+    "id": "989ae713-90e0-4419-bd63-2b39186f8408",
+    "title": "Dans le carroussel, je vois seulement les matchs avec des mises",
+    "description": "",
+    "priority": "haute",
+    "type": "feature",
+    "status": "termine",
+    "created_at": "2026-04-30T07:55:16.070430-04:00",
+    "updated_at": "2026-04-30T10:55:00.613212-04:00"
+  },
+  {
+    "id": "f828a798-b20f-4c89-8cfa-9870aeb6070c",
+    "title": "Dans Results, je vois seulement les combos de la veille, pas les autres matchs.",
+    "description": "",
+    "priority": "haute",
+    "type": "feature",
+    "status": "termine",
+    "created_at": "2026-04-30T07:55:43.475031-04:00",
+    "updated_at": "2026-04-30T10:55:13.098785-04:00"
+  },
+  {
+    "id": "147f14a0-4ddf-4318-b9c4-c768fe2e16f5",
+    "title": "mettre les cartes sur une colonne dans Results pour mobile",
+    "description": "",
+    "priority": "haute",
+    "type": "feature",
+    "status": "termine",
+    "created_at": "2026-04-30T11:19:33.938890-04:00",
+    "updated_at": "2026-04-30T12:09:50.701661-04:00"
+  },
+  {
+    "id": "78fe01c5-0b8c-4bf4-a132-81e8ef073587",
+    "title": "Dans results, changer la couleur de fond des cartes. Mettre du rouge lorsque perdu et vert lorsque gagné",
+    "description": "",
+    "priority": "haute",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-30T12:09:34.984872-04:00",
+    "updated_at": "2026-04-30T12:09:34.984872-04:00"
+  },
+  {
+    "id": "442dd9b7-6583-4977-8c3b-590868103f8a",
+    "title": "Changer l'entête des résultats (heure du snapshot, mises distribuées et résultats). Enlever x matchs trouvés NHL",
+    "description": "",
+    "priority": "moyenne",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-30T12:11:35.508589-04:00",
+    "updated_at": "2026-04-30T12:11:35.508589-04:00"
+  },
+  {
+    "id": "3f932251-4d7d-460a-8e33-155945263695",
+    "title": "Faire évaluer le site par Claude Design",
+    "description": "",
+    "priority": "moyenne",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-30T12:15:44.973996-04:00",
+    "updated_at": "2026-04-30T12:15:44.973996-04:00"
+  },
+  {
+    "id": "beed38ca-ed04-4237-a77b-4f0b720d614f",
+    "title": "Le pointage des matchs se met à jour automaitquement dans l'onglet LIVE mais pas dans le carroussel. Mettre un autorefresh.",
+    "description": "",
+    "priority": "moyenne",
+    "type": "feature",
+    "status": "a_faire",
+    "created_at": "2026-04-30T12:16:54.790408-04:00",
+    "updated_at": "2026-04-30T12:16:54.790408-04:00"
+  }
+]

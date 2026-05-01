@@ -1,7 +1,6 @@
 # Runtime data files (generated, not committed)
 snapshot.json
 snapshots/
-backlog.json
 real_bets/
 balance_log.json
 nhl_cache/
