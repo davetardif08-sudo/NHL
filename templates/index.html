@@ -944,52 +944,189 @@
     .playoff-seeds-table tr:hover td { background: rgba(255,255,255,0.03); }
 
     /* Bracket wrapper */
-    .bracket-outer { margin-top: 16px; }
+    .bracket-outer { margin-top: 16px; overflow-x: hidden; }
     .bracket-conf-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
     .bracket-conf-label.east { color: #4fc3f7; }
     .bracket-conf-label.west { color: #ffb74d; }
 
-    /* Main bracket row: [East R1][East R2][East CF][Cup][West CF][West R2][West R1] */
-    .bracket-row { display: flex; align-items: center; gap: 0; width: 100%; overflow-x: auto; padding-bottom: 8px; }
-    .bracket-col { display: flex; flex-direction: column; justify-content: space-around; flex-shrink: 0; }
-    .bracket-col.r1 { width: 160px; gap: 6px; }
-    .bracket-col.r2 { width: 152px; gap: 6px; }
-    .bracket-col.cf { width: 152px; gap: 6px; }
-    .bracket-col.cup { width: 140px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .bracket-col-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); text-align: center; padding: 4px 0 8px; }
+    /* Main bracket row: Grid-based responsive layout (no horizontal scroll) */
+    /* Layout: [WEST R1] [spacer] [WEST R2] [spacer] [WEST CF] [CUP] [EAST CF] [spacer] [EAST R2] [spacer] [EAST R1] */
+    .bracket-row {
+      display: grid;
+      grid-template-columns:
+        clamp(80px, 20vw, 160px)        /* WEST R1 */
+        clamp(4px, 2vw, 6px)            /* spacer */
+        clamp(75px, 18vw, 152px)        /* WEST R2 */
+        clamp(4px, 2vw, 6px)            /* spacer */
+        clamp(75px, 18vw, 152px)        /* WEST CF */
+        clamp(70px, 16vw, 140px)        /* CUP */
+        clamp(75px, 18vw, 152px)        /* EAST CF */
+        clamp(4px, 2vw, 6px)            /* spacer */
+        clamp(75px, 18vw, 152px)        /* EAST R2 */
+        clamp(4px, 2vw, 6px)            /* spacer */
+        clamp(80px, 20vw, 160px);       /* EAST R1 */
+      gap: 0;
+      width: 100%;
+      padding-bottom: 8px;
+      padding-left: clamp(8px, 2vw, 16px);
+      padding-right: clamp(8px, 2vw, 16px);
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .bracket-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      min-height: clamp(300px, 60vh, 500px);
+    }
+    .bracket-col.r1 { gap: clamp(4px, 2vw, 6px); }
+    .bracket-col.r2 { gap: clamp(4px, 2vw, 6px); }
+    .bracket-col.cf { gap: clamp(4px, 2vw, 6px); }
+    .bracket-col.cup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bracket-col-label {
+      font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+      text-align: center;
+      padding: clamp(2px, 1vw, 4px) 0 clamp(4px, 1.5vw, 8px);
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
 
     /* Connector lines between columns */
-    .bracket-connectors { width: 24px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-around; align-self: stretch; position: relative; }
-    .bracket-connectors svg { width: 24px; height: 100%; position: absolute; top: 0; left: 0; }
+    .bracket-connectors {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-self: stretch;
+      min-height: clamp(300px, 60vh, 500px);
+    }
+    .bracket-connectors svg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
 
-    /* Matchup card */
-    .bk-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; cursor: pointer; transition: border-color .2s, box-shadow .2s; position: relative; }
-    .bk-card:hover { border-color: rgba(200,255,128,.4); box-shadow: 0 0 0 2px rgba(200,255,128,.08); }
-    .bk-card.active { border-color: #c8ff80; box-shadow: 0 0 0 2px rgba(200,255,128,.15); }
-    .bk-card.tbd { background: rgba(255,255,255,0.03); border-style: dashed; cursor: default; opacity: .7; }
-    .bk-card.cup-card { background: linear-gradient(135deg, rgba(255,200,0,.12), rgba(255,150,0,.06)); border-color: #ffd700; border-width: 2px; cursor: default; text-align: center; padding: 14px 12px; }
-    .bk-card.series-live { border-color: rgba(100,220,100,.25); }
-    .bk-card.series-over { border-color: rgba(255,215,0,.4); box-shadow: 0 0 0 1px rgba(255,215,0,.1); }
+    /* Matchup card — clean horizontal layout */
+    .bk-matchup {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
 
-    /* Team row inside card */
-    .bk-team { display: flex; align-items: center; gap: 6px; padding: 3px 0; border-radius: 4px; transition: background .15s; }
-    .bk-team.winner { background: rgba(200,255,128,.07); }
-    .bk-team-seed { font-size: 0.65rem; font-weight: 700; color: var(--muted); min-width: 14px; text-align: right; }
-    .bk-team-name { font-size: 0.82rem; font-weight: 700; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .bk-team-pct { font-size: 0.7rem; font-weight: 700; min-width: 34px; text-align: right; }
-    .bk-team-pct.hi { color: #c8ff80; }
-    .bk-divider { height: 1px; background: var(--border); margin: 3px 0; }
-    .bk-bar-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,.08); overflow: hidden; display: flex; margin-top: 5px; }
-    .bk-bar-a { height: 100%; background: #4fc3f7; transition: width .5s ease; }
-    .bk-bar-b { height: 100%; background: #ef9a9a; transition: width .5s ease; }
+    .bk-matchup:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
 
-    /* TBD card */
-    .bk-tbd-text { font-size: 0.75rem; color: var(--muted); text-align: center; padding: 10px 0; }
+    .bk-matchup.active {
+      background: #f3f4f6;
+      border-color: #9ca3af;
+      box-shadow: 0 0 0 2px rgba(59,130,246,0.1);
+    }
 
-    /* Cup card */
-    .bk-cup-icon { font-size: 2rem; display: block; margin-bottom: 4px; }
-    .bk-cup-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #ffd700; }
-    .bk-cup-finalist { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
+    .bk-matchup.tbd {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .bk-matchup-team {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+    }
+
+    .bk-team-logo {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bk-team-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .bk-team-name-seed {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bk-team-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #1f2937;
+    }
+
+    .bk-team-seed {
+      font-size: 0.65rem;
+      color: #6b7280;
+      margin-top: 1px;
+    }
+
+    .bk-team-score {
+      font-size: 1.1rem;
+      font-weight: 800;
+      min-width: 28px;
+      text-align: center;
+      color: #1f2937;
+    }
+
+    .bk-matchup-team._faded {
+      opacity: 0.4;
+    }
+
+    /* Cup card — minimal design */
+    .bk-cup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 12px;
+      border: 2px solid #fbbf24;
+      border-radius: 8px;
+      background: #fef3c7;
+    }
+
+    .bk-cup-icon {
+      font-size: 2.5rem;
+      display: block;
+    }
+
+    .bk-cup-year {
+      font-size: 0.75rem;
+      color: #92400e;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
     /* Detail panel (expandable below bracket) */
     .bk-detail-panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-top: 12px; animation: slideDown .2s ease; }
@@ -1018,10 +1155,53 @@
     .bubble-row { font-size: 0.78rem; color: var(--muted); padding: 3px 0; display: flex; gap: 8px; }
     .bubble-row .behind { color: #ef5350; font-size: 0.72rem; }
 
-    @media (max-width: 900px) {
-      .bracket-col.r1 { width: 130px; }
-      .bracket-col.r2, .bracket-col.cf { width: 124px; }
-      .bracket-col.cup { width: 110px; }
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      .bracket-row {
+        grid-template-columns:
+          clamp(70px, 18vw, 140px)        /* WEST R1 */
+          clamp(3px, 1.5vw, 4px)          /* spacer */
+          clamp(65px, 16vw, 130px)        /* WEST R2 */
+          clamp(3px, 1.5vw, 4px)          /* spacer */
+          clamp(65px, 16vw, 130px)        /* WEST CF */
+          clamp(60px, 14vw, 120px)        /* CUP */
+          clamp(65px, 16vw, 130px)        /* EAST CF */
+          clamp(3px, 1.5vw, 4px)          /* spacer */
+          clamp(65px, 16vw, 130px)        /* EAST R2 */
+          clamp(3px, 1.5vw, 4px)          /* spacer */
+          clamp(70px, 18vw, 140px);       /* EAST R1 */
+        padding-left: clamp(4px, 1vw, 8px);
+        padding-right: clamp(4px, 1vw, 8px);
+      }
+      .bracket-col { min-height: clamp(250px, 50vh, 400px); }
+      .bracket-connectors { min-height: clamp(250px, 50vh, 400px); }
+    }
+
+    @media (max-width: 480px) {
+      .bracket-row {
+        grid-template-columns:
+          clamp(60px, 15vw, 100px)        /* WEST R1 */
+          clamp(2px, 1vw, 3px)            /* spacer */
+          clamp(55px, 13vw, 100px)        /* WEST R2 */
+          clamp(2px, 1vw, 3px)            /* spacer */
+          clamp(55px, 13vw, 100px)        /* WEST CF */
+          clamp(50px, 12vw, 90px)         /* CUP */
+          clamp(55px, 13vw, 100px)        /* EAST CF */
+          clamp(2px, 1vw, 3px)            /* spacer */
+          clamp(55px, 13vw, 100px)        /* EAST R2 */
+          clamp(2px, 1vw, 3px)            /* spacer */
+          clamp(60px, 15vw, 100px);       /* EAST R1 */
+        padding-left: clamp(2px, 0.5vw, 4px);
+        padding-right: clamp(2px, 0.5vw, 4px);
+      }
+      .bracket-col { min-height: clamp(200px, 40vh, 300px); }
+      .bracket-connectors { min-height: clamp(200px, 40vh, 300px); }
+
+      .bracket-col-label { font-size: 0.55rem; }
+      .bk-card { padding: 6px 8px; }
+      .bk-team-seed { font-size: 0.6rem; }
+      .bk-team-name { font-size: 0.75rem; }
+      .bk-team-pct { font-size: 0.65rem; }
     }
 
     /* ─── Live Cards Layout ────────────────────────────────────────── */
@@ -7221,68 +7401,27 @@
     // ── Card builders ────────────────────────────────────────
     function matchupCard(m, confKey, idx) {
       const a = m.high_seed, b = m.low_seed;
-      const pA = m.p_series;
-      const pB = Math.round((100 - pA) * 10) / 10;
-      const favA = pA >= 50;
-      const isActive = _bkActiveCard && _bkActiveCard.confKey === confKey && _bkActiveCard.matchupIdx === idx;
       const hw = m.high_wins || 0, lw = m.low_wins || 0;
-      const seriesStarted = m.series_started;
-
-      // Score de la série — couleurs + détection victoire (4 victoires)
-      const aWon = hw >= 4, bWon = lw >= 4;
-      const seriesOver = aWon || bWon;
-      const winner = aWon ? a : bWon ? b : null;
-      let seriesBadge = '';
-      if (seriesStarted) {
-        const aLeads = hw > lw, bLeads = lw > hw, tied = hw === lw;
-        const aW = `<span style="font-weight:800;color:${aLeads ? '#c8ff80' : tied ? '#e2e8f0' : '#ef5350'}">${hw}</span>`;
-        const bW = `<span style="font-weight:800;color:${bLeads ? '#c8ff80' : tied ? '#e2e8f0' : '#ef5350'}">${lw}</span>`;
-
-        let statusTxt, statusColor;
-        if (seriesOver) {
-          statusTxt = `🏆 ${winner.abbrev} a gagné`;
-          statusColor = '#ffd700';
-        } else {
-          statusTxt = aLeads ? `${a.abbrev} mène` : bLeads ? `${b.abbrev} mène` : `Égalité`;
-          statusColor = tied ? '#94a3b8' : '#c8ff80';
-        }
-
-        const badgeBg = seriesOver
-          ? 'background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);'
-          : 'background:rgba(255,255,255,.05);';
-        seriesBadge = `<div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px;padding:3px 6px;${badgeBg}border-radius:4px;">
-          <span style="font-size:.65rem;color:${statusColor};font-weight:${seriesOver ? 700 : 400};">${statusTxt}</span>
-          <span style="font-size:.75rem;letter-spacing:2px;">${aW} – ${bW}</span>
-        </div>`;
-      }
-
-      // Carte terminée : surbrillance du gagnant, opacité sur le perdant
-      const aWonClass  = seriesOver && aWon  ? ' winner' : '';
-      const bWonClass  = seriesOver && bWon  ? ' winner' : '';
-      const aFadedStyle = seriesOver && bWon  ? 'opacity:.4;' : '';
-      const bFadedStyle = seriesOver && aWon  ? 'opacity:.4;' : '';
-      const cardExtraClass = seriesOver ? ' series-over' : seriesStarted ? ' series-live' : '';
+      const isActive = _bkActiveCard && _bkActiveCard.confKey === confKey && _bkActiveCard.matchupIdx === idx;
 
       return `
-        <div class="bk-card${isActive ? ' active' : ''}${cardExtraClass}" onclick="bkToggleDetail('${confKey}',${idx})" title="Cliquer pour détails">
-          <div class="bk-team${aWonClass}" style="${aFadedStyle}">
-            <span class="bk-team-seed">${a.seed}</span>
-            ${teamLogoImg(a.abbrev, 16)}
-            <span class="bk-team-name">${a.abbrev}${aWon ? ' ✓' : ''}</span>
-            <span class="bk-team-pct${aWon ? ' hi' : ''}">${pA}%</span>
+        <div class="bk-matchup${isActive ? ' active' : ''}" onclick="bkToggleDetail('${confKey}',${idx})" title="Cliquer pour détails">
+          <div class="bk-matchup-team">
+            <div class="bk-team-logo">${teamLogoImg(a.abbrev, 18)}</div>
+            <div class="bk-team-name-seed">
+              <div class="bk-team-name">${a.abbrev}</div>
+              <div class="bk-team-seed">(${a.seed})</div>
+            </div>
+            <div class="bk-team-score">${hw}</div>
           </div>
-          <div class="bk-divider"></div>
-          <div class="bk-team${bWonClass}" style="${bFadedStyle}">
-            <span class="bk-team-seed">${b.seed}</span>
-            ${teamLogoImg(b.abbrev, 16)}
-            <span class="bk-team-name">${b.abbrev}${bWon ? ' ✓' : ''}</span>
-            <span class="bk-team-pct${bWon ? ' hi' : ''}">${pB}%</span>
+          <div class="bk-matchup-team">
+            <div class="bk-team-logo">${teamLogoImg(b.abbrev, 18)}</div>
+            <div class="bk-team-name-seed">
+              <div class="bk-team-name">${b.abbrev}</div>
+              <div class="bk-team-seed">(${b.seed})</div>
+            </div>
+            <div class="bk-team-score">${lw}</div>
           </div>
-          <div class="bk-bar-track">
-            <div class="bk-bar-a" style="width:${pA}%"></div>
-            <div class="bk-bar-b" style="width:${pB}%"></div>
-          </div>
-          ${seriesBadge}
         </div>`;
     }
 
@@ -7291,12 +7430,9 @@
     }
 
     function cupCard() {
-      return `<div class="bk-card cup-card">
-        <span class="bk-cup-icon">🏆</span>
-        <span class="bk-cup-label">Coupe Stanley</span>
-        <div class="bk-cup-finalist" style="margin-top:8px;font-size:.7rem;color:var(--muted)">Est</div>
-        <div style="font-size:.7rem;font-weight:700;color:#ffd700;margin:2px 0">VS</div>
-        <div class="bk-cup-finalist" style="font-size:.7rem;color:var(--muted)">Ouest</div>
+      return `<div class="bk-cup">
+        <div class="bk-cup-icon">🏆</div>
+        <div class="bk-cup-year">2026</div>
       </div>`;
     }
 
@@ -7345,30 +7481,33 @@
       function r2MatchupCard(winner1, winner2, r2idx) {
         const isComplete = winner1 && winner2;
         if (!isComplete && !winner1 && !winner2) {
-          return tbdCard('Demi-finale');
+          return `<div class="bk-matchup tbd" style="opacity:0.4">
+            <div style="text-align:center;padding:12px 8px;font-size:0.75rem;color:var(--muted)">À déterminer</div>
+          </div>`;
         }
 
-        // Au moins un gagnant du 1er tour est connu
         const h = winner1 || { abbrev: '?', seed: '?', logo: null };
-        const l = winner2 || { abbrev: 'TBD', seed: '', logo: null };
+        const l = winner2 || { abbrev: '?', seed: '?', logo: null };
         const isActive = _bkActiveCard && _bkActiveCard.confKey === confKey && _bkActiveCard.matchupIdx === (-r2idx - 1);
 
         return `
-          <div class="bk-card${isActive ? ' active' : ''}${isComplete ? ' series-live' : ' tbd'}" onclick="bkToggleDetail('${confKey}',${-r2idx-1})" title="2e tour">
-            <div class="bk-team">
-              <span class="bk-team-seed">${h.seed}</span>
-              ${h.logo ? teamLogoImg(h.abbrev, 16) : '<span style="width:16px;height:16px"></span>'}
-              <span class="bk-team-name">${h.abbrev}</span>
-              <span class="bk-team-pct">—</span>
+          <div class="bk-matchup${isActive ? ' active' : ''}${!isComplete ? ' tbd' : ''}" onclick="bkToggleDetail('${confKey}',${-r2idx-1})" title="2e tour">
+            <div class="bk-matchup-team${!winner1 ? ' _faded' : ''}">
+              <div class="bk-team-logo">${h.logo ? teamLogoImg(h.abbrev, 18) : '<div style="width:18px;height:18px;background:rgba(255,255,255,0.1);border-radius:4px"></div>'}</div>
+              <div class="bk-team-name-seed">
+                <div class="bk-team-name">${h.abbrev}</div>
+                <div class="bk-team-seed">${h.seed !== '?' ? `(${h.seed})` : ''}</div>
+              </div>
+              <div class="bk-team-score">0</div>
             </div>
-            <div class="bk-divider"></div>
-            <div class="bk-team" style="${!winner2 ? 'opacity:.4' : ''}">
-              <span class="bk-team-seed">${l.seed || 'TBD'}</span>
-              ${l.logo ? teamLogoImg(l.abbrev, 16) : '<span style="width:16px;height:16px"></span>'}
-              <span class="bk-team-name">${l.abbrev}</span>
-              <span class="bk-team-pct">—</span>
+            <div class="bk-matchup-team${!winner2 ? ' _faded' : ''}">
+              <div class="bk-team-logo">${l.logo ? teamLogoImg(l.abbrev, 18) : '<div style="width:18px;height:18px;background:rgba(255,255,255,0.1);border-radius:4px"></div>'}</div>
+              <div class="bk-team-name-seed">
+                <div class="bk-team-name">${l.abbrev}</div>
+                <div class="bk-team-seed">${l.seed !== '?' ? `(${l.seed})` : ''}</div>
+              </div>
+              <div class="bk-team-score">0</div>
             </div>
-            <div class="bk-bar-track" style="opacity:.3"><div class="bk-bar-a" style="width:50%"></div><div class="bk-bar-b" style="width:50%"></div></div>
           </div>`;
       }
 
@@ -7394,21 +7533,22 @@
       const r2Col = `<div class="bracket-col r2">${r2Cards}</div>`;
       const cfCol = `<div class="bracket-col cf">${cfCard}</div>`;
 
-      // Label cells matching exact column widths
-      const sp  = `<div style="width:24px;flex-shrink:0"></div>`;
-      const lbl = (txt, w) => `<div class="bracket-col-label" style="width:${w}px;text-align:center">${txt}</div>`;
+      // Return individual columns for grid rearrangement
+      const conn_r1_r2 = connectorSvg(4, 2);
+      const conn_r2_cf = connectorSvg(2, 1);
+      const conn_r2_cf_mirror = connectorSvgMirror(2, 1);
+      const conn_r1_r2_mirror = connectorSvgMirror(4, 2);
 
-      if (side === 'east') {
-        return {
-          labels: lbl('1er tour',160) + sp + lbl('2e tour',152) + sp + lbl('Finale conf.',152),
-          cols:   r1Col + connectorSvg(4,2) + r2Col + connectorSvg(2,1) + cfCol
-        };
-      } else {
-        return {
-          labels: lbl('Finale conf.',152) + sp + lbl('2e tour',152) + sp + lbl('1er tour',160),
-          cols:   cfCol + connectorSvgMirror(2,1) + r2Col + connectorSvgMirror(4,2) + r1Col
-        };
-      }
+      return {
+        // Individual parts for new grid layout
+        r1Col, r2Col, cfCol,
+        conn_r1_r2, conn_r2_cf,
+        conn_r1_r2_mirror, conn_r2_cf_mirror,
+        // Legacy format (for compatibility if needed)
+        cols: side === 'east'
+          ? r1Col + conn_r1_r2 + r2Col + conn_r2_cf + cfCol
+          : cfCol + conn_r2_cf_mirror + r2Col + conn_r1_r2_mirror + r1Col
+      };
     }
 
     // ── Detail panel HTML ──────────────────────────────────
@@ -7562,36 +7702,60 @@
     // ── Assemble full bracket ──────────────────────────────
     const eastParts = confColumnParts(eSorted, 'east', 'east');
     const westParts = confColumnParts(wSorted, 'west', 'west');
-    const cupConnE = `<div class="bracket-connectors" style="width:20px;flex-shrink:0"><svg viewBox="0 0 20 100" preserveAspectRatio="none" style="width:20px;height:100%;position:absolute;top:0;left:0"><line x1="0" y1="50%" x2="20" y2="50%" stroke="rgba(255,215,0,.5)" stroke-width="2"/></svg></div>`;
-    const cupConnW = `<div class="bracket-connectors" style="width:20px;flex-shrink:0"><svg viewBox="0 0 20 100" preserveAspectRatio="none" style="width:20px;height:100%;position:absolute;top:0;left:0"><line x1="20" y1="50%" x2="0" y2="50%" stroke="rgba(255,215,0,.5)" stroke-width="2"/></svg></div>`;
-    const cupLblW = 140;
-    const connW = 24;
+
+    // Create label row for new grid layout (hidden on mobile for space)
+    const labelRowHtml = `
+      <div style="display:none;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding-bottom:8px;gap:0;text-align:center;padding-left:clamp(8px,2vw,16px);padding-right:clamp(8px,2vw,16px)">
+        <div style="text-align:center">1er tour</div>
+        <div></div>
+        <div style="text-align:center">2e tour</div>
+        <div></div>
+        <div style="text-align:center">Finale conf.</div>
+        <div style="color:#ffd700">Finale</div>
+        <div style="text-align:center">Finale conf.</div>
+        <div></div>
+        <div style="text-align:center">2e tour</div>
+        <div></div>
+        <div style="text-align:center">1er tour</div>
+      </div>
+    `;
 
     return `
       <div class="bracket-outer">
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px;flex-wrap:wrap;gap:8px">
-          <span class="bracket-conf-label east">🏒 Conférence Est</span>
-          <span style="font-size:.75rem;color:var(--muted)">Cliquer sur un match pour détails · Prob. meilleur des 7</span>
           <span class="bracket-conf-label west">Conférence Ouest 🏒</span>
+          <span style="font-size:.75rem;color:var(--muted)">Cliquer sur un match pour détails · Prob. meilleur des 7</span>
+          <span class="bracket-conf-label east">🏒 Conférence Est</span>
         </div>
 
-        <!-- Labels row — outside of columns so they don't shift card vertical positions -->
-        <div style="display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:2px;scrollbar-width:none">
-          ${eastParts.labels}
-          <div style="width:20px;flex-shrink:0"></div>
-          <div class="bracket-col-label" style="width:${cupLblW}px;text-align:center;color:#ffd700">Finale</div>
-          <div style="width:20px;flex-shrink:0"></div>
-          ${westParts.labels}
-        </div>
+        ${labelRowHtml}
 
-        <div class="bracket-row" id="bracket-row-main" style="align-items:stretch;min-height:360px">
-          ${eastParts.cols}
-          ${cupConnE}
+        <!-- New responsive grid layout (no horizontal scroll) -->
+        <div class="bracket-row" id="bracket-row-main">
+          <!-- WEST R1 -->
+          ${westParts.r1Col}
+          <!-- Spacer -->
+          <div></div>
+          <!-- WEST R2 -->
+          ${westParts.r2Col}
+          <!-- Spacer -->
+          <div></div>
+          <!-- WEST CF -->
+          ${westParts.cfCol}
+          <!-- CUP (center) -->
           <div class="bracket-col cup">
             ${cupCard()}
           </div>
-          ${cupConnW}
-          ${westParts.cols}
+          <!-- EAST CF -->
+          ${eastParts.cfCol}
+          <!-- Spacer -->
+          <div></div>
+          <!-- EAST R2 -->
+          ${eastParts.r2Col}
+          <!-- Spacer -->
+          <div></div>
+          <!-- EAST R1 -->
+          ${eastParts.r1Col}
         </div>
 
         <div id="bk-detail-container" style="margin-top:12px">
