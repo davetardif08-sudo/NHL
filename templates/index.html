@@ -2253,8 +2253,10 @@
     });
 
     container.innerHTML = sorted.map((r) => {
-      const homeLogoUrl = r.home_logo || '';
-      const awayLogoUrl = r.away_logo || '';
+      // Fallback: si home_logo/away_logo vide (ex: "Caroline (Hurricanes)" de Mise-O-Jeu),
+      // utiliser teamLogoImg() qui résout le nom via _NHL_ABBREV_MAP
+      const homeLogoUrl = r.home_logo || (r.home_team ? `https://assets.nhle.com/logos/nhl/svg/${teamAbbrev(r.home_team) || ''}_light.svg` : '');
+      const awayLogoUrl = r.away_logo || (r.away_team ? `https://assets.nhle.com/logos/nhl/svg/${teamAbbrev(r.away_team) || ''}_light.svg` : '');
       const mise = ((r._mise || r.mise) || 0).toFixed(2);
       const cote = (r.odds || 0).toFixed(2);
       const betType = (r.bet_type || '').toLowerCase();
@@ -8510,12 +8512,12 @@
       let statusHtml = '';
       const cleanOutcome = outcome || 'pending';
 
-      // Determine card background color based on outcome
-      let cardBgColor = '#ffffff'; // default white for pending/in progress
+      // Determine card border color based on outcome (white background, colored border)
+      let cardBorderStyle = 'border: 1px solid #e5e7eb;'; // default subtle gray
       if (cleanOutcome === 'win') {
-        cardBgColor = 'rgba(63, 185, 80, 0.12)'; // light green
+        cardBorderStyle = 'border: 6px solid #3fb950;'; // thick green border for win
       } else if (cleanOutcome === 'loss') {
-        cardBgColor = 'rgba(248, 81, 73, 0.12)'; // light red
+        cardBorderStyle = 'border: 6px solid #f85149;'; // thick red border for loss
       }
 
       if (cleanOutcome === 'not_found' || cleanOutcome === 'pending') {
@@ -8542,7 +8544,7 @@
       }
 
       return `
-        <div class="live-prediction-card" style="background-color: ${cardBgColor};">
+        <div class="live-prediction-card" style="background-color: #ffffff; ${cardBorderStyle}">
           <div class="live-card-logos">
             <div class="live-logo-circle ${awayCircleClass}">
               ${awayLogoHtml}
@@ -8611,12 +8613,12 @@
         const cleanOutcome = outcome || 'pending';
         const miseNum = parseFloat(mise || 0);
 
-        // Determine card background color based on outcome
-        let cardBgColor = '#ffffff'; // default white for pending
+        // Determine card border color based on outcome (white background, colored border)
+        let cardBorderStyle = 'border: 1px solid #e5e7eb;'; // default subtle gray
         if (cleanOutcome === 'win') {
-          cardBgColor = 'rgba(63, 185, 80, 0.12)'; // light green
+          cardBorderStyle = 'border: 6px solid #3fb950;'; // thick green border for win
         } else if (cleanOutcome === 'loss') {
-          cardBgColor = 'rgba(248, 81, 73, 0.12)'; // light red
+          cardBorderStyle = 'border: 6px solid #f85149;'; // thick red border for loss
         }
 
         if (cleanOutcome === 'win') {
@@ -8640,7 +8642,7 @@
         }
 
         return `
-          <div class="live-prediction-card" style="background-color: ${cardBgColor};">
+          <div class="live-prediction-card" style="background-color: #ffffff; ${cardBorderStyle}">
             <div class="live-card-logos">
               <div class="live-logo-circle ${awayCircleClass}">
                 ${awayLogoHtml}
