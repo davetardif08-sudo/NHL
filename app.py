@@ -3954,11 +3954,12 @@ def api_playoff_nhl():
     import requests as _rq
     from datetime import datetime as _dt, timedelta as _td
 
-    # ── Vérifier le cache (refresh quotidien) ─────────────────────────────────
-    today = _dt.now().strftime("%Y-%m-%d")
+    # ── Vérifier le cache (refresh toutes les heures) ───────────────────────────
+    now = _dt.now()
+    today_hour = now.strftime("%Y-%m-%d %H:00")
     with _playoff_cache_lock:
         if (_playoff_cache["data"] is not None and
-            _playoff_cache["date"] == today):
+            _playoff_cache["date"] == today_hour):
             return jsonify(_playoff_cache["data"])
 
     try:
@@ -4217,10 +4218,10 @@ def api_playoff_nhl():
         "updated_at": _get_et_now().strftime("%Y-%m-%d %H:%M"),
     }
 
-    # ── Cacher le résultat pour la journée ─────────────────────────────────
+    # ── Cacher le résultat pour l'heure ────────────────────────────────────
     with _playoff_cache_lock:
         _playoff_cache["data"] = result
-        _playoff_cache["date"] = today
+        _playoff_cache["date"] = today_hour
 
     return jsonify(result)
 
