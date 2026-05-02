@@ -1662,6 +1662,25 @@ def api_cron_auto_snapshot():
     today = _get_today_et()
     now_et = _get_et_now()
 
+    # 0. Auto-update des outcomes en BG (throttle : max 1×/10 min)
+    #    Ça permet aux résultats des matchs d'hier de se résoudre automatiquement
+    #    sans clic manuel sur "Actualiser".
+    global _LAST_AUTO_OUTCOMES_TS
+    try:
+        _LAST_AUTO_OUTCOMES_TS
+    except NameError:
+        _LAST_AUTO_OUTCOMES_TS = 0
+    if time.time() - _LAST_AUTO_OUTCOMES_TS > 600:  # 10 min
+        _LAST_AUTO_OUTCOMES_TS = time.time()
+        def _bg_auto_outcomes():
+            try:
+                from predictions import update_outcomes
+                update_outcomes()
+                print(f"  [auto-outcomes] update_outcomes done at {now_et.strftime('%H:%M ET')}")
+            except Exception as e:
+                print(f"  [auto-outcomes] erreur: {e}")
+        threading.Thread(target=_bg_auto_outcomes, daemon=True).start()
+
     # 1. Lock : déjà fait aujourd'hui ?
     if os.path.exists(_AUTO_SNAPSHOT_LOCK):
         try:
