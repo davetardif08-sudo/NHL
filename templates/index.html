@@ -8213,45 +8213,8 @@
       }
     }
 
-    // Stats bar
-    const netColor = kellyNet > 0 ? 'green' : kellyNet < 0 ? 'red' : '';
-    const netSign  = kellyNet >= 0 ? '+' : '';
-    const statsBar = `
-      <div class="stats-bar" style="margin-bottom:16px;">
-        <div class="stat-card">
-          <div class="label">Date</div>
-          <div class="value blue" style="font-size:15px;">${dateStr}</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">Snapshot</div>
-          <div class="value" style="font-size:15px;">${timeStr}</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">Prédictions</div>
-          <div class="value">${picks.length}</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">Paris misés</div>
-          <div class="value green">${withMise.length}</div>
-        </div>
-        ${resolved.length > 0 ? `
-        <div class="stat-card">
-          <div class="label">Résultats</div>
-          <div class="value">${wins.length}✓ / ${resolved.length - wins.length}✗</div>
-        </div>
-        <div class="stat-card">
-          <div class="label">Net Kelly</div>
-          <div class="value ${netColor}">${netSign}${kellyNet.toFixed(2)}$</div>
-        </div>` : ''}
-        ${inGame.length > 0 ? `
-        <div class="stat-card">
-          <div class="label">En cours</div>
-          <div class="value orange">${inGame.length} 🔴</div>
-        </div>` : ''}
-      </div>`;
-
     if (!picks.length) {
-      return statsBar + `<div class="empty"><div class="empty-icon">🔍</div><h3>Snapshot vide</h3></div>`;
+      return `<div class="empty"><div class="empty-icon">🔍</div><h3>Snapshot vide</h3></div>`;
     }
 
     // Tri colonnes
@@ -8435,7 +8398,6 @@
 
     return `
       ${renderScoreband(data.game_scores)}
-      ${statsBar}
       ${refreshBtn}
       ${renderNhlLiveAsCards(data)}
       ${sgpBlock}`;
