@@ -1964,8 +1964,12 @@ def _nhl_outcomes_for_date(date_str: str) -> dict:
                     cached = json.load(_f)
                 # Reconstruire les clés tuple depuis les strings "A|B"
                 results = {tuple(k.split("|", 1)): v for k, v in cached.items()}
-                _NHL_OUTCOMES_CACHE[date_str] = results
-                return results
+                # Valider : tous les matchs doivent être finaux ("OFF"/"FINAL")
+                # Sinon le cache est obsolète (match était en cours quand sauvegardé) → refetch
+                if results and all(g.get("state") in ("OFF", "FINAL") for g in results.values()):
+                    _NHL_OUTCOMES_CACHE[date_str] = results
+                    return results
+                # Cache obsolète → on continue vers le refetch API
             except Exception:
                 pass  # Cache corrompu → on refetch
 
@@ -2027,12 +2031,16 @@ def _nhl_outcomes_for_date(date_str: str) -> dict:
             results[(away_ab, home_ab)] = game_data
         results[(nick(away_name), nick(home_name))] = game_data
 
-    # ── Mettre en cache (dates passées seulement — aujourd'hui toujours refetché) ──
-    if is_past:
+    # ── Mettre en cache UNIQUEMENT si TOUS les matchs sont terminés ──
+    # Empêche de figer un cache obsolète quand un match late-night n'est pas encore fini
+    # (ex: match Vegas qui commence à 22h ET = 2h UTC lendemain)
+    all_final = all(g.get("state") in ("OFF", "FINAL") for g in results.values())
+
+    if is_past and all_final:
         _NHL_OUTCOMES_CACHE[date_str] = results
 
-    # Cache disque uniquement pour les dates passées (résultats finals immuables)
-    if is_past and results:
+    # Cache disque uniquement pour les dates passées dont tous les matchs sont finals
+    if is_past and all_final and results:
         try:
             os.makedirs(_NHL_CACHE_DIR, exist_ok=True)
             disk_path = os.path.join(_NHL_CACHE_DIR, f"{date_str}.json")
