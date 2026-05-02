@@ -2550,11 +2550,12 @@
         if (n === 3) return '3e pér.';
         return `P${n}`;
       })();
-      const clockStr = periodLabel && !r.in_intermission && r.time_remaining
+      // Afficher "INT 1" au lieu de "P1" pendant les entractes
+      const displayLabel = r.in_intermission && r.period ? `INT ${r.period}` : periodLabel;
+      const clockStr = displayLabel && !r.in_intermission && r.time_remaining
         ? r.time_remaining : '';
-      const intermStr = periodLabel && r.in_intermission ? 'Entracte' : '';
-      const periodHtml = periodLabel
-        ? `<span style="font-size:10px;color:#fca5a5;margin-top:1px;">${periodLabel}${clockStr ? ` · ${clockStr}` : ''}${intermStr ? ` · ${intermStr}` : ''}</span>`
+      const periodHtml = displayLabel
+        ? `<span style="font-size:10px;color:#fca5a5;margin-top:1px;">${displayLabel}${clockStr ? ` · ${clockStr}` : ''}</span>`
         : '';
       middle = `<div style="display:flex;flex-direction:column;align-items:center;margin:0 10px;gap:2px;">
         <span style="font-size:11px;color:#ff4444;font-weight:700;letter-spacing:1px;">🔴 EN COURS</span>
@@ -2924,8 +2925,9 @@
       if (gs) {
         if (gs.state === 'LIVE' || gs.state === 'CRIT') {
           // Match en cours - afficher le score live au centre en orange + période + temps
-          const periodLabel = gs.period ? `P${gs.period}` : '';
-          const timeLabel = gs.time_remaining || '';
+          // Afficher "INT 1" au lieu de "P1" pendant les entractes
+          const periodLabel = gs.period ? (gs.in_intermission ? `INT ${gs.period}` : `P${gs.period}`) : '';
+          const timeLabel = !gs.in_intermission ? (gs.time_remaining || '') : '';
           const periodTimeLabel = [periodLabel, timeLabel].filter(Boolean).join(' | ');
           scoreDisplay = `<div style="display:flex;flex-direction:column;align-items:center;gap:1px;margin:0 2px;">
             <div style="font-size:13px;color:#f59e0b;font-weight:800;letter-spacing:1px;">${gs.away_score ?? 0}</div>
@@ -7955,11 +7957,12 @@
           if (n === 3) return '3e pér.';
           return `P${n}`;
         })();
-        const clockStr = periodLabel && !g.in_intermission && g.time_remaining
+        // Afficher "INT 1" au lieu de "P1" pendant les entractes
+        const displayLabel = g.in_intermission && g.period ? `INT ${g.period}` : periodLabel;
+        const clockStr = displayLabel && !g.in_intermission && g.time_remaining
           ? g.time_remaining : '';
-        const intermStr = periodLabel && g.in_intermission ? 'Entracte' : '';
-        const periodInfo = periodLabel
-          ? ` ${periodLabel}${clockStr ? ` · ${clockStr}` : ''}${intermStr ? ` · ${intermStr}` : ''}`
+        const periodInfo = displayLabel
+          ? ` ${displayLabel}${clockStr ? ` · ${clockStr}` : ''}`
           : '';
         statusHtml = `<div style="font-size:10px;color:#f87171;font-weight:700;margin-top:4px;">🔴${periodInfo}</div>`;
       } else if (isFinal) {
