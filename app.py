@@ -3537,7 +3537,7 @@ def api_sgp_history():
 
             resolved_picks = []
             for p in raw_picks:
-                outcome_info = _resolve_pick_outcome(p, nhl_map)
+                outcome_info = _resolve_pick_outcome(p, nhl_map, game_date=d)
                 rp = dict(p)
                 rp["outcome"] = outcome_info.get("outcome", "not_found") if isinstance(outcome_info, dict) else "not_found"
                 resolved_picks.append(rp)
