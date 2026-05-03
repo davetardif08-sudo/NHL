@@ -2075,74 +2075,122 @@ def _warm_nhl_cache(dates: list) -> None:
 def _get_player_points_for_game(player_name: str, away_abbrev: str, home_abbrev: str, game_date: str) -> int | None:
     """
     Récupère le nombre de points d'un joueur dans un match spécifique.
+    Utilise l'endpoint /score/{YYYY-MM-DD} de l'API NHL et parse les goals/assists
+    directement depuis le tableau goals[] pour éviter un 2e appel API.
     Retourne le nombre de points (goals + assists) ou None si non trouvé.
     """
     try:
         import requests
-        # Format: YYYYMMDD pour l'API NHL
-        date_formatted = game_date.replace('-', '')
+        # L'API NHL utilise le format YYYY-MM-DD (avec tirets)
+        date_formatted = game_date  # Déjà en format YYYY-MM-DD
 
-        # Cherche le game_id pour ce match
         resp = requests.get(
             f"https://api-web.nhle.com/v1/score/{date_formatted}",
-            timeout=5,
+            timeout=8,
             headers={"User-Agent": "Mozilla/5.0"}
         )
         if not resp.ok:
+            print(f"  >> _get_player_points_for_game: API {resp.status_code} pour {date_formatted}")
             return None
 
         games = resp.json().get("games", [])
 
-        # Trouver le match
-        game = next(
-            (g for g in games
-             if g.get("awayTeam", {}).get("abbrev") == away_abbrev
-             and g.get("homeTeam", {}).get("abbrev") == home_abbrev),
-            None
-        )
+        # Trouver le match par abréviations
+        game = None
+        for g in games:
+            g_away = g.get("awayTeam", {}).get("abbrev", "")
+            g_home = g.get("homeTeam", {}).get("abbrev", "")
+            if g_away == away_abbrev and g_home == home_abbrev:
+                game = g
+                break
+            # Fallback: chercher sans contraindre les deux équipes (si une seule abbrev connue)
+            if away_abbrev and g_away == away_abbrev:
+                game = g
+            elif home_abbrev and g_home == home_abbrev:
+                game = g
+
         if not game:
+            print(f"  >> _get_player_points_for_game: match {away_abbrev}@{home_abbrev} non trouvé le {date_formatted}")
             return None
 
-        game_id = game.get("id")
-        if not game_id:
-            return None
-
-        # Récupérer les stats du match (box score)
-        box_resp = requests.get(
-            f"https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore",
-            timeout=5,
-            headers={"User-Agent": "Mozilla/5.0"}
-        )
-        if not box_resp.ok:
-            return None
-
-        box = box_resp.json()
+        # Compter goals + assists du joueur depuis le tableau goals[]
         player_name_lower = player_name.lower().strip()
+        goals_count = 0
+        assists_count = 0
 
-        # Chercher le joueur dans les deux équipes
-        for team_key in ("awayTeam", "homeTeam"):
-            players = box.get(team_key, {}).get("players", [])
-            for player in players:
-                pname = player.get("person", {}).get("fullName", "").lower()
-                if player_name_lower in pname or pname in player_name_lower:
-                    # Compter goals + assists
-                    stats = player.get("stats", {}).get("skatingStats", {})
-                    goals = stats.get("goals", 0) or 0
-                    assists = stats.get("assists", 0) or 0
-                    return goals + assists
+        for goal in game.get("goals", []):
+            # Vérifier si le joueur a marqué ce but
+            scorer_name = goal.get("name", {}).get("default", "").lower()
+            if _names_match(player_name_lower, scorer_name):
+                goals_count += 1
 
-        return None
+            # Vérifier si le joueur a une passe sur ce but
+            for assist in goal.get("assists", []):
+                assist_name = assist.get("name", {}).get("default", "").lower()
+                if _names_match(player_name_lower, assist_name):
+                    assists_count += 1
+
+        total_points = goals_count + assists_count
+        print(f"  >> _get_player_points_for_game: {player_name} = {total_points} pts ({goals_count}G {assists_count}A)")
+        return total_points
+
     except Exception as e:
         print(f"  >> _get_player_points_for_game erreur: {e}")
         return None
 
 
+def _names_match(query: str, full_name: str) -> bool:
+    """Vérifie si un nom de joueur matche partiellement (ex: 'P. Martone' matche 'Porter Martone')."""
+    if not query or not full_name:
+        return False
+    # Match exact
+    if query in full_name or full_name in query:
+        return True
+    # Match par nom de famille seulement (ex: "martone" dans "porter martone")
+    query_parts = query.split()
+    full_parts  = full_name.split()
+    if len(query_parts) >= 2 and len(full_parts) >= 2:
+        # Comparer nom de famille (dernier mot)
+        if query_parts[-1] == full_parts[-1]:
+            return True
+    return False
+
+
 def _resolve_pick_outcome(pick: dict, nhl_map: dict, game_date: str = ""):
     """Détermine win/loss/pending pour un pari en croisant avec les résultats NHL."""
     import re
-    bet_type  = (pick.get("bet_type")  or "").lower()
+    bet_type_raw = (pick.get("bet_type") or "")   # Conserver la casse originale pour prop detection
+    bet_type  = bet_type_raw.lower()
     selection = (pick.get("selection") or "").lower()
     snap_date = game_date or pick.get("date", "")
+
+    # ── Prop bets joueur — vérifier EN PREMIER (avant les checks "total"/"moins") ──
+    # Format: "Prénom Nom Total de points plus/moins 0.5"
+    # _is_player_prop() a besoin de la casse originale (majuscules) pour détecter le nom
+    if _is_player_prop(type('o', (), {'bet_type': bet_type_raw})()):
+        m_thresh = re.search(r"(\d+[.,]?\d*)", bet_type)
+        threshold = float(m_thresh.group(1).replace(',', '.')) if m_thresh else None
+        if threshold is not None:
+            # Extraire le nom du joueur (les 2 premiers mots du bet_type original)
+            player_name = ' '.join(bet_type_raw.split()[:2]).strip()
+            # Résoudre les abréviations d'équipes pour la recherche
+            try:
+                from nhl_stats import _match_abbrev as _ma
+                _away = (pick.get("away_team") or "").lower()
+                _home = (pick.get("home_team") or "").lower()
+                _away_ab = (_ma(_away) or "").upper()
+                _home_ab = (_ma(_home) or "").upper()
+            except Exception:
+                _away_ab = _home_ab = ""
+            player_points = _get_player_points_for_game(player_name, _away_ab, _home_ab, snap_date)
+            if player_points is not None:
+                is_under = "moins" in selection or "under" in selection
+                is_over  = "plus"  in selection or "over"  in selection
+                if is_under:
+                    return {"outcome": "win" if player_points < threshold else "loss", "score": "?"}
+                if is_over:
+                    return {"outcome": "win" if player_points > threshold else "loss", "score": "?"}
+        return {"outcome": "unsupported", "score": "?"}
     home_team = (pick.get("home_team") or "").lower()
     away_team = (pick.get("away_team") or "").lower()
 
@@ -2246,33 +2294,6 @@ def _resolve_pick_outcome(pick: dict, nhl_map: dict, game_date: str = ""):
         outcome = "win" if hs > 0 and as_ > 0 else "loss"
         return {"outcome": outcome, "score": score_txt}
 
-    # Prop bets individuels (joueur) : "Matvei Michkov Total de points moins 0.5"
-    if _is_player_prop({"bet_type": bet_type, "selection": selection}):
-        # Format: "[Player Name] Total de points [Plus/Moins] [Threshold]"
-        # Extraire le seuil (threshold) depuis le type de pari
-        import re
-        m = re.search(r"(\d+[.,]?\d*)", bet_type)
-        threshold = float(m.group(1).replace(',', '.')) if m else None
-
-        if threshold is not None:
-            # Extrait le nom du joueur (premiers 1-2 mots du bet_type)
-            player_name = ' '.join(bet_type.split()[:2]).strip()
-
-            # Récupérer les stats du joueur pour ce match
-            player_points = _get_player_points_for_game(player_name, away_ab, home_ab, snap_date)
-
-            if player_points is not None:
-                is_over = "plus" in selection.lower() or "over" in selection.lower()
-                is_under = "moins" in selection.lower() or "under" in selection.lower()
-
-                if is_over:
-                    outcome = "win" if player_points > threshold else "loss"
-                elif is_under:
-                    outcome = "win" if player_points < threshold else "loss"
-                else:
-                    outcome = "unsupported"
-
-                return {"outcome": outcome, "score": score_txt}
 
     return {"outcome": "unsupported", "score": score_txt}
 
