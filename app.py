@@ -3236,12 +3236,12 @@ def api_history_by_bettype():
         snap_files = sorted([
             f for f in os.listdir(_SNAPSHOTS_DIR)
             if f.endswith(".json")
-            and f.replace(".json", "") < today
-            and f.replace(".json", "") not in _excluded_dates
+            and f[:10] < today
+            and f[:10] not in _excluded_dates
         ])
 
         # Pré-charger les outcomes NHL
-        all_dates = [f.replace(".json", "") for f in snap_files]
+        all_dates = list({f[:10] for f in snap_files})
         _warm_nhl_cache(all_dates)
 
         # Dictionnaire : {bet_type -> [(date, resolved, wins, win_rate), ...]}
@@ -3249,7 +3249,7 @@ def api_history_by_bettype():
 
         # D'abord traiter les snapshots individuels
         for fname in snap_files:
-            d = fname.replace(".json", "")
+            d = fname[:10]
             with open(os.path.join(_SNAPSHOTS_DIR, fname), encoding="utf-8-sig") as fh:
                 snap = json.load(fh)
 
@@ -3311,7 +3311,7 @@ def api_history_by_bettype():
             by_combo_date = defaultdict(lambda: {"resolved": 0, "wins": 0})
 
             for fname in snap_files:
-                d = fname.replace(".json", "")
+                d = fname[:10]
                 snap_path = os.path.join(_SNAPSHOTS_DIR, fname)
                 try:
                     with open(snap_path, encoding="utf-8-sig") as fh:
@@ -3344,7 +3344,7 @@ def api_history_by_bettype():
 
                     resolved_picks = []
                     for p in raw_picks:
-                        outcome_info = _resolve_pick_outcome(p, nhl_map)
+                        outcome_info = _resolve_pick_outcome(p, nhl_map, game_date=d)
                         rp = dict(p)
                         rp["outcome"] = outcome_info.get("outcome", "not_found") if isinstance(outcome_info, dict) else "not_found"
                         resolved_picks.append(rp)
