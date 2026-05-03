@@ -8559,6 +8559,7 @@
     const cardsHtml = sorted.map((pick, idx) => {
       try {
         const { away_team, home_team, selection, odds, mise, outcome } = pick;
+        const bet_type = pick.bet_type || '';
 
         // Determine logo circle colors (vert si selection = team, gris sinon)
         const awayIsSelected = selection && (selection.includes(away_team) || selection.includes(teamAbbrev(away_team)));
@@ -8569,6 +8570,46 @@
         // Logos HTML
         const awayLogoHtml = teamLogoImg(away_team, 70) || `<span>${away_team}</span>`;
         const homeLogoHtml = teamLogoImg(home_team, 70) || `<span>${home_team}</span>`;
+
+        // Formater le type de mise de façon concise
+        const formatBetType = (bt, sel) => {
+          if (!bt) return sel || '';
+          const btL = bt.toLowerCase();
+          const selL = (sel || '').toLowerCase();
+          if (btL.includes('gagnant') || btL.includes('victoire') || btL.includes('2 issues')) {
+            return 'Gagnant à 2 issues';
+          }
+          if (btL.includes('double chance')) return 'Double chance';
+          if (btL.includes('total de buts') || btL.includes('plus/moins')) {
+            const m = bt.match(/(\d+[.,]?\d*)/);
+            const val = m ? m[1] : '';
+            const dir = selL.includes('moins') || selL.includes('under') ? 'Moins' : 'Plus';
+            // Détecter si c'est un total d'équipe (ex: "Carolina (Hurricanes) Total de buts...")
+            // Le nom d'équipe apparaît avant "Total de buts"
+            const totalIdx = btL.indexOf('total de buts');
+            if (totalIdx > 0) {
+              // Il y a du texte avant "Total de buts" = c'est un total d'équipe
+              // Extraire le nick de l'équipe (ce qui est dans les parenthèses, ou le premier mot)
+              const teamPart = bt.slice(0, totalIdx).trim();
+              const nickM = teamPart.match(/\(([^)]+)\)/);
+              const teamNick = nickM ? nickM[1] : teamPart.split(' ')[0];
+              return val ? `Total buts ${teamNick} ${dir} ${val}` : bt;
+            }
+            return val ? `Total buts (2 éq.) ${dir} ${val}` : bt;
+          }
+          if (btL.includes('les 2') || btL.includes('both')) return 'Les 2 équipes marquent';
+          if (btL.includes('prolongation') || btL.includes('barrage')) return 'Prolongation';
+          // Prop bet joueur (ex: "Porter Martone Total de points moins 0.5")
+          if (/^[A-ZÀ-Ü]/.test(bt)) {
+            const m = bt.match(/(\d+[.,]?\d*)/);
+            const val = m ? m[1] : '';
+            const dir = selL.includes('moins') ? 'Moins' : selL.includes('plus') ? 'Plus' : '';
+            const playerName = bt.split(' ').slice(0, 2).join(' ');
+            return val ? `${playerName} ${dir} ${val} pts` : bt;
+          }
+          return bt.length > 28 ? bt.slice(0, 26) + '…' : bt;
+        };
+        const betLabel = formatBetType(bet_type, selection);
 
         // Status text
         let statusHtml = '';
@@ -8613,6 +8654,10 @@
               <div class="live-logo-circle ${homeCircleClass}">
                 ${homeLogoHtml}
               </div>
+            </div>
+
+            <div style="width:100%; text-align:center; font-size:11px; color:#6b7280; font-weight:600; margin-top:4px; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.3px;">
+              ${betLabel}
             </div>
 
             <div class="live-card-stats">
