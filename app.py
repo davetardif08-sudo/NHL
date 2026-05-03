@@ -3144,7 +3144,8 @@ def api_history():
 
             # Outcomes NHL — maintenant depuis le cache (pas d'appel réseau)
             nhl_map = _nhl_outcomes_for_date(d)
-            enriched = [_resolve_pick_outcome(p, nhl_map) | p for p in picks]
+            # ⚠️ Ordre correct: pick | resolved → resolved écrase pick (et non l'inverse)
+            enriched = [p | _resolve_pick_outcome(p, nhl_map, game_date=d) for p in picks]
 
             # Stats sur TOUS les picks du snapshot
             resolved = [p for p in enriched if p.get("outcome") in ("win", "loss")]
@@ -3258,7 +3259,7 @@ def api_history_by_bettype():
 
             # Résoudre les outcomes
             nhl_map = _nhl_outcomes_for_date(d)
-            enriched = [_resolve_pick_outcome(p, nhl_map) | p for p in picks]
+            enriched = [p | _resolve_pick_outcome(p, nhl_map, game_date=d) for p in picks]
             resolved_picks = [p for p in enriched if p.get("outcome") in ("win", "loss")]
 
             # Grouper par bet_type catégorisé (généraliser)
