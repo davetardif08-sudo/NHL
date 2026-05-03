@@ -2072,11 +2072,77 @@ def _warm_nhl_cache(dates: list) -> None:
                 print(f"  >> warm_nhl_cache erreur {futures[fut]}: {e}")
 
 
-def _resolve_pick_outcome(pick: dict, nhl_map: dict):
+def _get_player_points_for_game(player_name: str, away_abbrev: str, home_abbrev: str, game_date: str) -> int | None:
+    """
+    Récupère le nombre de points d'un joueur dans un match spécifique.
+    Retourne le nombre de points (goals + assists) ou None si non trouvé.
+    """
+    try:
+        import requests
+        # Format: YYYYMMDD pour l'API NHL
+        date_formatted = game_date.replace('-', '')
+
+        # Cherche le game_id pour ce match
+        resp = requests.get(
+            f"https://api-web.nhle.com/v1/score/{date_formatted}",
+            timeout=5,
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
+        if not resp.ok:
+            return None
+
+        games = resp.json().get("games", [])
+
+        # Trouver le match
+        game = next(
+            (g for g in games
+             if g.get("awayTeam", {}).get("abbrev") == away_abbrev
+             and g.get("homeTeam", {}).get("abbrev") == home_abbrev),
+            None
+        )
+        if not game:
+            return None
+
+        game_id = game.get("id")
+        if not game_id:
+            return None
+
+        # Récupérer les stats du match (box score)
+        box_resp = requests.get(
+            f"https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore",
+            timeout=5,
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
+        if not box_resp.ok:
+            return None
+
+        box = box_resp.json()
+        player_name_lower = player_name.lower().strip()
+
+        # Chercher le joueur dans les deux équipes
+        for team_key in ("awayTeam", "homeTeam"):
+            players = box.get(team_key, {}).get("players", [])
+            for player in players:
+                pname = player.get("person", {}).get("fullName", "").lower()
+                if player_name_lower in pname or pname in player_name_lower:
+                    # Compter goals + assists
+                    stats = player.get("stats", {}).get("skatingStats", {})
+                    goals = stats.get("goals", 0) or 0
+                    assists = stats.get("assists", 0) or 0
+                    return goals + assists
+
+        return None
+    except Exception as e:
+        print(f"  >> _get_player_points_for_game erreur: {e}")
+        return None
+
+
+def _resolve_pick_outcome(pick: dict, nhl_map: dict, game_date: str = ""):
     """Détermine win/loss/pending pour un pari en croisant avec les résultats NHL."""
     import re
     bet_type  = (pick.get("bet_type")  or "").lower()
     selection = (pick.get("selection") or "").lower()
+    snap_date = game_date or pick.get("date", "")
     home_team = (pick.get("home_team") or "").lower()
     away_team = (pick.get("away_team") or "").lower()
 
@@ -2180,6 +2246,34 @@ def _resolve_pick_outcome(pick: dict, nhl_map: dict):
         outcome = "win" if hs > 0 and as_ > 0 else "loss"
         return {"outcome": outcome, "score": score_txt}
 
+    # Prop bets individuels (joueur) : "Matvei Michkov Total de points moins 0.5"
+    if _is_player_prop({"bet_type": bet_type, "selection": selection}):
+        # Format: "[Player Name] Total de points [Plus/Moins] [Threshold]"
+        # Extraire le seuil (threshold) depuis le type de pari
+        import re
+        m = re.search(r"(\d+[.,]?\d*)", bet_type)
+        threshold = float(m.group(1).replace(',', '.')) if m else None
+
+        if threshold is not None:
+            # Extrait le nom du joueur (premiers 1-2 mots du bet_type)
+            player_name = ' '.join(bet_type.split()[:2]).strip()
+
+            # Récupérer les stats du joueur pour ce match
+            player_points = _get_player_points_for_game(player_name, away_ab, home_ab, snap_date)
+
+            if player_points is not None:
+                is_over = "plus" in selection.lower() or "over" in selection.lower()
+                is_under = "moins" in selection.lower() or "under" in selection.lower()
+
+                if is_over:
+                    outcome = "win" if player_points > threshold else "loss"
+                elif is_under:
+                    outcome = "win" if player_points < threshold else "loss"
+                else:
+                    outcome = "unsupported"
+
+                return {"outcome": outcome, "score": score_txt}
+
     return {"outcome": "unsupported", "score": score_txt}
 
 
@@ -2224,7 +2318,7 @@ def api_snapshot_results():
 
     enriched = []
     for pick in snap.get("picks", []):
-        resolved = _resolve_pick_outcome(pick, nhl_map)
+        resolved = _resolve_pick_outcome(pick, nhl_map, snap_date)
         enriched.append({**pick, **resolved})
 
     # Calculer kelly_warning rétroactivement (même logique que /api/history)
