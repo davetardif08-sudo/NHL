@@ -7538,21 +7538,55 @@
           </div>`;
       }
 
-      // Déterminer les 2 gagnants pour chaque "pool" du 2e tour
-      // R1 order: [0]=1v8, [1]=2v7, [2]=3v4, [3]=5v6
-      // Pool A : winner[0] (1v8) vs winner[2] (3v4)
-      // Pool B : winner[1] (2v7) vs winner[3] (5v6)
-      const winners = matchups.map(m => {
-        const hw = m.high_wins || 0, lw = m.low_wins || 0;
-        if (hw >= 4) return m.high_seed;
-        if (lw >= 4) return m.low_seed;
-        return null;
-      });
+      // ── R2 : utiliser les vrais matchups du bracket NHL si disponibles ──
+      const confData = confKey === 'east' ? data.east : data.west;
+      const actualR2 = confData.r2_matchups || [];
 
-      const r2Cards = [
-        r2MatchupCard(winners[0], winners[2], 0),
-        r2MatchupCard(winners[1], winners[3], 1)
-      ].join('');
+      let r2Cards;
+      if (actualR2.length > 0) {
+        // Utiliser les vrais matchups R2 depuis l'API NHL
+        r2Cards = actualR2.map((m, i) => {
+          const hw = m.high_wins || 0, lw = m.low_wins || 0;
+          const a = m.high_seed, b = m.low_seed;
+          const isActive = _bkActiveCard && _bkActiveCard.confKey === confKey && _bkActiveCard.matchupIdx === (-i - 1);
+          return `
+            <div class="bk-matchup${isActive ? ' active' : ''}" onclick="bkToggleDetail('${confKey}',${-i-1})" title="2e tour">
+              <div class="bk-matchup-team">
+                <div class="bk-team-logo">${teamLogoImg(a.abbrev, 18)}</div>
+                <div class="bk-team-name-seed">
+                  <div class="bk-team-name">${a.abbrev}</div>
+                  <div class="bk-team-seed">(${a.seed})</div>
+                </div>
+                <div class="bk-team-score">${hw}</div>
+              </div>
+              <div class="bk-matchup-team">
+                <div class="bk-team-logo">${teamLogoImg(b.abbrev, 18)}</div>
+                <div class="bk-team-name-seed">
+                  <div class="bk-team-name">${b.abbrev}</div>
+                  <div class="bk-team-seed">(${b.seed})</div>
+                </div>
+                <div class="bk-team-score">${lw}</div>
+              </div>
+            </div>`;
+        }).join('');
+        // Pad to 2 cards if only 1 R2 matchup so far
+        while (actualR2.length < 2) {
+          r2Cards += `<div class="bk-matchup tbd" style="opacity:0.4"><div style="text-align:center;padding:12px 8px;font-size:0.75rem;color:var(--muted)">À déterminer</div></div>`;
+          actualR2.push(null); // avoid infinite loop
+        }
+      } else {
+        // Fallback : dériver R2 depuis les gagnants R1
+        const winners = matchups.map(m => {
+          const hw = m.high_wins || 0, lw = m.low_wins || 0;
+          if (hw >= 4) return m.high_seed;
+          if (lw >= 4) return m.low_seed;
+          return null;
+        });
+        r2Cards = [
+          r2MatchupCard(winners[0], winners[2], 0),
+          r2MatchupCard(winners[1], winners[3], 1)
+        ].join('');
+      }
 
       const cfCard  = tbdCard('Finale de conf.');
 

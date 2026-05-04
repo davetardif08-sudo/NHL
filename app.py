@@ -4117,19 +4117,26 @@ def api_playoff_nhl():
             if r.ok:
                 bracket = r.json()
                 for s in bracket.get("series", []):
-                    # Sauter les séries futures (wins=0 pour les deux et c'est pas la 1ère ronde)
                     if not s.get("topSeedTeam") or not s.get("bottomSeedTeam"):
                         continue
                     top_ab = s.get("topSeedTeam", {}).get("abbrev", "")
                     bot_ab = s.get("bottomSeedTeam", {}).get("abbrev", "")
                     if not top_ab or not bot_ab:
                         continue
+                    # Détecter le numéro de ronde (plusieurs noms possibles selon version API)
+                    round_num = (
+                        s.get("roundNumber")
+                        or s.get("playoffRound", {}).get("roundNumber")
+                        or s.get("seriesRound")
+                        or 1
+                    )
                     key = frozenset([top_ab, bot_ab])
                     series[key] = {
                         "top_ab":   top_ab,
                         "bot_ab":   bot_ab,
                         "top_wins": s.get("topSeedWins", 0),
                         "bot_wins": s.get("bottomSeedWins", 0),
+                        "round":    round_num,
                     }
         except Exception:
             pass  # Fallback: retourner dict vide, ui affichera "N/A"
@@ -4323,7 +4330,46 @@ def api_playoff_nhl():
             make_matchup(by_seed.get(5), by_seed.get(6)),  # Div bot 2e vs 3e
         ] if m]
 
-        return {"seeds": result, "bubble": bubble, "matchups": matchups}
+        # ── Matchups 2e tour — tirés directement du bracket NHL ───────────────
+        conf_abbrevs = {t["abbrev"] for t in result}
+        by_abbrev = {t["abbrev"]: t for t in result}
+
+        # Détecter si on est en R2 : au moins une série avec round=2 dans cette conf
+        r2_series = [
+            sd for sd in _series_scores.values()
+            if sd.get("round", 1) == 2
+            and sd.get("top_ab") in conf_abbrevs
+            and sd.get("bot_ab") in conf_abbrevs
+        ]
+
+        # Fallback si round number non dispo dans l'API : déduire R2 à partir des gagnants R1
+        if not r2_series:
+            r1_winners = {}
+            for m in matchups:
+                hw = m.get("high_wins", 0)
+                lw = m.get("low_wins", 0)
+                if hw >= 4:
+                    r1_winners[m["high_seed"]["abbrev"]] = m["high_seed"]
+                elif lw >= 4:
+                    r1_winners[m["low_seed"]["abbrev"]] = m["low_seed"]
+
+            # Chercher des séries dans _series_scores entre deux gagnants R1
+            for sd in _series_scores.values():
+                top_ab, bot_ab = sd.get("top_ab"), sd.get("bot_ab")
+                if top_ab in r1_winners and bot_ab in r1_winners:
+                    r2_series.append(sd)
+
+        r2_matchups = []
+        for sd in r2_series:
+            top_ab, bot_ab = sd.get("top_ab"), sd.get("bot_ab")
+            a = by_abbrev.get(top_ab)
+            b = by_abbrev.get(bot_ab)
+            if a and b:
+                m = make_matchup(a, b)
+                if m:
+                    r2_matchups.append(m)
+
+        return {"seeds": result, "bubble": bubble, "matchups": matchups, "r2_matchups": r2_matchups}
 
     east = build_conference("E")
     west = build_conference("W")
