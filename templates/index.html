@@ -1863,8 +1863,8 @@
         </label>
       </div>
 
-      <!-- Cartes résumé 6 systèmes -->
-      <div id="cmp-cards" style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:24px;"></div>
+      <!-- Cartes résumé 8 systèmes -->
+      <div id="cmp-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;"></div>
 
       <!-- Graphique cumulatif 3 courbes -->
       <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;
@@ -5607,6 +5607,16 @@
         desc: `Seulement les ${params.topn} meilleurs edges du soir — budget total redistribué entre eux`,
         accent: '#fb7185', bg: 'rgba(251,113,133,0.08)', border: 'rgba(251,113,133,0.25)',
       },
+      {
+        key: 'H', label: 'Système G', sub: '1 pari par match',
+        desc: 'Pour chaque match, garde uniquement le pick avec le plus haut edge — élimine les paris corrélés',
+        accent: '#06b6d4', bg: 'rgba(6,182,212,0.08)', border: 'rgba(6,182,212,0.25)',
+      },
+      {
+        key: 'I', label: 'Système H', sub: 'Non-contradictoire',
+        desc: 'Greedy par match : meilleur edge + paris compatibles (jamais 2 paris qui ne peuvent pas tous deux gagner)',
+        accent: '#84cc16', bg: 'rgba(132,204,22,0.08)', border: 'rgba(132,204,22,0.25)',
+      },
     ];
 
     container.innerHTML = systems.map(s => {
@@ -5680,7 +5690,7 @@
 
     // Calculer la médiane (moyenne) pour chaque jour
     const medianData = days.map(d => {
-      const values = [d.A.cumulative, d.C.cumulative, d.D.cumulative, d.E.cumulative, d.F.cumulative, d.G.cumulative];
+      const values = [d.A.cumulative, d.C.cumulative, d.D.cumulative, d.E.cumulative, d.F.cumulative, d.G.cumulative, d.H.cumulative, d.I.cumulative];
       return values.reduce((a, b) => a + b, 0) / values.length;
     });
 
@@ -5695,6 +5705,8 @@
           mkDataset('D — Kelly dynamique',  '#f43f5e', d => d.E.cumulative),
           mkDataset('E — Edge²',            '#22d3ee', d => d.F.cumulative),
           mkDataset('F — Top N',            '#fb7185', d => d.G.cumulative),
+          mkDataset('G — 1 pari/match',     '#06b6d4', d => d.H.cumulative),
+          mkDataset('H — Non-contradict.',  '#84cc16', d => d.I.cumulative),
           {
             label: 'Médiane',
             data: medianData,
@@ -5769,6 +5781,8 @@
         <td style="padding:7px 10px;text-align:right;">${fmtNet(p.E_net, p.E_mise > 0)}<br><span style="font-size:9px;color:var(--muted);">${p.E_bankroll ? p.E_bankroll.toFixed(0)+'$' : ''}</span></td>
         <td style="padding:7px 10px;text-align:right;">${fmtNet(p.F_net, p.F_mise > 0)}</td>
         <td style="padding:7px 10px;text-align:right;">${fmtNet(p.G_net, p.G_active)}</td>
+        <td style="padding:7px 10px;text-align:right;">${fmtNet(p.H_net, p.H_active)}</td>
+        <td style="padding:7px 10px;text-align:right;">${fmtNet(p.I_net, p.I_active)}</td>
       </tr>`;
     }).join('');
 
@@ -5792,6 +5806,8 @@
                 <th style="padding:8px 10px;text-align:right;font-weight:600;color:#f43f5e;">D Dyn.</th>
                 <th style="padding:8px 10px;text-align:right;font-weight:600;color:#22d3ee;">E Edge²</th>
                 <th style="padding:8px 10px;text-align:right;font-weight:600;color:#fb7185;">F Top N</th>
+                <th style="padding:8px 10px;text-align:right;font-weight:600;color:#06b6d4;">G 1/match</th>
+                <th style="padding:8px 10px;text-align:right;font-weight:600;color:#84cc16;">H Non-cor.</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>

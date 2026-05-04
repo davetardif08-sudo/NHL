@@ -2584,9 +2584,56 @@ def api_real_bets():
     return jsonify({"sessions": sessions})
 
 
+def _picks_contradictory(p1, p2):
+    """Retourne True si les deux picks ne peuvent pas tous deux gagner sur le même match."""
+    import re as _re
+    bt1 = (p1.get('bet_type') or '').lower()
+    bt2 = (p2.get('bet_type') or '').lower()
+    sel1 = (p1.get('selection') or '').lower()
+    sel2 = (p2.get('selection') or '').lower()
+
+    def _nick(s):
+        m = _re.search(r'\(([^)]+)\)', s or '')
+        return m.group(1).strip().lower() if m else (s or '').lower().strip()
+
+    moneyline_kw = ['gagnant', '2 issues', 'victoire']
+    is_ml1 = any(kw in bt1 for kw in moneyline_kw) and 'double' not in bt1
+    is_ml2 = any(kw in bt2 for kw in moneyline_kw) and 'double' not in bt2
+    is_dc1 = 'double chance' in bt1
+    is_dc2 = 'double chance' in bt2
+
+    # Moneyline vs Moneyline : sélections différentes = contradictoire
+    if is_ml1 and is_ml2:
+        return _nick(sel1) != _nick(sel2)
+
+    # Moneyline vs Double Chance : contradictoire si l'équipe ML n'est pas dans la DC
+    if (is_ml1 and is_dc2) or (is_ml2 and is_dc1):
+        ml_sel = sel1 if is_ml1 else sel2
+        dc_sel = sel2 if is_dc2 else sel1
+        return _nick(ml_sel) not in dc_sel
+
+    # DC vs DC : équipes différentes = contradictoire
+    if is_dc1 and is_dc2:
+        return _nick(sel1) != _nick(sel2)
+
+    # Total de buts même seuil + directions opposées
+    is_tot1 = 'total' in bt1 and ('plus' in bt1 or 'moins' in bt1 or 'plus' in sel1 or 'moins' in sel1)
+    is_tot2 = 'total' in bt2 and ('plus' in bt2 or 'moins' in bt2 or 'plus' in sel2 or 'moins' in sel2)
+    if is_tot1 and is_tot2:
+        m1 = _re.search(r'(\d+\.?\d*)', bt1)
+        m2 = _re.search(r'(\d+\.?\d*)', bt2)
+        if m1 and m2 and m1.group(1) == m2.group(1):
+            dir1 = 'plus' in sel1 or 'over' in sel1
+            dir2 = 'plus' in sel2 or 'over' in sel2
+            if dir1 != dir2:
+                return True
+
+    return False
+
+
 @app.route("/api/compare-systems")
 def api_compare_systems():
-    """Compare 4 stratégies de mise sur les mêmes picks historiques.
+    """Compare plusieurs stratégies de mise sur les mêmes picks historiques.
 
     Système A : ½ Kelly (sizing existant, champ `mise` du snapshot)
     Système B : Mise plate ($X fixe, même picks que A)
@@ -2731,7 +2778,62 @@ def api_compare_systems():
             else:
                 g_mises.append(0.0)
 
-        # ── Passe 2 : calculer A/B/C/D/E pour chaque pick et accumuler ───────
+        # ── Calcul mises Système H — 1 pari par match (meilleur edge) ─────────
+        # Pour chaque match, garder uniquement le pick avec le plus haut edge.
+        # Redistribuer total_a proportionnellement aux Kelly des picks gardés.
+        from collections import defaultdict as _dd
+        match_groups_h = _dd(list)
+        for i, pk in enumerate(valid_day):
+            match = (pk["p"].get("match") or f"_idx{i}")
+            match_groups_h[match].append(i)
+
+        h_set = set()
+        for match, indices in match_groups_h.items():
+            best_i = max(indices, key=lambda i: valid_day[i]["edge"])
+            h_set.add(best_i)
+
+        h_total_hk = sum(valid_day[i]["hk"] for i in h_set)
+        h_mises = []
+        for i in range(len(valid_day)):
+            if i in h_set and h_total_hk > 0:
+                h_mises.append(max(round(valid_day[i]["hk"] / h_total_hk * total_a * 2) / 2, 0.0))
+            else:
+                h_mises.append(0.0)
+
+        # ── Calcul mises Système I — Kelly non-contradictoire ─────────────────
+        # Greedy par match : prendre le meilleur edge, puis ajouter les picks
+        # non-contradictoires avec ceux déjà sélectionnés (mêmes match seulement).
+        match_groups_i = _dd(list)
+        for i, pk in enumerate(valid_day):
+            match = (pk["p"].get("match") or f"_idx{i}")
+            match_groups_i[match].append(i)
+
+        i_set = set()
+        for match, indices in match_groups_i.items():
+            # Trier par edge décroissant
+            sorted_idx = sorted(indices, key=lambda i: valid_day[i]["edge"], reverse=True)
+            chosen = []
+            for cand_i in sorted_idx:
+                cand_p = valid_day[cand_i]["p"]
+                # Compatible avec tous les déjà choisis ?
+                ok = True
+                for ch_i in chosen:
+                    if _picks_contradictory(cand_p, valid_day[ch_i]["p"]):
+                        ok = False
+                        break
+                if ok:
+                    chosen.append(cand_i)
+            i_set.update(chosen)
+
+        i_total_hk = sum(valid_day[i]["hk"] for i in i_set)
+        i_mises = []
+        for i in range(len(valid_day)):
+            if i in i_set and i_total_hk > 0:
+                i_mises.append(max(round(valid_day[i]["hk"] / i_total_hk * total_a * 2) / 2, 0.0))
+            else:
+                i_mises.append(0.0)
+
+        # ── Passe 2 : calculer A/B/C/D/E/F/G/H/I pour chaque pick et accumuler ─
         day = {
             "date": date_str,
             "A": {"mise": 0, "net": 0, "picks": 0, "wins": 0, "losses": 0},
@@ -2742,6 +2844,8 @@ def api_compare_systems():
                   "bankroll_before": round(bankroll_e, 2)},
             "F": {"mise": 0, "net": 0, "picks": 0, "wins": 0, "losses": 0},
             "G": {"mise": 0, "net": 0, "picks": 0, "wins": 0, "losses": 0},
+            "H": {"mise": 0, "net": 0, "picks": 0, "wins": 0, "losses": 0},
+            "I": {"mise": 0, "net": 0, "picks": 0, "wins": 0, "losses": 0},
         }
 
         day_e_net = 0.0
@@ -2755,6 +2859,8 @@ def api_compare_systems():
             mise_e  = e_mises[i]
             mise_f  = f_mises[i]
             mise_g  = g_mises[i]
+            mise_h  = h_mises[i]
+            mise_i  = i_mises[i]
 
             # A : ½ Kelly (fixe)
             net_a = round(mise_a * (odds - 1), 2) if outcome == "win" else round(-mise_a, 2)
@@ -2780,6 +2886,10 @@ def api_compare_systems():
             net_f  = round(mise_f * (odds - 1), 2) if (outcome == "win" and mise_f > 0) else (round(-mise_f, 2) if mise_f > 0 else 0)
             # G : Top N du soir
             net_g  = round(mise_g * (odds - 1), 2) if (outcome == "win" and mise_g > 0) else (round(-mise_g, 2) if mise_g > 0 else 0)
+            # H : 1 pari par match
+            net_h  = round(mise_h * (odds - 1), 2) if (outcome == "win" and mise_h > 0) else (round(-mise_h, 2) if mise_h > 0 else 0)
+            # I : Non-contradictoire
+            net_i  = round(mise_i * (odds - 1), 2) if (outcome == "win" and mise_i > 0) else (round(-mise_i, 2) if mise_i > 0 else 0)
 
             all_picks.append({
                 "date": date_str,
@@ -2795,6 +2905,8 @@ def api_compare_systems():
                 "E_bankroll": round(bankroll_e, 2),
                 "F_mise": mise_f, "F_net": net_f,
                 "G_mise": mise_g, "G_net": net_g, "G_active": mise_g > 0,
+                "H_mise": mise_h, "H_net": net_h, "H_active": mise_h > 0,
+                "I_mise": mise_i, "I_net": net_i, "I_active": mise_i > 0,
             })
 
             for sys_key, mise_v, net_v, active in [
@@ -2805,6 +2917,8 @@ def api_compare_systems():
                 ("E", mise_e, net_e, mise_e > 0),
                 ("F", mise_f, net_f, mise_f > 0),
                 ("G", mise_g, net_g, mise_g > 0),
+                ("H", mise_h, net_h, mise_h > 0),
+                ("I", mise_i, net_i, mise_i > 0),
             ]:
                 if not active:
                     continue
@@ -2820,15 +2934,15 @@ def api_compare_systems():
         bankroll_e = max(0.0, round(bankroll_e + day_e_net, 2))
         day["E"]["bankroll_after"] = bankroll_e
 
-        for sys_key in ("A", "B", "C", "D", "E", "F", "G"):
+        for sys_key in ("A", "B", "C", "D", "E", "F", "G", "H", "I"):
             day[sys_key]["net"]  = round(day[sys_key]["net"], 2)
             day[sys_key]["mise"] = round(day[sys_key]["mise"], 2)
         days_out.append(day)
 
     # ── Cumulatifs jour par jour ──────────────────────────────────────────────
-    cum = {"A": 0.0, "B": 0.0, "C": 0.0, "D": 0.0, "E": 0.0, "F": 0.0, "G": 0.0}
+    cum = {"A": 0.0, "B": 0.0, "C": 0.0, "D": 0.0, "E": 0.0, "F": 0.0, "G": 0.0, "H": 0.0, "I": 0.0}
     for d in days_out:
-        for sys_key in ("A", "B", "C", "D", "E", "F", "G"):
+        for sys_key in ("A", "B", "C", "D", "E", "F", "G", "H", "I"):
             cum[sys_key] = round(cum[sys_key] + d[sys_key]["net"], 2)
             d[sys_key]["cumulative"] = cum[sys_key]
 
@@ -2857,7 +2971,8 @@ def api_compare_systems():
         "summary": {"A": _sys_summary("A"), "B": _sys_summary("B"),
                     "C": _sys_summary("C"), "D": _sys_summary("D"),
                     "E": _sys_summary("E"), "F": _sys_summary("F"),
-                    "G": _sys_summary("G")},
+                    "G": _sys_summary("G"), "H": _sys_summary("H"),
+                    "I": _sys_summary("I")},
         "picks":   all_picks,
         "params":  {"flat": flat_amt, "edge_min": edge_min, "cap": cap_amt,
                     "bankroll_start": bankroll_start, "nightly_pct": nightly_pct,
