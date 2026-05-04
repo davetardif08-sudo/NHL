@@ -7539,8 +7539,9 @@
       }
 
       // Déterminer les 2 gagnants pour chaque "pool" du 2e tour
-      // Pool A : winner[0] (1v8) vs winner[3] (4v5)
-      // Pool B : winner[1] (2v7) vs winner[2] (3v6)
+      // R1 order: [0]=1v8, [1]=2v7, [2]=3v4, [3]=5v6
+      // Pool A : winner[0] (1v8) vs winner[2] (3v4)
+      // Pool B : winner[1] (2v7) vs winner[3] (5v6)
       const winners = matchups.map(m => {
         const hw = m.high_wins || 0, lw = m.low_wins || 0;
         if (hw >= 4) return m.high_seed;
@@ -7549,8 +7550,8 @@
       });
 
       const r2Cards = [
-        r2MatchupCard(winners[0], winners[3], 0),
-        r2MatchupCard(winners[1], winners[2], 1)
+        r2MatchupCard(winners[0], winners[2], 0),
+        r2MatchupCard(winners[1], winners[3], 1)
       ].join('');
 
       const cfCard  = tbdCard('Finale de conf.');
