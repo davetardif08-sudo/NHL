@@ -2340,19 +2340,43 @@ def api_snapshot_results():
     enriched = []
     for pick in snap.get("picks", []):
         resolved = _resolve_pick_outcome(pick, nhl_map, snap_date)
-        # Ajouter aussi les scores du match
-        match_key = (
-            (pick.get("away_team") or "").lower().strip(),
-            (pick.get("home_team") or "").lower().strip()
-        )
-        game_data = nhl_map.get(match_key, {})
-        away_score = game_data.get("away_score")
-        home_score = game_data.get("home_score")
         enriched_pick = {**pick, **resolved}
-        if away_score is not None:
-            enriched_pick["away_score"] = away_score
-        if home_score is not None:
-            enriched_pick["home_score"] = home_score
+
+        # Ajouter aussi les scores du match
+        away_team = (pick.get("away_team") or "").strip()
+        home_team = (pick.get("home_team") or "").strip()
+
+        game_data = {}
+        # Chercher le match dans nhl_map avec plusieurs formats
+        if away_team and home_team:
+            # Essayer abbrev en majuscules
+            key1 = (away_team.upper(), home_team.upper())
+            if key1 in nhl_map:
+                game_data = nhl_map[key1]
+            else:
+                # Essayer avec nicknames en minuscules
+                def _team_nick(name):
+                    import re
+                    m = re.search(r'\(([^)]+)\)', name or "")
+                    if m:
+                        return m.group(1).lower()
+                    return name.lower().strip()
+
+                key2 = (_team_nick(away_team), _team_nick(home_team))
+                if key2 in nhl_map:
+                    game_data = nhl_map[key2]
+                else:
+                    # Essayer direct lower
+                    key3 = (away_team.lower(), home_team.lower())
+                    if key3 in nhl_map:
+                        game_data = nhl_map[key3]
+
+        if game_data:
+            if "away_score" in game_data:
+                enriched_pick["away_score"] = game_data.get("away_score")
+            if "home_score" in game_data:
+                enriched_pick["home_score"] = game_data.get("home_score")
+
         enriched.append(enriched_pick)
 
     # Calculer kelly_warning rétroactivement (même logique que /api/history)
