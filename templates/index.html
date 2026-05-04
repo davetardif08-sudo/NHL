@@ -8691,15 +8691,33 @@
           statusHtml = `<div class="live-card-status pending">⏳ En attente</div>`;
         }
 
+        // Récupérer le score du match si disponible
+        let awayScore = pick.away_score !== undefined ? pick.away_score : null;
+        let homeScore = pick.home_score !== undefined ? pick.home_score : null;
+
+        const scoreHtml = (awayScore !== null && homeScore !== null)
+          ? `<div style="text-align:center; font-size:11px; color:#6b7280; font-weight:600; margin-top:-8px;">
+               <span style="display:inline-block; min-width:30px;">${awayScore}</span>
+               <span style="margin:0 4px;">–</span>
+               <span style="display:inline-block; min-width:30px;">${homeScore}</span>
+             </div>`
+          : '';
+
         return `
           <div class="live-prediction-card" style="background-color: #ffffff; ${cardBorderStyle}">
             <div class="live-card-logos">
-              <div class="live-logo-circle ${awayCircleClass}">
-                ${awayLogoHtml}
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div class="live-logo-circle ${awayCircleClass}">
+                  ${awayLogoHtml}
+                </div>
+                ${awayScore !== null ? `<div style="font-size:13px; font-weight:700; color:#1f2937;">${awayScore}</div>` : ''}
               </div>
               <span style="font-size:14px; font-weight:600; color:#8b949e;">vs</span>
-              <div class="live-logo-circle ${homeCircleClass}">
-                ${homeLogoHtml}
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div class="live-logo-circle ${homeCircleClass}">
+                  ${homeLogoHtml}
+                </div>
+                ${homeScore !== null ? `<div style="font-size:13px; font-weight:700; color:#1f2937;">${homeScore}</div>` : ''}
               </div>
             </div>
 

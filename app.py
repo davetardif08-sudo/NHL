@@ -2340,7 +2340,20 @@ def api_snapshot_results():
     enriched = []
     for pick in snap.get("picks", []):
         resolved = _resolve_pick_outcome(pick, nhl_map, snap_date)
-        enriched.append({**pick, **resolved})
+        # Ajouter aussi les scores du match
+        match_key = (
+            (pick.get("away_team") or "").lower().strip(),
+            (pick.get("home_team") or "").lower().strip()
+        )
+        game_data = nhl_map.get(match_key, {})
+        away_score = game_data.get("away_score")
+        home_score = game_data.get("home_score")
+        enriched_pick = {**pick, **resolved}
+        if away_score is not None:
+            enriched_pick["away_score"] = away_score
+        if home_score is not None:
+            enriched_pick["home_score"] = home_score
+        enriched.append(enriched_pick)
 
     # Calculer kelly_warning rétroactivement (même logique que /api/history)
     def _hk_snap(p):
