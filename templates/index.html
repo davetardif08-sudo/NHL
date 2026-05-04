@@ -7402,27 +7402,23 @@
     const teamMap = {};
     [...(data.east.seeds||[]), ...(data.west.seeds||[])].forEach(t => { teamMap[t.abbrev] = t; });
 
-    // For each conference, sort matchups by quarter-group so top seeds appear first
-    // Quarter A: seeds {1,4,5,8}  → 1v8, 4v5
-    // Quarter B: seeds {2,3,6,7}  → 2v7, 3v6
+    // For each conference, sort matchups by standard pairing order
+    // R1 bracket order: 1v8, 2v7, 3v6, 4v5
     function sortMatchups(matchups) {
-      // Get min seed from each matchup to determine quarter
-      function getMinSeed(m) {
-        return Math.min(m.high_seed.seed, m.low_seed.seed);
+      function getPairingOrder(m) {
+        const min = Math.min(m.high_seed.seed, m.low_seed.seed);
+        const max = Math.max(m.high_seed.seed, m.low_seed.seed);
+        // Map each valid pairing to its order
+        // 1v8 → 0, 2v7 → 1, 3v6 → 2, 4v5 → 3
+        if ((min === 1 && max === 8) || (min === 8 && max === 1)) return 0;
+        if ((min === 2 && max === 7) || (min === 7 && max === 2)) return 1;
+        if ((min === 3 && max === 6) || (min === 6 && max === 3)) return 2;
+        if ((min === 4 && max === 5) || (min === 5 && max === 4)) return 3;
+        return 9; // unknown pairing
       }
 
-      // Quarter order: 1v8 (group 1), 2v7 (group 2), 3v6 (group 2), 4v5 (group 1)
-      const quarterOrder = {
-        1: 0,  // 1v8
-        4: 3,  // 4v5
-        2: 1,  // 2v7
-        3: 2   // 3v6
-      };
-
       return [...matchups].sort((a, b) => {
-        const minA = getMinSeed(a);
-        const minB = getMinSeed(b);
-        return (quarterOrder[minA] ?? 9) - (quarterOrder[minB] ?? 9);
+        return getPairingOrder(a) - getPairingOrder(b);
       });
     }
 
@@ -7543,8 +7539,8 @@
       }
 
       // Déterminer les 2 gagnants pour chaque "pool" du 2e tour
-      // Pool A : winners[0] vs winners[1] (1er vs 4e matchup)
-      // Pool B : winners[2] vs winners[3] (2e vs 3e matchup)
+      // Pool A : winner[0] (1v8) vs winner[3] (4v5)
+      // Pool B : winner[1] (2v7) vs winner[2] (3v6)
       const winners = matchups.map(m => {
         const hw = m.high_wins || 0, lw = m.low_wins || 0;
         if (hw >= 4) return m.high_seed;
@@ -7553,8 +7549,8 @@
       });
 
       const r2Cards = [
-        r2MatchupCard(winners[0], winners[1], 0),
-        r2MatchupCard(winners[2], winners[3], 1)
+        r2MatchupCard(winners[0], winners[3], 0),
+        r2MatchupCard(winners[1], winners[2], 1)
       ].join('');
 
       const cfCard  = tbdCard('Finale de conf.');
