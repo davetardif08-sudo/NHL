@@ -2265,15 +2265,35 @@ def _resolve_pick_outcome(pick: dict, nhl_map: dict, game_date: str = ""):
     if any(kw in bet_type for kw in ["plus", "moins", "total", "over", "under"]):
         # Détecter si c'est un total d'équipe (ex: "Ottawa (Sénateurs) Total de buts")
         # vs total du match (ex: "Total de buts plus/moins 6.5")
-        # Utiliser le nom de ville (avant la parenthèse) pour éviter les problèmes d'accents
+        import unicodedata
+        def _no_accent(s):
+            """Retire les accents pour comparaison insensible aux accents."""
+            return ''.join(
+                c for c in unicodedata.normalize('NFD', (s or "").lower())
+                if unicodedata.category(c) != 'Mn'
+            )
         def city_name(s):
-            return s.split('(')[0].strip().lower()
-        bt_lower   = bet_type.lower()
+            return _no_accent(s.split('(')[0].strip())
+        def team_nick(s):
+            """Extrait le surnom dans les parenthèses."""
+            m2 = re.search(r'\(([^)]+)\)', s or "")
+            return _no_accent(m2.group(1)) if m2 else ""
+
+        bt_norm    = _no_accent(bet_type)
         home_city  = city_name(home_team)
         away_city  = city_name(away_team)
-        if home_city and "total" in bt_lower and home_city in bt_lower:
+        home_nick  = team_nick(home_team)
+        away_nick2 = team_nick(away_team)
+
+        # Vérifier si le nom de ville OU le surnom d'une équipe apparaît dans le bet_type
+        home_in_bt = bool(home_city and "total" in bt_norm and home_city in bt_norm) or \
+                     bool(home_nick and "total" in bt_norm and home_nick in bt_norm)
+        away_in_bt = bool(away_city and "total" in bt_norm and away_city in bt_norm) or \
+                     bool(away_nick2 and "total" in bt_norm and away_nick2 in bt_norm)
+
+        if home_in_bt:
             score_to_use = game["home_score"]
-        elif away_city and "total" in bt_lower and away_city in bt_lower:
+        elif away_in_bt:
             score_to_use = game["away_score"]
         else:
             score_to_use = game["home_score"] + game["away_score"]
