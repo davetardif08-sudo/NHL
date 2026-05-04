@@ -2051,8 +2051,8 @@
         <h2>🛠️ Dev Backlog</h2>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <div class="backlog-filters">
-            <button class="bl-filter active" onclick="blSetFilter('all',this)">Tout</button>
-            <button class="bl-filter" onclick="blSetFilter('a_faire',this)">À faire</button>
+            <button class="bl-filter" onclick="blSetFilter('all',this)">Tout</button>
+            <button class="bl-filter active" onclick="blSetFilter('a_faire',this)">À faire</button>
             <button class="bl-filter" onclick="blSetFilter('en_cours',this)">En cours</button>
             <button class="bl-filter" onclick="blSetFilter('termine',this)">Terminé</button>
           </div>
@@ -7841,7 +7841,7 @@
   // DEV BACKLOG
   // ═══════════════════════════════════════════════════════════════════
   let _blItems = [];
-  let _blFilter = 'all';
+  let _blFilter = 'a_faire';
   let _blEditId = null;
 
   const BL_PRIORITY_LABELS = { basse: 'Basse', moyenne: 'Moyenne', haute: 'Haute', critique: 'Critique' };
