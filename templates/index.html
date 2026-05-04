@@ -7406,8 +7406,24 @@
     // Quarter A: seeds {1,4,5,8}  → 1v8, 4v5
     // Quarter B: seeds {2,3,6,7}  → 2v7, 3v6
     function sortMatchups(matchups) {
-      const order = { 1:0, 8:1, 4:2, 5:3, 2:4, 7:5, 3:6, 6:7 };
-      return [...matchups].sort((a,b) => (order[a.high_seed.seed]??9) - (order[b.high_seed.seed]??9));
+      // Get min seed from each matchup to determine quarter
+      function getMinSeed(m) {
+        return Math.min(m.high_seed.seed, m.low_seed.seed);
+      }
+
+      // Quarter order: 1v8 (group 1), 2v7 (group 2), 3v6 (group 2), 4v5 (group 1)
+      const quarterOrder = {
+        1: 0,  // 1v8
+        4: 3,  // 4v5
+        2: 1,  // 2v7
+        3: 2   // 3v6
+      };
+
+      return [...matchups].sort((a, b) => {
+        const minA = getMinSeed(a);
+        const minB = getMinSeed(b);
+        return (quarterOrder[minA] ?? 9) - (quarterOrder[minB] ?? 9);
+      });
     }
 
     const eSorted = sortMatchups(data.east.matchups || []);
