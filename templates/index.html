@@ -8528,6 +8528,19 @@
           }
         }
 
+        // For prop bets joueur (ex: "Porter Martone Total de points moins 0.5")
+        if (/^[A-ZÀ-Ü]/.test(betType)) {
+          const btL = betType.toLowerCase();
+          if (btL.includes('total de point')) {
+            const m = betType.match(/(\d+[.,]?\d*)/);
+            const val = m ? m[1] : '';
+            const selL = (sel || '').toLowerCase();
+            const dir = selL.includes('moins') ? 'Moins' : selL.includes('plus') ? 'Plus' : '';
+            const playerName = betType.split(' ').slice(0, 2).join(' ');
+            return val && dir ? `${playerName} ${dir} ${val}` : betType;
+          }
+        }
+
         // For other bets, return as-is
         return betType;
       };
