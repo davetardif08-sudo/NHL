@@ -6145,19 +6145,59 @@
   }
 
   function loadHistory() {
-    // Alias conservé pour compatibilité (non utilisé si loadResultatsNew a déjà tout chargé)
+    // Pattern stale-while-revalidate :
+    // 1. Afficher immédiatement le cache localStorage (s'il existe)
+    // 2. Fetch frais en arrière-plan et remplacer quand prêt
     const cardsSection = document.getElementById('rn-summary-cards');
     const chartSection = document.getElementById('history-chart-section');
     if (!cardsSection || !chartSection) return;
+
+    // ── 1. Afficher cache local IMMÉDIATEMENT ─────────────────────────────
+    let staleShown = false;
+    try {
+      const cachedHistory = localStorage.getItem('history_cache_v1');
+      if (cachedHistory) {
+        const data = JSON.parse(cachedHistory);
+        renderHistory(data, cardsSection, chartSection);
+        staleShown = true;
+        // Badge discret pour indiquer données en cache
+        const staleBadge = document.createElement('div');
+        staleBadge.id = 'history-stale-badge';
+        staleBadge.style.cssText = 'font-size:11px;color:var(--muted);text-align:center;margin:4px 0;opacity:0.7;';
+        staleBadge.innerHTML = '⟳ Mise à jour en cours…';
+        if (chartSection.parentNode) chartSection.parentNode.insertBefore(staleBadge, chartSection);
+      }
+      const cachedSGP = localStorage.getItem('sgp_history_cache_v1');
+      if (cachedSGP) renderSGPHistory(JSON.parse(cachedSGP));
+    } catch(e) { /* localStorage indisponible, fallback */ }
+
+    // Si pas de cache, afficher état de chargement
+    if (!staleShown) {
+      chartSection.innerHTML = `<div class="empty" style="margin-top:16px;"><div class="empty-icon">⏳</div><h3>Chargement de l'historique…</h3></div>`;
+    }
+
+    // ── 2. Fetch frais en BG ──────────────────────────────────────────────
     fetch('/api/history')
       .then(r => r.json())
-      .then(data => renderHistory(data, cardsSection, chartSection))
+      .then(data => {
+        try { localStorage.setItem('history_cache_v1', JSON.stringify(data)); } catch(e) {}
+        renderHistory(data, cardsSection, chartSection);
+        const badge = document.getElementById('history-stale-badge');
+        if (badge) badge.remove();
+      })
       .catch(() => {
-        chartSection.innerHTML = `<div class="empty" style="margin-top:16px;"><div class="empty-icon">⚠️</div><h3>Erreur chargement historique</h3></div>`;
+        if (!staleShown) {
+          chartSection.innerHTML = `<div class="empty" style="margin-top:16px;"><div class="empty-icon">⚠️</div><h3>Erreur chargement historique</h3></div>`;
+        }
+        const badge = document.getElementById('history-stale-badge');
+        if (badge) badge.innerHTML = '⚠️ Échec de la mise à jour — données en cache';
       });
     fetch('/api/sgp-history')
       .then(r => r.json())
-      .then(data => renderSGPHistory(data))
+      .then(data => {
+        try { localStorage.setItem('sgp_history_cache_v1', JSON.stringify(data)); } catch(e) {}
+        renderSGPHistory(data);
+      })
       .catch(() => {});
   }
 
